@@ -2,7 +2,7 @@
 
 ```text
 Aether/
-  core/              Rust core runtime and kernel crates
+  core/              Rust core runtime, kernel crates, and service manifests
   backend/           FastAPI backend service
   frontend/          Reserved for Next.js
   desktop/           Reserved for Tauri
@@ -33,6 +33,7 @@ Aether/
 - `aether-resources`: service resource declaration model.
 - `aether-service`: service manifest, descriptor, registry, and health aggregation.
 - `aether-service-bus`: Aether Service Bus abstraction and in-memory implementation.
+- `aether-system-services`: official service map and Phase 4 core system services.
 - `aether-telemetry`: telemetry abstraction.
 - `aether-core`: module lifecycle contracts.
 - `aether-runtime`: runtime bootstrap.

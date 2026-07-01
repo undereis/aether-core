@@ -1,0 +1,19 @@
+[service]
+name = "configuration-service"
+version = "0.1.0"
+description = "Core system service for local configuration, environment settings, and provider contracts."
+owner = "neuroforge-labs"
+
+[capabilities]
+provides = ["config.read", "config.validate", "config.provider.local"]
+requires = ["telemetry.emit"]
+
+[permissions]
+requested = ["config.read", "telemetry.emit", "event.publish"]
+
+[resources]
+cpu_class = "low"
+memory_class = "low"
+storage_class = "low"
+network = false
+filesystem_access = "read_only"

@@ -21,3 +21,5 @@ record.
 - `ADR-0005-typed-id-strategy.md`: typed identifier strategy.
 - `ADR-0006-aether-service-platform.md`: Aether Service Platform.
 - `ADR-0007-aether-service-bus.md`: Aether Service Bus.
+- `ADR-0008-official-service-map.md`: official Aether service map.
+- `ADR-0009-core-system-services.md`: Phase 4 core system services.

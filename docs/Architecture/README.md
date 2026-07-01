@@ -29,6 +29,10 @@ Service, permission, and resource models are described in
 `docs/Architecture/service-model.md`,
 `docs/Architecture/permission-model.md`, and
 `docs/Architecture/resource-model.md`.
+The official service map is described in
+`docs/Architecture/aether-official-service-map.md`.
+The Phase 4 core system services are described in
+`docs/Architecture/core-system-services.md`.
 
 ## Dependency Direction
 

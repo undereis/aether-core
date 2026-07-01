@@ -13,6 +13,7 @@ members = [
   "core/crates/aether-resources",
   "core/crates/aether-service",
   "core/crates/aether-service-bus",
+  "core/crates/aether-system-services",
   "core/crates/aether-telemetry",
 ]
 
@@ -34,6 +35,7 @@ aether-runtime = { path = "core/crates/aether-runtime" }
 aether-resources = { path = "core/crates/aether-resources" }
 aether-service = { path = "core/crates/aether-service" }
 aether-service-bus = { path = "core/crates/aether-service-bus" }
+aether-system-services = { path = "core/crates/aether-system-services" }
 aether-telemetry = { path = "core/crates/aether-telemetry" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

@@ -1,0 +1,19 @@
+[service]
+name = "event-service"
+version = "0.1.0"
+description = "Core system service for internal event publication, subscription, and routing contracts."
+owner = "neuroforge-labs"
+
+[capabilities]
+provides = ["events.publish", "events.subscribe", "events.route"]
+requires = ["telemetry.emit"]
+
+[permissions]
+requested = ["event.publish", "event.subscribe", "telemetry.emit"]
+
+[resources]
+cpu_class = "low"
+memory_class = "low"
+storage_class = "none"
+network = false
+filesystem_access = "none"
