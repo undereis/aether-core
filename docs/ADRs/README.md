@@ -19,3 +19,5 @@ record.
 - `ADR-0003-core-runtime-rust.md`: Core Runtime in Rust.
 - `ADR-0004-aether-kernel.md`: Aether Kernel orchestration layer.
 - `ADR-0005-typed-id-strategy.md`: typed identifier strategy.
+- `ADR-0006-aether-service-platform.md`: Aether Service Platform.
+- `ADR-0007-aether-service-bus.md`: Aether Service Bus.

@@ -14,6 +14,8 @@ use aether_events::EventBus;
 use aether_ids::KernelId;
 use aether_logging::{LogLevel, StructuredLogger};
 use aether_runtime::{AetherRuntime, RuntimeError, RuntimeHealth};
+use aether_service::{ServiceDescriptor, ServiceError, ServiceHealthAggregation, ServiceRegistry};
+use aether_service_bus::{AetherServiceBus, InMemoryAetherServiceBus, ServiceBusError};
 use aether_telemetry::{TelemetryEmitter, TelemetryError, TelemetryRecord};
 use thiserror::Error;
 
@@ -25,6 +27,8 @@ pub struct AetherKernel {
     id: KernelId,
     runtime: AetherRuntime,
     registry: ModuleRegistry,
+    services: ServiceRegistry,
+    service_bus: InMemoryAetherServiceBus,
     telemetry: TelemetryEmitter,
     status: LifecycleStatus,
 }
@@ -36,6 +40,8 @@ impl fmt::Debug for AetherKernel {
             .field("id", &self.id)
             .field("runtime", &self.runtime)
             .field("registry", &self.registry)
+            .field("services", &self.services)
+            .field("service_bus", &self.service_bus)
             .field("telemetry", &self.telemetry)
             .field("status", &self.status)
             .finish()
@@ -56,6 +62,8 @@ impl AetherKernel {
             id,
             runtime: AetherRuntime::new(config, event_bus, logger),
             registry: ModuleRegistry::new(),
+            services: ServiceRegistry::new(),
+            service_bus: InMemoryAetherServiceBus::new(),
             telemetry,
             status: LifecycleStatus::Created,
         }
@@ -196,6 +204,50 @@ impl AetherKernel {
     #[must_use]
     pub fn capabilities(&self) -> Vec<CapabilityRegistration> {
         self.registry.capabilities()
+    }
+
+    /// Register a service descriptor with the Kernel-controlled service registry.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`KernelError`] when service registration, bus permission registration,
+    /// or telemetry emission fails.
+    pub fn register_service(&mut self, descriptor: ServiceDescriptor) -> Result<(), KernelError> {
+        let service_id = descriptor.id.clone();
+        let permissions = descriptor.permissions.clone();
+        self.services.register(descriptor)?;
+        self.service_bus
+            .register_permissions(&service_id, permissions)?;
+        self.telemetry.emit(
+            &TelemetryRecord::log(LogLevel::Info, KERNEL_TARGET, "service registered")
+                .with_attribute("kernel_id", self.id.as_str())
+                .with_attribute("service_id", service_id.to_string()),
+        )?;
+        Ok(())
+    }
+
+    /// Return registered services.
+    #[must_use]
+    pub fn services(&self) -> Vec<ServiceDescriptor> {
+        self.services.services()
+    }
+
+    /// Return service platform health aggregation.
+    #[must_use]
+    pub fn service_health(&self) -> ServiceHealthAggregation {
+        self.services.health_aggregation()
+    }
+
+    /// Return the service registry.
+    #[must_use]
+    pub const fn service_registry(&self) -> &ServiceRegistry {
+        &self.services
+    }
+
+    /// Return the Aether Service Bus.
+    #[must_use]
+    pub const fn service_bus(&self) -> &InMemoryAetherServiceBus {
+        &self.service_bus
     }
 
     /// Return the kernel identifier.
@@ -505,6 +557,12 @@ pub enum KernelError {
     /// Telemetry emission failed.
     #[error("telemetry emission failed: {0}")]
     Telemetry(#[from] TelemetryError),
+    /// Service registry failed.
+    #[error("service registry failed: {0}")]
+    Service(#[from] ServiceError),
+    /// Service bus failed.
+    #[error("service bus failed: {0}")]
+    ServiceBus(#[from] ServiceBusError),
     /// Kernel cannot load modules until it is running.
     #[error("kernel is not running")]
     KernelNotRunning,
@@ -575,6 +633,8 @@ mod tests {
     use aether_events::EventBus;
     use aether_ids::KernelId;
     use aether_logging::{MemoryLogSink, StructuredLogger};
+    use aether_service::{ServiceDescriptor, ServiceHealthStatus, ServiceManifest};
+    use aether_service_bus::AetherServiceBus;
     use aether_telemetry::{MemoryTelemetrySink, TelemetryEmitter};
 
     use super::{
@@ -632,6 +692,37 @@ mod tests {
         let kernel = AetherKernel::new(KernelId::generate(), config, event_bus, logger, telemetry);
 
         (kernel, telemetry_sink)
+    }
+
+    fn test_service_descriptor() -> ServiceDescriptor {
+        let manifest = ServiceManifest::from_toml_str(
+            r#"
+            [service]
+            name = "telemetry-service"
+            version = "0.1.0"
+            description = "Base telemetry service"
+            owner = "neuroforge-labs"
+
+            [capabilities]
+            provides = ["telemetry.emit"]
+            requires = ["events.publish"]
+
+            [permissions]
+            requested = ["event.publish", "event.subscribe"]
+
+            [resources]
+            cpu_class = "low"
+            memory_class = "low"
+            storage_class = "none"
+            network = false
+            "#,
+        )
+        .expect("manifest");
+
+        ServiceDescriptor::from_manifest(manifest)
+            .expect("descriptor")
+            .with_lifecycle_status(LifecycleStatus::Running)
+            .with_health_status(ServiceHealthStatus::Healthy)
     }
 
     #[test]
@@ -753,5 +844,47 @@ mod tests {
         assert!(!kernel.runtime_is_running());
         assert_eq!(kernel.modules()[0].status(), LifecycleStatus::Stopped);
         assert!(!telemetry_sink.records().expect("records").is_empty());
+    }
+
+    #[test]
+    fn kernel_registers_service_platform_descriptor() {
+        let (mut kernel, _telemetry_sink) = test_kernel();
+
+        kernel
+            .register_service(test_service_descriptor())
+            .expect("register service");
+
+        assert_eq!(kernel.services().len(), 1);
+        assert_eq!(
+            kernel
+                .service_registry()
+                .providers_for_capability_name("telemetry.emit")
+                .expect("providers")
+                .len(),
+            1
+        );
+        assert_eq!(
+            kernel
+                .service_bus()
+                .status()
+                .expect("bus status")
+                .permission_entries,
+            1
+        );
+    }
+
+    #[test]
+    fn kernel_exposes_service_health_aggregation() {
+        let (mut kernel, _telemetry_sink) = test_kernel();
+
+        kernel
+            .register_service(test_service_descriptor())
+            .expect("register service");
+
+        let health = kernel.service_health();
+
+        assert_eq!(health.total_services, 1);
+        assert_eq!(health.running_services, 1);
+        assert_eq!(health.capabilities_available, ["telemetry.emit"]);
     }
 }

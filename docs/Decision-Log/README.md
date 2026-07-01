@@ -21,3 +21,7 @@ This log records lightweight decisions that do not yet require a full ADR.
   lifecycle, health, and discovery responsibilities in the Kernel.
 - Introduced telemetry as a forward-compatible abstraction above structured
   logging without implementing OpenTelemetry in Phase 2.
+- Added ADR-0006 to establish the Aether Service Platform.
+- Added ADR-0007 to define the Aether Service Bus as the only service
+  communication boundary.
+- Added Engineering Rule #002: services must communicate only through ASB.

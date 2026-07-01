@@ -12,6 +12,7 @@ use aether_ids::KernelId;
 use aether_kernel::{AetherKernel, KernelError};
 use aether_logging::{MemoryLogSink, StructuredLogger};
 use aether_runtime::{AetherRuntime, RuntimeError};
+use aether_service_bus::{AetherServiceBus, ServiceBusError};
 use aether_telemetry::{MemoryTelemetrySink, TelemetryEmitter};
 use thiserror::Error;
 
@@ -44,6 +45,8 @@ where
     match command {
         "validate" => validate(writer),
         "kernel" => kernel_command(args.get(2).map(String::as_str), writer),
+        "service" => service_command(args.get(2).map(String::as_str), writer),
+        "bus" => bus_command(args.get(2).map(String::as_str), writer),
         "version" => {
             writeln!(writer, "aether-cli {}", env!("CARGO_PKG_VERSION"))?;
             Ok(EXIT_SUCCESS)
@@ -189,6 +192,160 @@ where
     Ok(EXIT_SUCCESS)
 }
 
+fn service_command<W>(command: Option<&str>, writer: &mut W) -> Result<i32, CliError>
+where
+    W: Write,
+{
+    match command.unwrap_or("list") {
+        "list" => service_list(writer),
+        "inspect" => service_inspect(writer),
+        "capabilities" => service_capabilities(writer),
+        "health" => service_health(writer),
+        "help" | "--help" | "-h" => {
+            writeln!(
+                writer,
+                "Usage: aether service [list|inspect|capabilities|health]"
+            )?;
+            Ok(EXIT_SUCCESS)
+        }
+        unknown => {
+            writeln!(writer, "Unknown service command: {unknown}")?;
+            writeln!(
+                writer,
+                "Usage: aether service [list|inspect|capabilities|health]"
+            )?;
+            Ok(EXIT_USAGE)
+        }
+    }
+}
+
+fn service_list<W>(writer: &mut W) -> Result<i32, CliError>
+where
+    W: Write,
+{
+    let kernel = local_kernel()?;
+    let services = kernel.services();
+    writeln!(writer, "service list: count={}", services.len())?;
+    for service in services {
+        writeln!(
+            writer,
+            "- id={}, name={}, version={}, status={:?}, health={:?}",
+            service.id,
+            service.name,
+            service.version,
+            service.lifecycle_status,
+            service.health_status
+        )?;
+    }
+    Ok(EXIT_SUCCESS)
+}
+
+fn service_inspect<W>(writer: &mut W) -> Result<i32, CliError>
+where
+    W: Write,
+{
+    let kernel = local_kernel()?;
+    let services = kernel.services();
+    if services.is_empty() {
+        writeln!(writer, "service inspect: no services registered")?;
+        return Ok(EXIT_SUCCESS);
+    }
+
+    for service in services {
+        writeln!(
+            writer,
+            "service inspect: id={}, name={}, owner={}, provides={}, requires={}, permissions={}, resources=declared",
+            service.id,
+            service.name,
+            service.owner,
+            service.capabilities.provides().len(),
+            service.capabilities.requires().len(),
+            service.permissions.requested().len()
+        )?;
+    }
+    Ok(EXIT_SUCCESS)
+}
+
+fn service_capabilities<W>(writer: &mut W) -> Result<i32, CliError>
+where
+    W: Write,
+{
+    let kernel = local_kernel()?;
+    let services = kernel.services();
+    let provided = services
+        .iter()
+        .map(|service| service.capabilities.provides().len())
+        .sum::<usize>();
+    let required = services
+        .iter()
+        .map(|service| service.capabilities.requires().len())
+        .sum::<usize>();
+    writeln!(
+        writer,
+        "service capabilities: services={}, provided={}, required={}",
+        services.len(),
+        provided,
+        required
+    )?;
+    Ok(EXIT_SUCCESS)
+}
+
+fn service_health<W>(writer: &mut W) -> Result<i32, CliError>
+where
+    W: Write,
+{
+    let kernel = local_kernel()?;
+    let health = kernel.service_health();
+    writeln!(
+        writer,
+        "service health: total={}, running={}, degraded={}, failed={}, capabilities={}, permissions={}, resources={}",
+        health.total_services,
+        health.running_services,
+        health.degraded_services,
+        health.failed_services,
+        health.capabilities_available.len(),
+        health.permissions_requested.len(),
+        health.resources_declared
+    )?;
+    Ok(EXIT_SUCCESS)
+}
+
+fn bus_command<W>(command: Option<&str>, writer: &mut W) -> Result<i32, CliError>
+where
+    W: Write,
+{
+    match command.unwrap_or("status") {
+        "status" => bus_status(writer),
+        "help" | "--help" | "-h" => {
+            writeln!(writer, "Usage: aether bus [status]")?;
+            Ok(EXIT_SUCCESS)
+        }
+        unknown => {
+            writeln!(writer, "Unknown bus command: {unknown}")?;
+            writeln!(writer, "Usage: aether bus [status]")?;
+            Ok(EXIT_USAGE)
+        }
+    }
+}
+
+fn bus_status<W>(writer: &mut W) -> Result<i32, CliError>
+where
+    W: Write,
+{
+    let kernel = local_kernel()?;
+    let status = kernel.service_bus().status()?;
+    writeln!(
+        writer,
+        "bus status: event_bus={}, notification_subscribers={}, request_handlers={}, command_handlers={}, permission_entries={}",
+        status.event_bus,
+        status.notification_subscribers,
+        status.request_handlers,
+        status.command_handlers,
+        status.permission_entries
+    )?;
+    Ok(EXIT_SUCCESS)
+}
+
 fn local_kernel() -> Result<AetherKernel, CliError> {
     let config = AetherConfig::default();
     let provider = StaticConfigProvider::new(config.clone());
@@ -213,7 +370,7 @@ where
 {
     writeln!(
         writer,
-        "Usage: aether [validate|version|help|kernel <status|health|modules|capabilities>]"
+        "Usage: aether [validate|version|help|kernel <status|health|modules|capabilities>|service <list|inspect|capabilities|health>|bus <status>]"
     )
 }
 
@@ -226,6 +383,9 @@ pub enum CliError {
     /// Kernel validation failed.
     #[error("kernel validation failed: {0}")]
     Kernel(#[from] KernelError),
+    /// Service Bus validation failed.
+    #[error("service bus validation failed: {0}")]
+    ServiceBus(#[from] ServiceBusError),
     /// Logging validation failed.
     #[error("logging validation failed: {0}")]
     Logging(#[from] aether_logging::LoggingError),
@@ -307,5 +467,35 @@ mod tests {
 
         assert_eq!(code, EXIT_SUCCESS);
         assert!(output.contains("kernel capabilities: count=0"));
+    }
+
+    #[test]
+    fn service_list_command_lists_services() {
+        let mut output = Vec::new();
+        let code = run(["aether", "service", "list"], &mut output).expect("cli");
+        let output = String::from_utf8(output).expect("utf8");
+
+        assert_eq!(code, EXIT_SUCCESS);
+        assert!(output.contains("service list: count=0"));
+    }
+
+    #[test]
+    fn service_health_command_reports_aggregation() {
+        let mut output = Vec::new();
+        let code = run(["aether", "service", "health"], &mut output).expect("cli");
+        let output = String::from_utf8(output).expect("utf8");
+
+        assert_eq!(code, EXIT_SUCCESS);
+        assert!(output.contains("service health: total=0"));
+    }
+
+    #[test]
+    fn bus_status_command_reports_bus() {
+        let mut output = Vec::new();
+        let code = run(["aether", "bus", "status"], &mut output).expect("cli");
+        let output = String::from_utf8(output).expect("utf8");
+
+        assert_eq!(code, EXIT_SUCCESS);
+        assert!(output.contains("bus status: event_bus=in-memory"));
     }
 }

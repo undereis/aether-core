@@ -20,6 +20,8 @@ pub enum IdPrefix {
     Kernel,
     /// Capability identifiers use the `cap_` prefix.
     Capability,
+    /// Service identifiers use the `svc_` prefix.
+    Service,
 }
 
 impl IdPrefix {
@@ -31,6 +33,7 @@ impl IdPrefix {
             Self::Module => "mod",
             Self::Kernel => "ker",
             Self::Capability => "cap",
+            Self::Service => "svc",
         }
     }
 }
@@ -268,6 +271,46 @@ impl fmt::Display for CapabilityId {
     }
 }
 
+/// Typed service identifier.
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(transparent)]
+pub struct ServiceId(TypedId);
+
+impl ServiceId {
+    /// Generate a typed service identifier.
+    #[must_use]
+    pub fn generate() -> Self {
+        Self(TypedId::generate(IdPrefix::Service))
+    }
+
+    /// Create a typed service identifier from a stable suffix.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`IdError`] when the suffix is invalid.
+    pub fn new(suffix: impl Into<String>) -> Result<Self, IdError> {
+        Ok(Self(TypedId::new(IdPrefix::Service, suffix)?))
+    }
+
+    /// Return the raw typed identifier.
+    #[must_use]
+    pub const fn typed(&self) -> &TypedId {
+        &self.0
+    }
+
+    /// Return the identifier as a string slice.
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        self.0.as_str()
+    }
+}
+
+impl fmt::Display for ServiceId {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.0.fmt(formatter)
+    }
+}
+
 /// Identifier validation errors.
 #[derive(Debug, Error)]
 pub enum IdError {
@@ -305,7 +348,7 @@ fn validate_suffix(suffix: &str) -> Result<(), IdError> {
 
 #[cfg(test)]
 mod tests {
-    use super::{CapabilityId, IdError, IdPrefix, KernelId, TypedId};
+    use super::{CapabilityId, IdError, IdPrefix, KernelId, ServiceId, TypedId};
 
     #[test]
     fn generated_kernel_id_uses_kernel_prefix() {
@@ -333,5 +376,12 @@ mod tests {
         let id = CapabilityId::new("events_publish").expect("capability id");
 
         assert_eq!(id.as_str(), "cap_events_publish");
+    }
+
+    #[test]
+    fn service_id_uses_service_prefix() {
+        let id = ServiceId::new("telemetry-service").expect("service id");
+
+        assert_eq!(id.as_str(), "svc_telemetry-service");
     }
 }

@@ -8,7 +8,11 @@ members = [
   "core/crates/aether-ids",
   "core/crates/aether-kernel",
   "core/crates/aether-logging",
+  "core/crates/aether-permissions",
   "core/crates/aether-runtime",
+  "core/crates/aether-resources",
+  "core/crates/aether-service",
+  "core/crates/aether-service-bus",
   "core/crates/aether-telemetry",
 ]
 
@@ -25,7 +29,11 @@ aether-events = { path = "core/crates/aether-events" }
 aether-ids = { path = "core/crates/aether-ids" }
 aether-kernel = { path = "core/crates/aether-kernel" }
 aether-logging = { path = "core/crates/aether-logging" }
+aether-permissions = { path = "core/crates/aether-permissions" }
 aether-runtime = { path = "core/crates/aether-runtime" }
+aether-resources = { path = "core/crates/aether-resources" }
+aether-service = { path = "core/crates/aether-service" }
+aether-service-bus = { path = "core/crates/aether-service-bus" }
 aether-telemetry = { path = "core/crates/aether-telemetry" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
