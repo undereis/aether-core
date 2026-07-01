@@ -21,6 +21,14 @@ The kernel orchestration layer is described in
 Module lifecycle rules are described in
 `docs/Architecture/module-lifecycle.md`.
 Telemetry is described in `docs/Architecture/telemetry.md`.
+The Aether Service Platform is described in
+`docs/Architecture/aether-service-platform.md`.
+The Aether Service Bus is described in
+`docs/Architecture/aether-service-bus.md`.
+Service, permission, and resource models are described in
+`docs/Architecture/service-model.md`,
+`docs/Architecture/permission-model.md`, and
+`docs/Architecture/resource-model.md`.
 
 ## Dependency Direction
 
@@ -31,3 +39,4 @@ transport, framework, storage, or UI details.
 
 Synchronous APIs are allowed for platform health and version checks. Future
 cross-module workflows should prefer events once domain capabilities exist.
+Service-to-service communication must pass through the Aether Service Bus.

@@ -4,16 +4,22 @@ Last updated: 2026-07-01
 
 ## Current Status
 
-The Aether foundation is complete through Phase 2 and ready for review.
+The Aether foundation is complete through Phase 3 and ready for review.
 
 - Phase 0: approved.
 - Foundation hardening: completed.
 - Phase 1 Core Runtime in Rust: implemented and validated.
 - Phase 2 Aether Kernel: implemented and validated.
+- Phase 3 Aether Service Platform: implemented and validated.
 
-The repository is an initial local Git repository. At the start of Phase 2 the
-branch was `master`, there were no commits, and the created monorepo files were
-untracked. Check `git status` before any future commit.
+The repository has an official checkpoint through Phase 2:
+
+- branch: `master`
+- commit: `85e0adbd28b55697cf13a81dafc6cabf663d2f88`
+- tag: `v0.2.0-kernel`
+
+Phase 3 is implemented and validated but not committed yet. Check `git status`
+at the start of the next session before any action.
 
 ## What Was Done
 
@@ -172,6 +178,62 @@ Updated supporting docs:
 - `docs/Decision-Log/README.md`
 - `docs/ADRs/README.md`
 
+### Phase 3: Aether Service Platform
+
+Implemented the Kernel-controlled service platform:
+
+- `aether-permissions`
+  - internal permission model
+  - initial permissions:
+    - `event.publish`
+    - `event.subscribe`
+    - `config.read`
+    - `telemetry.emit`
+    - `service.command`
+    - `service.inspect`
+- `aether-resources`
+  - CPU, memory, storage, network, and filesystem resource declarations
+- `aether-service`
+  - service manifest loading from TOML
+  - service descriptor
+  - service registry
+  - capability provider lookup
+  - capability dependent lookup
+  - declared permission checks
+  - service health aggregation
+- `aether-service-bus`
+  - in-memory Aether Service Bus
+  - event publish and subscribe
+  - request/reply
+  - service command routing by bus route, not direct service identity
+  - service notifications
+  - bus status
+  - permission enforcement for bus actions
+- `aether-kernel`
+  - owns Service Registry
+  - owns ASB instance
+  - exposes service registration and health aggregation
+- `aether-cli`
+  - `service list`
+  - `service inspect`
+  - `service capabilities`
+  - `service health`
+  - `bus status`
+
+Created Phase 3 documentation:
+
+- `docs/Architecture/aether-service-platform.md`
+- `docs/Architecture/aether-service-bus.md`
+- `docs/Architecture/service-model.md`
+- `docs/Architecture/permission-model.md`
+- `docs/Architecture/resource-model.md`
+- `docs/ADRs/ADR-0006-aether-service-platform.md`
+- `docs/ADRs/ADR-0007-aether-service-bus.md`
+- `CHANGELOG.md`
+
+Updated Engineering Constitution with Rule #002: services must communicate only
+through ASB.
+
 ## Implemented Events
 
 The event model includes:
@@ -195,18 +257,24 @@ Each event contains:
 
 ## Validation Status
 
-The final Phase 2 validation passed:
+The final Phase 3 validation passed:
 
 - `make validate`
+- `cargo fmt --all -- --check`
 - `cargo check --workspace`
 - `cargo test --workspace`
-- `cargo clippy --workspace -- -D warnings`
+- `cargo clippy --workspace --all-targets -- -D warnings`
 - `cargo run -p aether-cli -- validate`
 - `cargo run -p aether-cli -- version`
 - `cargo run -p aether-cli -- kernel status`
 - `cargo run -p aether-cli -- kernel health`
 - `cargo run -p aether-cli -- kernel modules`
 - `cargo run -p aether-cli -- kernel capabilities`
+- `cargo run -p aether-cli -- service list`
+- `cargo run -p aether-cli -- service inspect`
+- `cargo run -p aether-cli -- service capabilities`
+- `cargo run -p aether-cli -- service health`
+- `cargo run -p aether-cli -- bus status`
 
 Validation coverage includes:
 
@@ -224,6 +292,61 @@ Validation coverage includes:
 - Backend smoke test
 - Core CLI validation
 - Kernel CLI validation
+- Service CLI validation
+- Bus CLI validation
+
+Rust workspace test count after Phase 3: 59 tests passed.
+
+## Current Git State
+
+Phase 3 has not been committed.
+
+Modified tracked files:
+
+- `Cargo.lock`
+- `Cargo.toml`
+- `README.md`
+- `core/README.md`
+- `core/crates/aether-cli/Cargo.toml`
+- `core/crates/aether-cli/src/lib.rs`
+- `core/crates/aether-ids/src/lib.rs`
+- `core/crates/aether-kernel/Cargo.toml`
+- `core/crates/aether-kernel/src/lib.rs`
+- `docs/ADRs/README.md`
+- `docs/Architecture/README.md`
+- `docs/Decision-Log/README.md`
+- `docs/Engineering-Constitution/README.md`
+- `docs/Project-Structure/README.md`
+- `docs/Roadmap/README.md`
+- `docs/SESSION-HANDOFF.md`
+- `docs/Tech-Stack/README.md`
+
+Untracked Phase 3 files:
+
+- `CHANGELOG.md`
+- `core/crates/aether-permissions/Cargo.toml`
+- `core/crates/aether-permissions/src/lib.rs`
+- `core/crates/aether-resources/Cargo.toml`
+- `core/crates/aether-resources/src/lib.rs`
+- `core/crates/aether-service/Cargo.toml`
+- `core/crates/aether-service/src/lib.rs`
+- `core/crates/aether-service-bus/Cargo.toml`
+- `core/crates/aether-service-bus/src/lib.rs`
+- `docs/ADRs/ADR-0006-aether-service-platform.md`
+- `docs/ADRs/ADR-0007-aether-service-bus.md`
+- `docs/Architecture/aether-service-platform.md`
+- `docs/Architecture/aether-service-bus.md`
+- `docs/Architecture/service-model.md`
+- `docs/Architecture/permission-model.md`
+- `docs/Architecture/resource-model.md`
+
+Suggested Phase 3 commit and tag after review:
+
+```bash
+git add .
+git commit -m "feat(platform): add Aether Service Platform"
+git tag v0.3.0-service-platform
+```
 
 ## Important Local Environment Notes
 
@@ -270,22 +393,23 @@ The following remain out of scope and were not implemented:
 - production OpenTelemetry
 - plugins
 - NATS messaging
+- direct service-to-service communication
 
 ## Next Recommended Steps
 
-The next section should begin with Phase 2 review, not Phase 3 implementation.
+The next section should begin with Phase 3 review, not Phase 4 implementation.
 
 Recommended order:
 
-1. Review Phase 2 Kernel crate boundaries and public APIs.
-2. Review whether `EventBusPort` should remain synchronous until NATS or async
-   messaging is formally introduced by ADR.
-3. Review whether typed ID migration should remain incremental or become
-   mandatory for new module descriptors.
-4. Decide whether to pin/use a Node.js LTS runtime before frontend/desktop work.
-5. Create a commit for the approved Phase 0, hardening, Phase 1, and Phase 2
-   foundation.
-6. Only after review approval, define the formal scope for Phase 3.
+1. Review Phase 3 Service Platform crate boundaries and public APIs.
+2. Review ASB permission enforcement before adding real services.
+3. Review whether the ASB should remain synchronous until NATS or async messaging
+   is formally introduced by ADR.
+4. Review Engineering Rule #002 enforcement: services communicate only through
+   ASB; service commands route by bus route, not direct service identity.
+5. Decide whether typed service IDs should become mandatory in manifests.
+6. Create a commit and tag for Phase 3 after review.
+7. Only after review approval, define the formal scope for Phase 4.
 
 ## Useful Commands
 
@@ -294,12 +418,18 @@ make validate
 cargo check --workspace
 cargo test --workspace
 cargo clippy --workspace -- -D warnings
+cargo clippy --workspace --all-targets -- -D warnings
 cargo run -p aether-cli -- validate
 cargo run -p aether-cli -- version
 cargo run -p aether-cli -- kernel status
 cargo run -p aether-cli -- kernel health
 cargo run -p aether-cli -- kernel modules
 cargo run -p aether-cli -- kernel capabilities
+cargo run -p aether-cli -- service list
+cargo run -p aether-cli -- service inspect
+cargo run -p aether-cli -- service capabilities
+cargo run -p aether-cli -- service health
+cargo run -p aether-cli -- bus status
 make docker-up
 make docker-validate
 make backend-smoke
@@ -309,6 +439,6 @@ make backend-smoke
 
 Aether now has a validated native Rust foundation for internal runtime
 contracts, local configuration, structured logs, module lifecycle, internal
-events, typed IDs, telemetry abstraction, and a Kernel orchestration layer. It
-is intentionally not yet a product runtime, AI system, agent system, desktop
-shell, or data platform.
+events, typed IDs, telemetry abstraction, a Kernel orchestration layer, and the
+Aether Service Platform. It is intentionally not yet a product runtime, AI
+system, agent system, desktop shell, or data platform.

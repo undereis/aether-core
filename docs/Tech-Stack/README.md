@@ -46,3 +46,13 @@ Production runtimes must follow the LTS strategy defined in
 - Configuration abstraction: `ConfigProvider`.
 - Current event bus implementation: in-memory.
 - Current configuration implementation: TOML and static in-memory providers.
+
+## Phase 3 Service Platform
+
+- Service model crate: `aether-service`.
+- Service Bus crate: `aether-service-bus`.
+- Permission model crate: `aether-permissions`.
+- Resource model crate: `aether-resources`.
+- Service manifest format: TOML.
+- Current Service Bus implementation: in-memory.
+- Future Service Bus candidates: NATS, Redis Streams, gRPC, local IPC, cloud bus.

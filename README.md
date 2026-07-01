@@ -44,6 +44,18 @@ desktop functionality.
 Phase 2 still excludes AI, agents, chat, OS capture, business APIs, UI,
 authentication, plugins, and desktop functionality.
 
+## Phase 3 Scope
+
+- Aether Service Platform as the Kernel-controlled service layer.
+- Service Model and TOML Service Manifest.
+- Service Registry and health aggregation.
+- Aether Service Bus for internal service communication.
+- Capability, permission, and resource models for services.
+- CLI inspection commands for services and bus status.
+
+Phase 3 still excludes AI, agents, authentication, Memory Engine, business
+database schemas, frontend, desktop functionality, and production sandboxing.
+
 ## Quick Start
 
 ```bash
@@ -85,4 +97,9 @@ cargo run -p aether-cli -- kernel status
 cargo run -p aether-cli -- kernel health
 cargo run -p aether-cli -- kernel modules
 cargo run -p aether-cli -- kernel capabilities
+cargo run -p aether-cli -- service list
+cargo run -p aether-cli -- service inspect
+cargo run -p aether-cli -- service capabilities
+cargo run -p aether-cli -- service health
+cargo run -p aether-cli -- bus status
 ```

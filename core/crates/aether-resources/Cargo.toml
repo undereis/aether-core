@@ -1,0 +1,13 @@
+[package]
+name = "aether-resources"
+description = "Resource declaration model for Aether services."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+serde.workspace = true
+
+[lints]
+workspace = true

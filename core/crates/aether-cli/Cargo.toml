@@ -13,6 +13,7 @@ aether-ids.workspace = true
 aether-kernel.workspace = true
 aether-logging.workspace = true
 aether-runtime.workspace = true
+aether-service-bus.workspace = true
 aether-telemetry.workspace = true
 thiserror.workspace = true
 

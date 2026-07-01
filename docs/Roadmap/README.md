@@ -26,7 +26,19 @@
 - Telemetry abstraction.
 - Typed ID strategy.
 
-## Phase 3: Platform Skeleton
+## Phase 3: Aether Service Platform
+
+- Service Model and Service Manifest.
+- Service Registry owned by the Kernel.
+- Aether Service Bus.
+- Advanced capability model.
+- Initial permission model.
+- Initial resource model.
+- Service lifecycle supervision.
+- Health aggregation.
+- Service and bus inspection CLI.
+
+## Phase 4: Platform Skeleton
 
 - Domain boundary discovery.
 - Persistence adapters without business schema creep.

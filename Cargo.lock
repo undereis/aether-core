@@ -12,6 +12,7 @@ dependencies = [
  "aether-kernel",
  "aether-logging",
  "aether-runtime",
+ "aether-service-bus",
  "aether-telemetry",
  "thiserror",
 ]
@@ -65,6 +66,8 @@ dependencies = [
  "aether-ids",
  "aether-logging",
  "aether-runtime",
+ "aether-service",
+ "aether-service-bus",
  "aether-telemetry",
  "thiserror",
 ]
@@ -80,6 +83,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "aether-permissions"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "thiserror",
+]
+
+[[package]]
+name = "aether-resources"
+version = "0.1.0"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "aether-runtime"
 version = "0.1.0"
 dependencies = [
@@ -87,6 +105,32 @@ dependencies = [
  "aether-core",
  "aether-events",
  "aether-logging",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
+name = "aether-service"
+version = "0.1.0"
+dependencies = [
+ "aether-core",
+ "aether-ids",
+ "aether-permissions",
+ "aether-resources",
+ "serde",
+ "thiserror",
+ "toml",
+]
+
+[[package]]
+name = "aether-service-bus"
+version = "0.1.0"
+dependencies = [
+ "aether-events",
+ "aether-ids",
+ "aether-permissions",
+ "aether-service",
+ "serde",
  "serde_json",
  "thiserror",
 ]

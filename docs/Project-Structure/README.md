@@ -29,6 +29,10 @@ Aether/
 - `aether-config`: local runtime configuration.
 - `aether-ids`: typed identifier strategy.
 - `aether-logging`: structured logging primitives.
+- `aether-permissions`: internal service permission model.
+- `aether-resources`: service resource declaration model.
+- `aether-service`: service manifest, descriptor, registry, and health aggregation.
+- `aether-service-bus`: Aether Service Bus abstraction and in-memory implementation.
 - `aether-telemetry`: telemetry abstraction.
 - `aether-core`: module lifecycle contracts.
 - `aether-runtime`: runtime bootstrap.

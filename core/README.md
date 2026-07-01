@@ -22,6 +22,16 @@ Phase 2 introduces the Aether Kernel:
 - telemetry abstraction
 - typed ID strategy
 
+Phase 3 introduces the Aether Service Platform:
+
+- Service Model and Service Manifest
+- Service Registry
+- Aether Service Bus
+- Permission Model
+- Resource Model
+- service health aggregation
+- service and bus inspection CLI
+
 No AI, agents, UI, OS event capture, or business behavior is implemented here.
 
 Run the CLI with:
@@ -32,4 +42,9 @@ cargo run -p aether-cli -- kernel status
 cargo run -p aether-cli -- kernel health
 cargo run -p aether-cli -- kernel modules
 cargo run -p aether-cli -- kernel capabilities
+cargo run -p aether-cli -- service list
+cargo run -p aether-cli -- service inspect
+cargo run -p aether-cli -- service capabilities
+cargo run -p aether-cli -- service health
+cargo run -p aether-cli -- bus status
 ```
