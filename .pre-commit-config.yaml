@@ -1,0 +1,33 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check backend scripts
+        language: system
+        pass_filenames: false
+      - id: ruff-format-check
+        name: ruff format check
+        entry: uv run ruff format --check backend scripts
+        language: system
+        pass_filenames: false
+      - id: black-check
+        name: black check
+        entry: uv run black --check backend scripts
+        language: system
+        pass_filenames: false
+      - id: mypy
+        name: mypy
+        entry: uv run mypy backend/src backend/tests scripts
+        language: system
+        pass_filenames: false
+      - id: cargo-fmt
+        name: cargo fmt
+        entry: cargo fmt --all --check
+        language: system
+        pass_filenames: false
+      - id: cargo-clippy
+        name: cargo clippy
+        entry: cargo clippy --workspace --all-targets -- -D warnings
+        language: system
+        pass_filenames: false

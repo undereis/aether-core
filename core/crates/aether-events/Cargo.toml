@@ -1,0 +1,21 @@
+[package]
+name = "aether-events"
+description = "Aether internal event contracts and in-memory event bus."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+aether-ids.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+time.workspace = true
+uuid.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[lints]
+workspace = true

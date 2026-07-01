@@ -1,0 +1,20 @@
+[package]
+name = "aether-config"
+description = "Aether local runtime configuration."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+aether-logging.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+toml.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[lints]
+workspace = true
+

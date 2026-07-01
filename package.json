@@ -1,0 +1,22 @@
+{
+  "name": "@neuroforge/aether",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Aether monorepo foundation.",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=22.11.0",
+    "pnpm": ">=11.9.0"
+  },
+  "scripts": {
+    "build": "pnpm exec tauri --version",
+    "lint": "pnpm exec tauri --version",
+    "test": "pnpm exec tauri --version",
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.8.0"
+  }
+}
+

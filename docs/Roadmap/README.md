@@ -1,0 +1,44 @@
+# Roadmap
+
+## Phase 0: Foundation
+
+- Toolchain validation.
+- Monorepo structure.
+- Backend health/version surface.
+- Local infrastructure containers.
+- Engineering governance.
+
+## Phase 1: Core Runtime
+
+- Rust core runtime crates.
+- Base event contracts and in-memory event bus.
+- Local configuration and structured logging.
+- Module lifecycle contract.
+- Runtime bootstrap and validation CLI.
+
+## Phase 2: Aether Kernel
+
+- Kernel orchestration above the Runtime.
+- Module registry and dependency validation.
+- Lifecycle states and health reporting.
+- Capability declaration and discovery.
+- EventBus and ConfigProvider abstractions.
+- Telemetry abstraction.
+- Typed ID strategy.
+
+## Phase 3: Platform Skeleton
+
+- Domain boundary discovery.
+- Persistence adapters without business schema creep.
+- Observability baseline.
+- CI/CD pipeline.
+
+## Later Phases
+
+- Memory engine.
+- Knowledge graph.
+- AI integration.
+- Agent orchestration.
+- Product UI and desktop shell.
+
+Each phase requires updated ADRs before implementation.

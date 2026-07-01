@@ -1,0 +1,20 @@
+[package]
+name = "aether-kernel"
+description = "Aether kernel orchestration layer."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+aether-config.workspace = true
+aether-core.workspace = true
+aether-events.workspace = true
+aether-ids.workspace = true
+aether-logging.workspace = true
+aether-runtime.workspace = true
+aether-telemetry.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true
