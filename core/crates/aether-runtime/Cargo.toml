@@ -1,0 +1,22 @@
+[package]
+name = "aether-runtime"
+description = "Aether runtime bootstrap and module orchestration."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+aether-config.workspace = true
+aether-core.workspace = true
+aether-events.workspace = true
+aether-logging.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[lints]
+workspace = true
+

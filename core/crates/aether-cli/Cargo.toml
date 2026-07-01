@@ -1,0 +1,27 @@
+[package]
+name = "aether-cli"
+description = "Minimal CLI for validating the Aether core runtime."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+aether-config.workspace = true
+aether-events.workspace = true
+aether-ids.workspace = true
+aether-kernel.workspace = true
+aether-logging.workspace = true
+aether-runtime.workspace = true
+aether-telemetry.workspace = true
+thiserror.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "aether"
+path = "src/main.rs"
+
+[lints]
+workspace = true

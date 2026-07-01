@@ -1,0 +1,43 @@
+[workspace]
+resolver = "3"
+members = [
+  "core/crates/aether-cli",
+  "core/crates/aether-config",
+  "core/crates/aether-core",
+  "core/crates/aether-events",
+  "core/crates/aether-ids",
+  "core/crates/aether-kernel",
+  "core/crates/aether-logging",
+  "core/crates/aether-runtime",
+  "core/crates/aether-telemetry",
+]
+
+[workspace.package]
+edition = "2024"
+license = "Apache-2.0"
+rust-version = "1.90"
+version = "0.1.0"
+
+[workspace.dependencies]
+aether-config = { path = "core/crates/aether-config" }
+aether-core = { path = "core/crates/aether-core" }
+aether-events = { path = "core/crates/aether-events" }
+aether-ids = { path = "core/crates/aether-ids" }
+aether-kernel = { path = "core/crates/aether-kernel" }
+aether-logging = { path = "core/crates/aether-logging" }
+aether-runtime = { path = "core/crates/aether-runtime" }
+aether-telemetry = { path = "core/crates/aether-telemetry" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+time = { version = "0.3", features = ["formatting", "serde"] }
+toml = "0.9"
+uuid = { version = "1", features = ["serde", "v7"] }
+
+[workspace.lints.rust]
+missing_docs = "warn"
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = "warn"
+pedantic = "warn"

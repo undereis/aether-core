@@ -1,0 +1,20 @@
+[project]
+name = "aether-backend"
+version = "0.1.0"
+description = "Aether Phase 0 FastAPI backend foundation."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "Apache-2.0"
+dependencies = [
+  "fastapi>=0.115.0,<1.0.0",
+  "pydantic-settings>=2.5.0,<3.0.0",
+  "uvicorn[standard]>=0.30.0,<1.0.0",
+]
+
+[build-system]
+requires = ["hatchling>=1.26.0,<2.0.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aether_backend"]
+

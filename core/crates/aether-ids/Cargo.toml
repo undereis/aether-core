@@ -1,0 +1,15 @@
+[package]
+name = "aether-ids"
+description = "Typed identifier strategy for Aether core components."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+
+[lints]
+workspace = true
