@@ -56,3 +56,12 @@ Production runtimes must follow the LTS strategy defined in
 - Service manifest format: TOML.
 - Current Service Bus implementation: in-memory.
 - Future Service Bus candidates: NATS, Redis Streams, gRPC, local IPC, cloud bus.
+
+## Phase 4 Core System Services
+
+- Core system services crate: `aether-system-services`.
+- Core service manifests: TOML files under `core/services`.
+- Implemented base services: Telemetry, Configuration, Health, Event, and
+  Service Inspector.
+- Official service map documentation:
+  `docs/Architecture/aether-official-service-map.md`.

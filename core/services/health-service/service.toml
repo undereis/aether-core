@@ -1,0 +1,19 @@
+[service]
+name = "health-service"
+version = "0.1.0"
+description = "Core system service for health checks, aggregation, and controlled degradation signals."
+owner = "neuroforge-labs"
+
+[capabilities]
+provides = ["health.report", "health.aggregate", "health.degradation"]
+requires = ["service.inspect", "telemetry.emit"]
+
+[permissions]
+requested = ["service.inspect", "telemetry.emit", "event.publish"]
+
+[resources]
+cpu_class = "low"
+memory_class = "low"
+storage_class = "none"
+network = false
+filesystem_access = "none"

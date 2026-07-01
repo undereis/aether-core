@@ -4,22 +4,24 @@ Last updated: 2026-07-01
 
 ## Current Status
 
-The Aether foundation is complete through Phase 3 and ready for review.
+The Aether foundation is complete through Phase 4 and ready for review.
 
 - Phase 0: approved.
 - Foundation hardening: completed.
 - Phase 1 Core Runtime in Rust: implemented and validated.
 - Phase 2 Aether Kernel: implemented and validated.
-- Phase 3 Aether Service Platform: implemented and validated.
+- Phase 3 Aether Service Platform: implemented, validated, committed, and tagged.
+- Phase 4 Official Service Map + Core System Services: implemented and pending
+  final review.
 
-The repository has an official checkpoint through Phase 2:
+The repository has an official checkpoint through Phase 3:
 
 - branch: `master`
-- commit: `85e0adbd28b55697cf13a81dafc6cabf663d2f88`
-- tag: `v0.2.0-kernel`
+- commit: `fb854cef781cd0457356bf95544bdec528fe48e3`
+- tag: `v0.3.0-service-platform`
 
-Phase 3 is implemented and validated but not committed yet. Check `git status`
-at the start of the next session before any action.
+Phase 4 is implemented but not committed. Check `git status --short` at the
+start of the next session before any action.
 
 ## What Was Done
 
@@ -234,6 +236,60 @@ Created Phase 3 documentation:
 Updated Engineering Constitution with Rule #002: services must communicate only
 through ASB.
 
+### Phase 4: Official Service Map + Core System Services
+
+Implemented the official service map and first base system services:
+
+- `docs/Architecture/aether-official-service-map.md`
+  - Foundation Services
+  - Cognitive Services
+  - AI Services
+  - Interaction Services
+  - Device Services
+  - Automation Services
+  - Enterprise Services
+  - 52 planned services total
+- `aether-system-services`
+  - typed official service map constants
+  - manifest loading for core system services
+  - Kernel registration helper
+  - ASB command handler registration
+  - no direct service-to-service coupling checks
+- Core service manifests:
+  - `core/services/telemetry-service/service.toml`
+  - `core/services/configuration-service/service.toml`
+  - `core/services/health-service/service.toml`
+  - `core/services/event-service/service.toml`
+  - `core/services/service-inspector/service.toml`
+- Core system services:
+  - Telemetry Service
+  - Configuration Service
+  - Health Service
+  - Event Service
+  - Service Inspector Service
+- `aether-cli`
+  - `service map`
+  - `system services`
+  - `system health`
+  - `system inspect`
+
+Created Phase 4 documentation:
+
+- `docs/Architecture/core-system-services.md`
+- `docs/ADRs/ADR-0008-official-service-map.md`
+- `docs/ADRs/ADR-0009-core-system-services.md`
+
+Updated supporting docs:
+
+- `README.md`
+- `core/README.md`
+- `CHANGELOG.md`
+- `docs/ADRs/README.md`
+- `docs/Architecture/README.md`
+- `docs/Project-Structure/README.md`
+- `docs/Roadmap/README.md`
+- `docs/Tech-Stack/README.md`
+
 ## Implemented Events
 
 The event model includes:
@@ -274,6 +330,10 @@ The final Phase 3 validation passed:
 - `cargo run -p aether-cli -- service inspect`
 - `cargo run -p aether-cli -- service capabilities`
 - `cargo run -p aether-cli -- service health`
+- `cargo run -p aether-cli -- service map`
+- `cargo run -p aether-cli -- system services`
+- `cargo run -p aether-cli -- system health`
+- `cargo run -p aether-cli -- system inspect`
 - `cargo run -p aether-cli -- bus status`
 
 Validation coverage includes:
@@ -293,59 +353,21 @@ Validation coverage includes:
 - Core CLI validation
 - Kernel CLI validation
 - Service CLI validation
+- System service CLI validation
 - Bus CLI validation
 
-Rust workspace test count after Phase 3: 59 tests passed.
+Rust workspace test count after Phase 4: 77 tests passed.
 
 ## Current Git State
 
-Phase 3 has not been committed.
+Phase 4 has not been committed.
 
-Modified tracked files:
-
-- `Cargo.lock`
-- `Cargo.toml`
-- `README.md`
-- `core/README.md`
-- `core/crates/aether-cli/Cargo.toml`
-- `core/crates/aether-cli/src/lib.rs`
-- `core/crates/aether-ids/src/lib.rs`
-- `core/crates/aether-kernel/Cargo.toml`
-- `core/crates/aether-kernel/src/lib.rs`
-- `docs/ADRs/README.md`
-- `docs/Architecture/README.md`
-- `docs/Decision-Log/README.md`
-- `docs/Engineering-Constitution/README.md`
-- `docs/Project-Structure/README.md`
-- `docs/Roadmap/README.md`
-- `docs/SESSION-HANDOFF.md`
-- `docs/Tech-Stack/README.md`
-
-Untracked Phase 3 files:
-
-- `CHANGELOG.md`
-- `core/crates/aether-permissions/Cargo.toml`
-- `core/crates/aether-permissions/src/lib.rs`
-- `core/crates/aether-resources/Cargo.toml`
-- `core/crates/aether-resources/src/lib.rs`
-- `core/crates/aether-service/Cargo.toml`
-- `core/crates/aether-service/src/lib.rs`
-- `core/crates/aether-service-bus/Cargo.toml`
-- `core/crates/aether-service-bus/src/lib.rs`
-- `docs/ADRs/ADR-0006-aether-service-platform.md`
-- `docs/ADRs/ADR-0007-aether-service-bus.md`
-- `docs/Architecture/aether-service-platform.md`
-- `docs/Architecture/aether-service-bus.md`
-- `docs/Architecture/service-model.md`
-- `docs/Architecture/permission-model.md`
-- `docs/Architecture/resource-model.md`
-
-Suggested Phase 3 commit and tag after review:
+Suggested Phase 4 commit and tag after review:
 
 ```bash
 git add .
-git commit -m "feat(platform): add Aether Service Platform"
-git tag v0.3.0-service-platform
+git commit -m "feat(system): add official service map and core system services"
+git tag v0.4.0-core-system-services
 ```
 
 ## Important Local Environment Notes
@@ -397,19 +419,17 @@ The following remain out of scope and were not implemented:
 
 ## Next Recommended Steps
 
-The next section should begin with Phase 3 review, not Phase 4 implementation.
+The next section should begin with Phase 4 review, not Phase 5 implementation.
 
 Recommended order:
 
-1. Review Phase 3 Service Platform crate boundaries and public APIs.
-2. Review ASB permission enforcement before adding real services.
-3. Review whether the ASB should remain synchronous until NATS or async messaging
-   is formally introduced by ADR.
-4. Review Engineering Rule #002 enforcement: services communicate only through
-   ASB; service commands route by bus route, not direct service identity.
-5. Decide whether typed service IDs should become mandatory in manifests.
-6. Create a commit and tag for Phase 3 after review.
-7. Only after review approval, define the formal scope for Phase 4.
+1. Review the official service map and classification choices.
+2. Review the five Phase 4 manifests and their capability/permission/resource
+   declarations.
+3. Review `aether-system-services` public API and ASB handler registration.
+4. Review Engineering Rule #002 enforcement for core system services.
+5. Create a commit and tag for Phase 4 after review.
+6. Only after review approval, define the formal scope for Phase 5.
 
 ## Useful Commands
 
@@ -429,6 +449,10 @@ cargo run -p aether-cli -- service list
 cargo run -p aether-cli -- service inspect
 cargo run -p aether-cli -- service capabilities
 cargo run -p aether-cli -- service health
+cargo run -p aether-cli -- service map
+cargo run -p aether-cli -- system services
+cargo run -p aether-cli -- system health
+cargo run -p aether-cli -- system inspect
 cargo run -p aether-cli -- bus status
 make docker-up
 make docker-validate
@@ -440,5 +464,7 @@ make backend-smoke
 Aether now has a validated native Rust foundation for internal runtime
 contracts, local configuration, structured logs, module lifecycle, internal
 events, typed IDs, telemetry abstraction, a Kernel orchestration layer, and the
-Aether Service Platform. It is intentionally not yet a product runtime, AI
-system, agent system, desktop shell, or data platform.
+Aether Service Platform. Phase 4 adds the official service map and the first
+core system service base. It is intentionally not yet a product runtime, AI
+system, agent system, desktop shell, memory engine, knowledge graph, or data
+platform.

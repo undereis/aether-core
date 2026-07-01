@@ -1,0 +1,19 @@
+[service]
+name = "service-inspector"
+version = "0.1.0"
+description = "Core system service for inspecting service descriptors, capabilities, permissions, and health."
+owner = "neuroforge-labs"
+
+[capabilities]
+provides = ["service.inspect", "service.catalog", "service.capabilities.query"]
+requires = ["health.report"]
+
+[permissions]
+requested = ["service.inspect", "service.command", "telemetry.emit"]
+
+[resources]
+cpu_class = "low"
+memory_class = "low"
+storage_class = "none"
+network = false
+filesystem_access = "none"

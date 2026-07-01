@@ -7,12 +7,14 @@ name = "aether-cli"
 version = "0.1.0"
 dependencies = [
  "aether-config",
+ "aether-core",
  "aether-events",
  "aether-ids",
  "aether-kernel",
  "aether-logging",
  "aether-runtime",
  "aether-service-bus",
+ "aether-system-services",
  "aether-telemetry",
  "thiserror",
 ]
@@ -131,6 +133,25 @@ dependencies = [
  "aether-permissions",
  "aether-service",
  "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
+name = "aether-system-services"
+version = "0.1.0"
+dependencies = [
+ "aether-config",
+ "aether-core",
+ "aether-events",
+ "aether-ids",
+ "aether-kernel",
+ "aether-logging",
+ "aether-permissions",
+ "aether-resources",
+ "aether-service",
+ "aether-service-bus",
+ "aether-telemetry",
  "serde_json",
  "thiserror",
 ]

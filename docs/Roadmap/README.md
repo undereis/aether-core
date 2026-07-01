@@ -38,12 +38,13 @@
 - Health aggregation.
 - Service and bus inspection CLI.
 
-## Phase 4: Platform Skeleton
+## Phase 4: Official Service Map + Core System Services
 
-- Domain boundary discovery.
-- Persistence adapters without business schema creep.
-- Observability baseline.
-- CI/CD pipeline.
+- Official service map across platform layers.
+- Base Telemetry, Configuration, Health, Event, and Service Inspector services.
+- Declarative service manifests under `core/services`.
+- `aether-system-services` crate for loading and registering base services.
+- CLI inspection for service map and core system services.
 
 ## Later Phases
 

@@ -56,6 +56,23 @@ authentication, plugins, and desktop functionality.
 Phase 3 still excludes AI, agents, authentication, Memory Engine, business
 database schemas, frontend, desktop functionality, and production sandboxing.
 
+## Phase 4 Scope
+
+- Official Service Map across Foundation, Cognitive, AI, Interaction, Device,
+  Automation, and Enterprise layers.
+- Base core system services:
+  - Telemetry Service
+  - Configuration Service
+  - Health Service
+  - Event Service
+  - Service Inspector Service
+- Declarative service manifests under `core/services`.
+- `aether-system-services` crate for loading and registering base services.
+- CLI inspection commands for the service map and core system services.
+
+Phase 4 still excludes AI, agents, Memory Engine, Knowledge Graph,
+authentication, frontend, desktop functionality, and business persistence.
+
 ## Quick Start
 
 ```bash
@@ -101,5 +118,9 @@ cargo run -p aether-cli -- service list
 cargo run -p aether-cli -- service inspect
 cargo run -p aether-cli -- service capabilities
 cargo run -p aether-cli -- service health
+cargo run -p aether-cli -- service map
+cargo run -p aether-cli -- system services
+cargo run -p aether-cli -- system health
+cargo run -p aether-cli -- system inspect
 cargo run -p aether-cli -- bus status
 ```

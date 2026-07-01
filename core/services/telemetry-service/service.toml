@@ -1,0 +1,19 @@
+[service]
+name = "telemetry-service"
+version = "0.1.0"
+description = "Core system service for logs, metrics, traces, and operational telemetry contracts."
+owner = "neuroforge-labs"
+
+[capabilities]
+provides = ["telemetry.emit", "telemetry.query", "telemetry.health"]
+requires = ["events.publish"]
+
+[permissions]
+requested = ["event.publish", "event.subscribe", "telemetry.emit", "service.inspect"]
+
+[resources]
+cpu_class = "low"
+memory_class = "low"
+storage_class = "none"
+network = false
+filesystem_access = "none"
