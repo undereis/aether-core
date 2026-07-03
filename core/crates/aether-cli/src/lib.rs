@@ -449,11 +449,12 @@ where
     let status = kernel.service_bus().status()?;
     writeln!(
         writer,
-        "bus status: event_bus={}, notification_subscribers={}, request_handlers={}, command_handlers={}, permission_entries={}",
+        "bus status: event_bus={}, notification_subscribers={}, request_handlers={}, command_handlers={}, contract_handlers={}, permission_entries={}",
         status.event_bus,
         status.notification_subscribers,
         status.request_handlers,
         status.command_handlers,
+        status.contract_handlers,
         status.permission_entries
     )?;
     Ok(EXIT_SUCCESS)

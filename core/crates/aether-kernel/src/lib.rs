@@ -3,19 +3,20 @@
 
 //! Kernel orchestration layer for Aether.
 
-use std::collections::BTreeMap;
 use std::fmt;
 
 use aether_config::{AetherConfig, ConfigError, ConfigProvider};
-use aether_core::{
-    AetherModule, Capability, LifecycleStatus, ModuleDescriptor, ModuleHealth, ModuleId,
-};
+use aether_core::{AetherModule, LifecycleStatus, ModuleDescriptor, ModuleHealth};
 use aether_events::EventBus;
 use aether_ids::KernelId;
 use aether_logging::{LogLevel, StructuredLogger};
+pub use aether_managers::{
+    CapabilityRegistration, LifecycleManager, ManagerDescriptor, ManagerError, ManagerRegistry,
+    ModuleHealthReport, ModuleRegistration, ModuleRegistry, RegistryError, ServiceManager,
+};
 use aether_runtime::{AetherRuntime, RuntimeError, RuntimeHealth};
 use aether_service::{ServiceDescriptor, ServiceError, ServiceHealthAggregation, ServiceRegistry};
-use aether_service_bus::{AetherServiceBus, InMemoryAetherServiceBus, ServiceBusError};
+use aether_service_bus::{InMemoryAetherServiceBus, ServiceBusError};
 use aether_telemetry::{TelemetryEmitter, TelemetryError, TelemetryRecord};
 use thiserror::Error;
 
@@ -26,9 +27,9 @@ pub const KERNEL_TARGET: &str = "aether-kernel";
 pub struct AetherKernel {
     id: KernelId,
     runtime: AetherRuntime,
-    registry: ModuleRegistry,
-    services: ServiceRegistry,
-    service_bus: InMemoryAetherServiceBus,
+    managers: ManagerRegistry,
+    lifecycle_manager: LifecycleManager,
+    service_manager: ServiceManager,
     telemetry: TelemetryEmitter,
     status: LifecycleStatus,
 }
@@ -39,9 +40,9 @@ impl fmt::Debug for AetherKernel {
             .debug_struct("AetherKernel")
             .field("id", &self.id)
             .field("runtime", &self.runtime)
-            .field("registry", &self.registry)
-            .field("services", &self.services)
-            .field("service_bus", &self.service_bus)
+            .field("managers", &self.managers)
+            .field("lifecycle_manager", &self.lifecycle_manager)
+            .field("service_manager", &self.service_manager)
             .field("telemetry", &self.telemetry)
             .field("status", &self.status)
             .finish()
@@ -61,9 +62,9 @@ impl AetherKernel {
         Self {
             id,
             runtime: AetherRuntime::new(config, event_bus, logger),
-            registry: ModuleRegistry::new(),
-            services: ServiceRegistry::new(),
-            service_bus: InMemoryAetherServiceBus::new(),
+            managers: ManagerRegistry::with_default_managers(),
+            lifecycle_manager: LifecycleManager::new(),
+            service_manager: ServiceManager::new(),
             telemetry,
             status: LifecycleStatus::Created,
         }
@@ -114,10 +115,12 @@ impl AetherKernel {
         }
 
         self.transition_kernel(LifecycleStatus::Stopping)?;
-        self.registry.transition_active_modules_to_stopping()?;
+        self.lifecycle_manager
+            .transition_active_modules_to_stopping()?;
         self.emit_kernel_telemetry(LogLevel::Info, "kernel stopping")?;
         self.runtime.stop()?;
-        self.registry.transition_stopping_modules_to_stopped()?;
+        self.lifecycle_manager
+            .transition_stopping_modules_to_stopped()?;
         self.status = LifecycleStatus::Stopped;
         self.emit_kernel_telemetry(LogLevel::Info, "kernel stopped")?;
         Ok(())
@@ -130,7 +133,7 @@ impl AetherKernel {
     /// Returns [`KernelError`] when registry validation or telemetry emission fails.
     pub fn register_module(&mut self, descriptor: ModuleDescriptor) -> Result<(), KernelError> {
         let module_id = descriptor.id().clone();
-        self.registry.register(descriptor)?;
+        self.lifecycle_manager.register(descriptor)?;
         self.telemetry.emit(
             &TelemetryRecord::log(LogLevel::Info, KERNEL_TARGET, "module registered")
                 .with_attribute("kernel_id", self.id.as_str())
@@ -152,20 +155,20 @@ impl AetherKernel {
 
         let descriptor = module.descriptor().clone();
         let module_id = descriptor.id().clone();
-        if !self.registry.contains(&module_id) {
+        if !self.lifecycle_manager.contains(&module_id) {
             self.register_module(descriptor)?;
         }
 
-        self.registry
+        self.lifecycle_manager
             .transition(&module_id, LifecycleStatus::Initializing)?;
         match self.runtime.load_module(module) {
             Ok(()) => {
-                self.registry
+                self.lifecycle_manager
                     .transition(&module_id, LifecycleStatus::Running)?;
                 Ok(())
             }
             Err(error) => {
-                self.registry
+                self.lifecycle_manager
                     .force_status(&module_id, LifecycleStatus::Failed)?;
                 Err(KernelError::Runtime(error))
             }
@@ -179,7 +182,7 @@ impl AetherKernel {
     /// Returns [`KernelError`] when the runtime health check fails.
     pub fn health(&self) -> Result<KernelHealth, KernelError> {
         let runtime = self.runtime.health_check()?;
-        let modules = self.registry.health_reports();
+        let modules = self.lifecycle_manager.health_reports();
         let healthy = runtime.healthy
             && modules
                 .iter()
@@ -197,13 +200,13 @@ impl AetherKernel {
     /// Return a snapshot of registered modules.
     #[must_use]
     pub fn modules(&self) -> Vec<ModuleRegistration> {
-        self.registry.registrations()
+        self.lifecycle_manager.registrations()
     }
 
     /// Return a snapshot of registered module capabilities.
     #[must_use]
     pub fn capabilities(&self) -> Vec<CapabilityRegistration> {
-        self.registry.capabilities()
+        self.lifecycle_manager.capabilities()
     }
 
     /// Register a service descriptor with the Kernel-controlled service registry.
@@ -214,10 +217,7 @@ impl AetherKernel {
     /// or telemetry emission fails.
     pub fn register_service(&mut self, descriptor: ServiceDescriptor) -> Result<(), KernelError> {
         let service_id = descriptor.id.clone();
-        let permissions = descriptor.permissions.clone();
-        self.services.register(descriptor)?;
-        self.service_bus
-            .register_permissions(&service_id, permissions)?;
+        self.service_manager.register_service(descriptor)?;
         self.telemetry.emit(
             &TelemetryRecord::log(LogLevel::Info, KERNEL_TARGET, "service registered")
                 .with_attribute("kernel_id", self.id.as_str())
@@ -229,25 +229,31 @@ impl AetherKernel {
     /// Return registered services.
     #[must_use]
     pub fn services(&self) -> Vec<ServiceDescriptor> {
-        self.services.services()
+        self.service_manager.services()
     }
 
     /// Return service platform health aggregation.
     #[must_use]
     pub fn service_health(&self) -> ServiceHealthAggregation {
-        self.services.health_aggregation()
+        self.service_manager.health_aggregation()
     }
 
     /// Return the service registry.
     #[must_use]
     pub const fn service_registry(&self) -> &ServiceRegistry {
-        &self.services
+        self.service_manager.registry()
     }
 
     /// Return the Aether Service Bus.
     #[must_use]
     pub const fn service_bus(&self) -> &InMemoryAetherServiceBus {
-        &self.service_bus
+        self.service_manager.service_bus()
+    }
+
+    /// Return registered managers.
+    #[must_use]
+    pub fn managers(&self) -> Vec<ManagerDescriptor> {
+        self.managers.managers()
     }
 
     /// Return the kernel identifier.
@@ -292,241 +298,6 @@ impl AetherKernel {
     }
 }
 
-/// Registry for module descriptors and lifecycle state.
-#[derive(Clone, Debug, Default)]
-pub struct ModuleRegistry {
-    modules: BTreeMap<ModuleId, ModuleRegistration>,
-}
-
-impl ModuleRegistry {
-    /// Create an empty module registry.
-    #[must_use]
-    pub const fn new() -> Self {
-        Self {
-            modules: BTreeMap::new(),
-        }
-    }
-
-    /// Register a module descriptor.
-    ///
-    /// # Errors
-    ///
-    /// Returns [`RegistryError`] when the module already exists or dependencies are missing.
-    pub fn register(&mut self, descriptor: ModuleDescriptor) -> Result<(), RegistryError> {
-        let module_id = descriptor.id().clone();
-        if self.modules.contains_key(&module_id) {
-            return Err(RegistryError::DuplicateModule {
-                module_id: module_id.to_string(),
-            });
-        }
-
-        for dependency in descriptor.dependencies() {
-            if !self.modules.contains_key(dependency) {
-                return Err(RegistryError::MissingDependency {
-                    module_id: module_id.to_string(),
-                    dependency_id: dependency.to_string(),
-                });
-            }
-        }
-
-        let mut registration = ModuleRegistration::new(descriptor);
-        registration.transition(LifecycleStatus::Registered)?;
-        self.modules.insert(module_id, registration);
-        Ok(())
-    }
-
-    /// Return whether a module is registered.
-    #[must_use]
-    pub fn contains(&self, module_id: &ModuleId) -> bool {
-        self.modules.contains_key(module_id)
-    }
-
-    /// Transition a registered module to a new lifecycle state.
-    ///
-    /// # Errors
-    ///
-    /// Returns [`RegistryError`] when the module is unknown or the transition is invalid.
-    pub fn transition(
-        &mut self,
-        module_id: &ModuleId,
-        next: LifecycleStatus,
-    ) -> Result<(), RegistryError> {
-        let registration =
-            self.modules
-                .get_mut(module_id)
-                .ok_or_else(|| RegistryError::UnknownModule {
-                    module_id: module_id.to_string(),
-                })?;
-        registration.transition(next)
-    }
-
-    /// Force a lifecycle state after an external failure path.
-    ///
-    /// # Errors
-    ///
-    /// Returns [`RegistryError`] when the module is unknown.
-    pub fn force_status(
-        &mut self,
-        module_id: &ModuleId,
-        status: LifecycleStatus,
-    ) -> Result<(), RegistryError> {
-        let registration =
-            self.modules
-                .get_mut(module_id)
-                .ok_or_else(|| RegistryError::UnknownModule {
-                    module_id: module_id.to_string(),
-                })?;
-        registration.status = status;
-        Ok(())
-    }
-
-    /// Return a snapshot of registrations.
-    #[must_use]
-    pub fn registrations(&self) -> Vec<ModuleRegistration> {
-        self.modules.values().cloned().collect()
-    }
-
-    /// Return a snapshot of capability registrations.
-    #[must_use]
-    pub fn capabilities(&self) -> Vec<CapabilityRegistration> {
-        self.modules
-            .values()
-            .flat_map(|registration| {
-                registration
-                    .descriptor()
-                    .capabilities()
-                    .iter()
-                    .cloned()
-                    .map(|capability| CapabilityRegistration {
-                        module_id: registration.descriptor().id().clone(),
-                        capability,
-                    })
-            })
-            .collect()
-    }
-
-    fn health_reports(&self) -> Vec<ModuleHealthReport> {
-        self.modules
-            .values()
-            .map(|registration| ModuleHealthReport {
-                module_id: registration.descriptor().id().clone(),
-                name: registration.descriptor().name().to_owned(),
-                status: registration.status(),
-                health: health_from_status(registration.status()),
-            })
-            .collect()
-    }
-
-    fn transition_active_modules_to_stopping(&mut self) -> Result<(), RegistryError> {
-        let module_ids = self
-            .modules
-            .values()
-            .filter(|registration| {
-                matches!(
-                    registration.status(),
-                    LifecycleStatus::Running | LifecycleStatus::Degraded
-                )
-            })
-            .map(|registration| registration.descriptor().id().clone())
-            .collect::<Vec<_>>();
-
-        for module_id in module_ids {
-            self.transition(&module_id, LifecycleStatus::Stopping)?;
-        }
-
-        Ok(())
-    }
-
-    fn transition_stopping_modules_to_stopped(&mut self) -> Result<(), RegistryError> {
-        let module_ids = self
-            .modules
-            .values()
-            .filter(|registration| registration.status() == LifecycleStatus::Stopping)
-            .map(|registration| registration.descriptor().id().clone())
-            .collect::<Vec<_>>();
-
-        for module_id in module_ids {
-            self.transition(&module_id, LifecycleStatus::Stopped)?;
-        }
-
-        Ok(())
-    }
-}
-
-/// Registered module metadata and lifecycle state.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ModuleRegistration {
-    descriptor: ModuleDescriptor,
-    status: LifecycleStatus,
-}
-
-impl ModuleRegistration {
-    /// Create an unregistered module registration record.
-    #[must_use]
-    pub const fn new(descriptor: ModuleDescriptor) -> Self {
-        Self {
-            descriptor,
-            status: LifecycleStatus::Created,
-        }
-    }
-
-    /// Return the module descriptor.
-    #[must_use]
-    pub const fn descriptor(&self) -> &ModuleDescriptor {
-        &self.descriptor
-    }
-
-    /// Return the lifecycle status.
-    #[must_use]
-    pub const fn status(&self) -> LifecycleStatus {
-        self.status
-    }
-
-    /// Transition to the next lifecycle status.
-    ///
-    /// # Errors
-    ///
-    /// Returns [`RegistryError`] when the transition is invalid.
-    pub fn transition(&mut self, next: LifecycleStatus) -> Result<(), RegistryError> {
-        if self.status == next {
-            return Ok(());
-        }
-
-        if !self.status.can_transition_to(next) {
-            return Err(RegistryError::InvalidLifecycleTransition {
-                module_id: self.descriptor.id().to_string(),
-                from: self.status,
-                to: next,
-            });
-        }
-
-        self.status = next;
-        Ok(())
-    }
-}
-
-/// Capability exposed by a registered module.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct CapabilityRegistration {
-    /// Module that declares the capability.
-    pub module_id: ModuleId,
-    /// Declared capability.
-    pub capability: Capability,
-}
-
-/// Module health report returned by the kernel.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ModuleHealthReport {
-    /// Module identifier.
-    pub module_id: ModuleId,
-    /// Human-readable module name.
-    pub name: String,
-    /// Current lifecycle status.
-    pub status: LifecycleStatus,
-    /// Health derived from lifecycle status.
-    pub health: ModuleHealth,
-}
-
 /// Kernel health report.
 #[derive(Clone, Debug, PartialEq)]
 pub struct KernelHealth {
@@ -563,6 +334,9 @@ pub enum KernelError {
     /// Service bus failed.
     #[error("service bus failed: {0}")]
     ServiceBus(#[from] ServiceBusError),
+    /// Manager layer failed.
+    #[error("manager layer failed: {0}")]
+    Manager(#[from] ManagerError),
     /// Kernel cannot load modules until it is running.
     #[error("kernel is not running")]
     KernelNotRunning,
@@ -576,60 +350,15 @@ pub enum KernelError {
     },
 }
 
-/// Module registry errors.
-#[derive(Debug, Error)]
-pub enum RegistryError {
-    /// Module is already registered.
-    #[error("module is already registered: {module_id}")]
-    DuplicateModule {
-        /// Module identifier.
-        module_id: String,
-    },
-    /// Module dependency is not registered.
-    #[error("module {module_id} depends on missing module {dependency_id}")]
-    MissingDependency {
-        /// Module identifier.
-        module_id: String,
-        /// Missing dependency identifier.
-        dependency_id: String,
-    },
-    /// Module is not registered.
-    #[error("module is not registered: {module_id}")]
-    UnknownModule {
-        /// Module identifier.
-        module_id: String,
-    },
-    /// Lifecycle transition is invalid.
-    #[error("invalid lifecycle transition for {module_id}: {from} to {to}")]
-    InvalidLifecycleTransition {
-        /// Module identifier.
-        module_id: String,
-        /// Current lifecycle status.
-        from: LifecycleStatus,
-        /// Requested lifecycle status.
-        to: LifecycleStatus,
-    },
-}
-
-fn health_from_status(status: LifecycleStatus) -> ModuleHealth {
-    match status {
-        LifecycleStatus::Running => ModuleHealth::Healthy,
-        LifecycleStatus::Degraded | LifecycleStatus::Registered | LifecycleStatus::Initializing => {
-            ModuleHealth::Degraded
-        }
-        LifecycleStatus::Created
-        | LifecycleStatus::Stopping
-        | LifecycleStatus::Stopped
-        | LifecycleStatus::Failed => ModuleHealth::Unhealthy,
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use std::sync::Arc;
 
     use aether_config::{AetherConfig, StaticConfigProvider};
-    use aether_core::{AetherModule, ModuleError};
+    use aether_core::{
+        AetherModule, Capability, LifecycleStatus, ModuleDescriptor, ModuleError, ModuleHealth,
+        ModuleId,
+    };
     use aether_events::EventBus;
     use aether_ids::KernelId;
     use aether_logging::{MemoryLogSink, StructuredLogger};
@@ -637,10 +366,7 @@ mod tests {
     use aether_service_bus::AetherServiceBus;
     use aether_telemetry::{MemoryTelemetrySink, TelemetryEmitter};
 
-    use super::{
-        AetherKernel, Capability, LifecycleStatus, ModuleDescriptor, ModuleHealth, ModuleId,
-        ModuleRegistry, RegistryError,
-    };
+    use super::{AetherKernel, ModuleRegistry, RegistryError};
 
     struct TestModule {
         descriptor: ModuleDescriptor,
@@ -812,6 +538,25 @@ mod tests {
         .expect("kernel");
 
         assert_eq!(kernel.status(), LifecycleStatus::Created);
+    }
+
+    #[test]
+    fn kernel_exposes_manager_layer() {
+        let (kernel, _telemetry_sink) = test_kernel();
+
+        let managers = kernel.managers();
+
+        assert_eq!(managers.len(), 9);
+        assert!(
+            managers
+                .iter()
+                .any(|manager| manager.name == "ServiceManager")
+        );
+        assert!(
+            managers
+                .iter()
+                .any(|manager| manager.name == "LifecycleManager")
+        );
     }
 
     #[test]

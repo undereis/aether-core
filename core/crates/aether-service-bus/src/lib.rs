@@ -22,6 +22,141 @@ use thiserror::Error;
 /// Service Bus payload map.
 pub type BusPayload = Map<String, Value>;
 
+/// Typed bus contract used by the Contract Bus base.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+pub struct BusContract {
+    subject: String,
+    version: String,
+}
+
+impl BusContract {
+    /// Create a typed bus contract.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ServiceBusError::InvalidContract`] when subject or version is empty.
+    pub fn new(
+        subject: impl Into<String>,
+        version: impl Into<String>,
+    ) -> Result<Self, ServiceBusError> {
+        let subject = subject.into();
+        let version = version.into();
+        if subject.trim().is_empty() || version.trim().is_empty() {
+            return Err(ServiceBusError::InvalidContract);
+        }
+        Ok(Self { subject, version })
+    }
+
+    /// Return the contract subject.
+    #[must_use]
+    pub fn subject(&self) -> &str {
+        &self.subject
+    }
+
+    /// Return the contract version.
+    #[must_use]
+    pub fn version(&self) -> &str {
+        &self.version
+    }
+
+    fn route_key(&self) -> String {
+        format!("{}@{}", self.subject, self.version)
+    }
+}
+
+/// Contract request routed through the Contract Bus base.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct ContractRequest {
+    contract: BusContract,
+    payload: BusPayload,
+}
+
+impl ContractRequest {
+    /// Create a contract request.
+    #[must_use]
+    pub fn new(contract: BusContract) -> Self {
+        Self {
+            contract,
+            payload: BusPayload::new(),
+        }
+    }
+
+    /// Attach a JSON payload value.
+    #[must_use]
+    pub fn with_payload_value(mut self, key: impl Into<String>, value: Value) -> Self {
+        self.payload.insert(key.into(), value);
+        self
+    }
+
+    /// Return the typed contract.
+    #[must_use]
+    pub const fn contract(&self) -> &BusContract {
+        &self.contract
+    }
+
+    /// Return the request payload.
+    #[must_use]
+    pub const fn payload(&self) -> &BusPayload {
+        &self.payload
+    }
+}
+
+/// Contract reply returned by the Contract Bus base.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct ContractReply {
+    accepted: bool,
+    payload: BusPayload,
+}
+
+impl ContractReply {
+    /// Create an accepted contract reply.
+    #[must_use]
+    pub fn accepted() -> Self {
+        Self {
+            accepted: true,
+            payload: BusPayload::new(),
+        }
+    }
+
+    /// Attach a JSON payload value.
+    #[must_use]
+    pub fn with_payload_value(mut self, key: impl Into<String>, value: Value) -> Self {
+        self.payload.insert(key.into(), value);
+        self
+    }
+
+    /// Return whether the reply accepted the contract request.
+    #[must_use]
+    pub const fn is_accepted(&self) -> bool {
+        self.accepted
+    }
+
+    /// Return the reply payload.
+    #[must_use]
+    pub const fn payload(&self) -> &BusPayload {
+        &self.payload
+    }
+}
+
+/// Contract handler used by typed contract routing.
+pub trait ContractHandler: Send + Sync {
+    /// Handle a typed contract request.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ServiceBusError`] when request handling fails.
+    fn handle(&self, request: &ContractRequest) -> Result<ContractReply, ServiceBusError>;
+}
+
+impl<F> ContractHandler for F
+where
+    F: Fn(&ContractRequest) -> Result<ContractReply, ServiceBusError> + Send + Sync,
+{
+    fn handle(&self, request: &ContractRequest) -> Result<ContractReply, ServiceBusError> {
+        self(request)
+    }
+}
+
 /// Request handler used by local request/reply routing.
 pub trait RequestHandler: Send + Sync {
     /// Handle a local service request.
@@ -336,6 +471,31 @@ pub trait AetherServiceBus: Send + Sync {
     fn status(&self) -> Result<ServiceBusStatus, ServiceBusError>;
 }
 
+/// Contract Bus abstraction for typed internal service contracts.
+pub trait AetherContractBus: Send + Sync {
+    /// Register a typed contract handler.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ServiceBusError`] when the handler cannot be registered.
+    fn register_contract_handler(
+        &self,
+        contract: BusContract,
+        handler: Arc<dyn ContractHandler>,
+    ) -> Result<(), ServiceBusError>;
+
+    /// Execute a typed contract request.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ServiceBusError`] when routing fails or permission is missing.
+    fn request_contract(
+        &self,
+        source: &ServiceId,
+        request: &ContractRequest,
+    ) -> Result<ContractReply, ServiceBusError>;
+}
+
 /// In-memory Aether Service Bus implementation.
 #[derive(Clone, Default)]
 pub struct InMemoryAetherServiceBus {
@@ -343,6 +503,7 @@ pub struct InMemoryAetherServiceBus {
     notification_subscribers: Arc<Mutex<Vec<Sender<ServiceNotification>>>>,
     request_handlers: Arc<Mutex<BTreeMap<String, Arc<dyn RequestHandler>>>>,
     command_handlers: Arc<Mutex<BTreeMap<String, Arc<dyn CommandHandler>>>>,
+    contract_handlers: Arc<Mutex<BTreeMap<String, Arc<dyn ContractHandler>>>>,
     permissions: Arc<Mutex<BTreeMap<ServiceId, PermissionSet>>>,
 }
 
@@ -524,12 +685,48 @@ impl AetherServiceBus for InMemoryAetherServiceBus {
                 .lock()
                 .map_err(|_| ServiceBusError::BusUnavailable)?
                 .len(),
+            contract_handlers: self
+                .contract_handlers
+                .lock()
+                .map_err(|_| ServiceBusError::BusUnavailable)?
+                .len(),
             permission_entries: self
                 .permissions
                 .lock()
                 .map_err(|_| ServiceBusError::BusUnavailable)?
                 .len(),
         })
+    }
+}
+
+impl AetherContractBus for InMemoryAetherServiceBus {
+    fn register_contract_handler(
+        &self,
+        contract: BusContract,
+        handler: Arc<dyn ContractHandler>,
+    ) -> Result<(), ServiceBusError> {
+        self.contract_handlers
+            .lock()
+            .map_err(|_| ServiceBusError::BusUnavailable)?
+            .insert(contract.route_key(), handler);
+        Ok(())
+    }
+
+    fn request_contract(
+        &self,
+        source: &ServiceId,
+        request: &ContractRequest,
+    ) -> Result<ContractReply, ServiceBusError> {
+        self.ensure_permission(source, &Permission::service_command())?;
+        let handlers = self
+            .contract_handlers
+            .lock()
+            .map_err(|_| ServiceBusError::BusUnavailable)?;
+        let route = request.contract().route_key();
+        let handler = handlers
+            .get(&route)
+            .ok_or(ServiceBusError::NoRoute { route })?;
+        handler.handle(request)
     }
 }
 
@@ -565,6 +762,8 @@ pub struct ServiceBusStatus {
     pub request_handlers: usize,
     /// Number of command handlers.
     pub command_handlers: usize,
+    /// Number of typed contract handlers.
+    pub contract_handlers: usize,
     /// Number of permission entries.
     pub permission_entries: usize,
 }
@@ -584,6 +783,9 @@ pub enum ServiceBusError {
     /// Command is invalid.
     #[error("invalid service command")]
     InvalidCommand,
+    /// Contract is invalid.
+    #[error("invalid service contract")]
+    InvalidContract,
     /// Route has no handler.
     #[error("no route registered for {route}")]
     NoRoute {
@@ -646,8 +848,9 @@ mod tests {
     use serde_json::json;
 
     use super::{
-        AetherServiceBus, InMemoryAetherServiceBus, ServiceBusError, ServiceCommand,
-        ServiceNotification, ServiceReply, ServiceRequest,
+        AetherContractBus, AetherServiceBus, BusContract, ContractReply, ContractRequest,
+        InMemoryAetherServiceBus, ServiceBusError, ServiceCommand, ServiceNotification,
+        ServiceReply, ServiceRequest,
     };
 
     fn service_id() -> aether_ids::ServiceId {
@@ -794,7 +997,39 @@ mod tests {
 
         assert_eq!(status.event_bus, "in-memory");
         assert_eq!(status.request_handlers, 1);
+        assert_eq!(status.contract_handlers, 0);
         assert_eq!(status.permission_entries, 1);
+    }
+
+    #[test]
+    fn contract_bus_routes_typed_contract_request() {
+        let bus = InMemoryAetherServiceBus::new();
+        let service_id = service_id();
+        let contract = BusContract::new("system.inspect", "v1").expect("contract");
+        bus.register_permissions(&service_id, permissions())
+            .expect("permissions");
+        bus.register_contract_handler(
+            contract.clone(),
+            Arc::new(|request: &ContractRequest| {
+                Ok(ContractReply::accepted()
+                    .with_payload_value("subject", json!(request.contract().subject()))
+                    .with_payload_value("version", json!(request.contract().version())))
+            }),
+        )
+        .expect("handler");
+
+        let reply = bus
+            .request_contract(&service_id, &ContractRequest::new(contract))
+            .expect("reply");
+        let status = bus.status().expect("status");
+
+        assert!(reply.is_accepted());
+        assert_eq!(
+            reply.payload().get("subject"),
+            Some(&json!("system.inspect"))
+        );
+        assert_eq!(reply.payload().get("version"), Some(&json!("v1")));
+        assert_eq!(status.contract_handlers, 1);
     }
 
     #[test]

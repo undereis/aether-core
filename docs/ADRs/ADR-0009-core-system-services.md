@@ -40,3 +40,10 @@ crate does not become an alternate runtime or a parallel registry.
   behavior.
 - Future phases can expand service internals while preserving the same
   manifest, permission, resource, and ASB boundaries.
+
+## Phase 4.5 Addendum
+
+Phase 4.5 refines internal ownership without changing the Phase 4 service
+model. The Kernel remains the public coordination facade. Service registry,
+service discovery, service inspection, service health aggregation, and ASB
+permission registration are now owned by `ServiceManager`.

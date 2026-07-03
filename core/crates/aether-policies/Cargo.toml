@@ -1,0 +1,14 @@
+[package]
+name = "aether-policies"
+description = "Policy layer contracts for Aether behavior control."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+aether-ids.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true

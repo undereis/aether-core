@@ -1,0 +1,14 @@
+[package]
+name = "aether-domains"
+description = "System domain model for Aether architecture boundaries."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+aether-ids.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true

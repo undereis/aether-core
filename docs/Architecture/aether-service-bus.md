@@ -16,6 +16,22 @@ through a new ADR.
 - Service notification broadcast.
 - Bus status inspection.
 
+## Phase 4.5 Contract Bus Base
+
+The ASB now includes a base Contract Bus abstraction for typed internal
+contracts:
+
+- `BusContract`;
+- `ContractRequest`;
+- `ContractReply`;
+- `ContractHandler`;
+- `AetherContractBus`.
+
+The current implementation is still in-memory and local. The Contract Bus base
+does not introduce business contracts; it only prepares a typed routing surface
+so future services can communicate through versioned internal contracts instead
+of ad hoc command names.
+
 ## Permission Enforcement
 
 ASB checks declared permissions before service actions:
@@ -36,4 +52,4 @@ boundary.
 
 The Phase 3 ASB is synchronous and local. It does not provide distributed
 delivery guarantees, durable queues, authentication, encryption, retries,
-backpressure, or production transport adapters.
+backpressure, schema negotiation, or production transport adapters.

@@ -43,6 +43,16 @@ Phase 4 introduces the official service map and core system service base:
 - Service Inspector Service
 - service map and system service inspection CLI
 
+Phase 4.5 decomposes Kernel internals into long-lived platform layers:
+
+- `aether-managers`
+- `aether-drivers`
+- `aether-domains`
+- `aether-policies`
+- ServiceManager owns service registration and inspection internals
+- LifecycleManager owns module registry and lifecycle internals
+- ASB includes the base Contract Bus abstraction
+
 No AI, agents, UI, OS event capture, or business behavior is implemented here.
 
 Run the CLI with:

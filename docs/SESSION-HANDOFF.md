@@ -1,27 +1,32 @@
 # Aether Session Handoff
 
-Last updated: 2026-07-01
+Last updated: 2026-07-03
 
 ## Current Status
 
-The Aether foundation is complete through Phase 4 and ready for review.
+The Aether foundation is complete through Phase 4.5. The Foundation Era is
+closed after the official Phase 4.5 architecture checkpoint.
 
 - Phase 0: approved.
 - Foundation hardening: completed.
 - Phase 1 Core Runtime in Rust: implemented and validated.
 - Phase 2 Aether Kernel: implemented and validated.
 - Phase 3 Aether Service Platform: implemented, validated, committed, and tagged.
-- Phase 4 Official Service Map + Core System Services: implemented and pending
-  final review.
+- Phase 4 Official Service Map + Core System Services: implemented, validated,
+  committed, and tagged.
+- Phase 4.5 Kernel Decomposition: implemented, validated, approved, and ready
+  for official checkpoint.
 
-The repository has an official checkpoint through Phase 3:
+The repository had an official checkpoint through Phase 4 before this closure
+run:
 
 - branch: `master`
-- commit: `fb854cef781cd0457356bf95544bdec528fe48e3`
-- tag: `v0.3.0-service-platform`
+- commit: `87d3d2edbb9ffd3ad60b949bbe610be00f381e4c`
+- tag: `v0.4.0-core-system-services`
 
-Phase 4 is implemented but not committed. Check `git status --short` at the
-start of the next session before any action.
+Do not start Phase 5 without explicit user authorization.
+
+The official Phase 4.5 checkpoint is `v0.4.5-kernel-decomposition`.
 
 ## What Was Done
 
@@ -290,6 +295,66 @@ Updated supporting docs:
 - `docs/Roadmap/README.md`
 - `docs/Tech-Stack/README.md`
 
+### Phase 4.5: Kernel Decomposition
+
+Implemented the Kernel decomposition and Manager Layer:
+
+- Added `aether-managers`
+  - `ServiceManager`
+  - `LifecycleManager`
+  - `ResourceManager`
+  - `TelemetryManager`
+  - `ConfigurationManager`
+  - `PermissionManager`
+  - `HealthManager`
+  - `DriverManager`
+  - `PluginManager`
+- Moved module registry and lifecycle internals behind `LifecycleManager`.
+- Moved service registry, service discovery, service inspect, service health,
+  and ASB permission registration behind `ServiceManager`.
+- Kept `AetherKernel` public methods as a compatibility facade.
+- Added `aether-drivers` with driver contracts only.
+- Added `aether-domains` with domain descriptors only.
+- Added `aether-policies` with policy contracts only.
+- Extended `aether-ids` with:
+  - `mgr_`
+  - `drv_`
+  - `dom_`
+  - `pol_`
+- Added Contract Bus base types to `aether-service-bus`:
+  - `BusContract`
+  - `ContractRequest`
+  - `ContractReply`
+  - `ContractHandler`
+  - `AetherContractBus`
+- Phase 4.5 approved.
+- Kernel Decomposition completed.
+- Manager Layer official.
+- Driver Layer official.
+- Domain Layer official.
+- Policy Layer official.
+- Contract Bus Base introduced.
+- Foundation Era completed.
+
+Created Phase 4.5 documentation:
+
+- `docs/Architecture/kernel-architecture.md`
+- `docs/Architecture/manager-architecture.md`
+- `docs/Architecture/driver-architecture.md`
+- `docs/Architecture/domain-architecture.md`
+- `docs/Architecture/policy-architecture.md`
+
+Updated supporting docs:
+
+- `core/README.md`
+- `CHANGELOG.md`
+- `docs/ADRs/ADR-0005-typed-id-strategy.md`
+- `docs/Architecture/README.md`
+- `docs/Architecture/aether-kernel.md`
+- `docs/Architecture/aether-service-bus.md`
+- `docs/Project-Structure/README.md`
+- `docs/SESSION-HANDOFF.md`
+
 ## Implemented Events
 
 The event model includes:
@@ -313,7 +378,7 @@ Each event contains:
 
 ## Validation Status
 
-The final Phase 3 validation passed:
+The final Phase 4.5 validation passed:
 
 - `make validate`
 - `cargo fmt --all -- --check`
@@ -356,19 +421,84 @@ Validation coverage includes:
 - System service CLI validation
 - Bus CLI validation
 
-Rust workspace test count after Phase 4: 77 tests passed.
+Rust workspace test count after Phase 4.5: 96 tests passed.
+
+The official Phase 4 checkpoint validation passed immediately before commit:
+
+- `make validate`: passed.
+- Commit: `87d3d2edbb9ffd3ad60b949bbe610be00f381e4c`.
+- Tag: `v0.4.0-core-system-services`.
+- Final `git status --short` after the checkpoint: clean.
+- Secret scan: no real `.env`, tokens, private keys, or secrets were versioned.
+- Only the expected `.env.example` placeholder was detected:
+  `POSTGRES_PASSWORD=aether_dev_password`.
+
+## Architecture Milestones
+
+| Version | Milestone |
+| --- | --- |
+| `v0.2.0` | Kernel |
+| `v0.3.0` | Service Platform |
+| `v0.4.0` | Core System Services |
+| `v0.4.5` | Kernel Decomposition |
 
 ## Current Git State
 
-Phase 4 has not been committed.
+The official repository checkpoint is clean through Phase 4 before the Phase
+4.5 closure commit. Phase 4.5 changes are expected to be committed and tagged
+by the official checkpoint task.
 
-Suggested Phase 4 commit and tag after review:
+Checkpoint:
 
-```bash
-git add .
-git commit -m "feat(system): add official service map and core system services"
-git tag v0.4.0-core-system-services
-```
+- commit: `87d3d2edbb9ffd3ad60b949bbe610be00f381e4c`
+- tag: `v0.4.0-core-system-services`
+- branch: `master`
+
+The official Phase 4.5 checkpoint tag is `v0.4.5-kernel-decomposition`.
+
+### Phase 4.5 Checkpoint Contents
+
+The Phase 4.5 checkpoint versions the Kernel Decomposition implementation and
+its documentation.
+
+Changed tracked files:
+
+- `CHANGELOG.md`
+- `Cargo.lock`
+- `Cargo.toml`
+- `core/README.md`
+- `core/crates/aether-cli/src/lib.rs`
+- `core/crates/aether-ids/src/lib.rs`
+- `core/crates/aether-kernel/Cargo.toml`
+- `core/crates/aether-kernel/src/lib.rs`
+- `core/crates/aether-service-bus/src/lib.rs`
+- `docs/ADRs/ADR-0005-typed-id-strategy.md`
+- `docs/Architecture/README.md`
+- `docs/Architecture/aether-kernel.md`
+- `docs/Architecture/aether-service-bus.md`
+- `docs/Project-Structure/README.md`
+- `docs/Roadmap/README.md`
+- `docs/SESSION-HANDOFF.md`
+
+New Phase 4.5 files/directories:
+
+- `core/crates/aether-domains/`
+- `core/crates/aether-drivers/`
+- `core/crates/aether-managers/`
+- `core/crates/aether-policies/`
+- `docs/Architecture/domain-architecture.md`
+- `docs/Architecture/driver-architecture.md`
+- `docs/Architecture/kernel-architecture.md`
+- `docs/Architecture/manager-architecture.md`
+- `docs/Architecture/policy-architecture.md`
+
+The official closure validation passed before the checkpoint:
+
+- `make validate`
+- `cargo fmt --all -- --check`
+- `cargo clippy --workspace --all-targets -- -D warnings`
+- `cargo test --workspace`
+- `cargo check --workspace`
 
 ## Important Local Environment Notes
 
@@ -419,17 +549,19 @@ The following remain out of scope and were not implemented:
 
 ## Next Recommended Steps
 
-The next section should begin with Phase 4 review, not Phase 5 implementation.
+The next section should begin with an explicit user decision, not automatic
+Phase 5 implementation. The Foundation Era is closed. Future approved phases
+will move from infrastructure foundation toward cognitive capabilities.
 
 Recommended order:
 
-1. Review the official service map and classification choices.
-2. Review the five Phase 4 manifests and their capability/permission/resource
-   declarations.
-3. Review `aether-system-services` public API and ASB handler registration.
-4. Review Engineering Rule #002 enforcement for core system services.
-5. Create a commit and tag for Phase 4 after review.
-6. Only after review approval, define the formal scope for Phase 5.
+1. Start from `git status --short`.
+2. Review the Phase 4.5 checkpoint if needed:
+   `git show --stat v0.4.5-kernel-decomposition`.
+3. Wait for the user to authorize Phase 5 before implementing anything.
+4. Do not implement AI, agents, Memory Engine, Knowledge Graph, authentication,
+   frontend, desktop, or business persistence unless a future phase explicitly
+   authorizes it.
 
 ## Useful Commands
 
@@ -465,6 +597,25 @@ Aether now has a validated native Rust foundation for internal runtime
 contracts, local configuration, structured logs, module lifecycle, internal
 events, typed IDs, telemetry abstraction, a Kernel orchestration layer, and the
 Aether Service Platform. Phase 4 adds the official service map and the first
-core system service base. It is intentionally not yet a product runtime, AI
-system, agent system, desktop shell, memory engine, knowledge graph, or data
-platform.
+core system service base. Phase 4.5 completes Kernel decomposition with official
+Manager, Driver, Domain, and Policy layers plus the Contract Bus base. It is
+intentionally not yet a product runtime, AI system, agent system, desktop shell,
+memory engine, knowledge graph, or data platform.
+
+## Session Closure Note
+
+This session is being closed after Phase 4.5 implementation, validation,
+approval, and official architecture checkpoint.
+
+Important continuation point:
+
+- The Phase 4.5 Kernel Decomposition is the official close of the Foundation
+  Era.
+- The official Phase 4.5 tag is `v0.4.5-kernel-decomposition`.
+- The previous official checkpoint was Phase 4:
+  `87d3d2edbb9ffd3ad60b949bbe610be00f381e4c`
+  / `v0.4.0-core-system-services`.
+- The next session should start by checking `git status --short`.
+- If the user authorizes Phase 5 later, read this handoff first and preserve the
+  Phase 4.5 architecture boundaries.
+- Do not start Phase 5 automatically.

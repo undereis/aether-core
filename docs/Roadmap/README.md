@@ -46,6 +46,25 @@
 - `aether-system-services` crate for loading and registering base services.
 - CLI inspection for service map and core system services.
 
+## Phase 4.5: Kernel Decomposition
+
+- Kernel responsibilities reduced to coordination.
+- Manager Layer made official.
+- Driver Layer contracts introduced.
+- Domain Layer contracts introduced.
+- Policy Layer contracts introduced.
+- Contract Bus base introduced on top of the ASB.
+- Foundation Era completed.
+
+## Architecture Milestones
+
+| Version | Milestone |
+| --- | --- |
+| `v0.2.0` | Kernel |
+| `v0.3.0` | Service Platform |
+| `v0.4.0` | Core System Services |
+| `v0.4.5` | Kernel Decomposition |
+
 ## Later Phases
 
 - Memory engine.
