@@ -7,10 +7,10 @@ contains no product features, no agents, no embeddings, no memory engine, no
 chat, no business APIs, and no authentication. Its purpose is to establish the
 engineering baseline for future decades of work.
 
-The Foundation Era is complete through Phase 4.5. Future approved phases will
+The Foundation Era is complete through Phase 4.6. Future approved phases will
 build cognitive capabilities on top of the Kernel, Manager Layer, Service
-Platform, Driver contracts, Domain model, Policy model, ASB, and Contract Bus
-base established here.
+Platform, Driver contracts, Domain model, Policy model, ASB, Contract Bus base,
+and Aether Engineering Protocols established here.
 
 ## Phase 0 Scope
 
@@ -88,9 +88,22 @@ authentication, frontend, desktop functionality, and business persistence.
 - Contract Bus base on top of the ASB.
 - Public compatibility facade preserved on the Kernel.
 
-Phase 4.5 closes the Foundation Era. It still excludes AI, agents, Memory
-Engine, Knowledge Graph, authentication, frontend, desktop functionality, and
-business persistence.
+Phase 4.5 structurally closes the Foundation Era. It still excludes AI, agents,
+Memory Engine, Knowledge Graph, authentication, frontend, desktop functionality,
+and business persistence.
+
+## Phase 4.6 Scope
+
+- Aether Engineering Protocols.
+- Architecture Constitution v2.
+- Architecture Bible.
+- Architecture Evolution Roadmap.
+- Architectural Gravity classification.
+- Architecture Guardian authority.
+
+Phase 4.6 adds governance only. It does not alter runtime behavior, public APIs,
+AI, agents, Memory Engine, Knowledge Graph, authentication, frontend, desktop
+functionality, or business persistence.
 
 ## Quick Start
 

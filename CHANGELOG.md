@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.4.6-aether-engineering-protocol
+
+- Established the Aether Engineering Protocols.
+- Added Architecture Constitution v2.
+- Added Architecture Bible.
+- Added Architecture Evolution Roadmap.
+- Added Architectural Gravity classification.
+- Instituted the Architecture Guardian role.
+- Documented that future phases must obey AEP governance.
+
 ## v0.4.5-kernel-decomposition
 
 - Phase 4.5 approved.
