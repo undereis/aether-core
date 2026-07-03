@@ -5,7 +5,8 @@ Last updated: 2026-07-03
 ## Current Status
 
 The Aether foundation is complete through Phase 4.6. The Foundation Era is
-closed structurally and constitutionally.
+closed structurally and constitutionally. CDR-0001 has been drafted for
+architecture review; the Cognitive Era has not started implementation.
 
 - Phase 0: approved.
 - Foundation hardening: completed.
@@ -16,19 +17,20 @@ closed structurally and constitutionally.
   committed, and tagged.
 - Phase 4.5 Kernel Decomposition: implemented, validated, approved, committed,
   and tagged.
-- Phase 4.6 Aether Engineering Protocol: governance documentation created and
-  awaiting review.
+- Phase 4.6 Aether Engineering Protocol: implemented, validated, approved,
+  committed, and tagged.
+- CDR-0001 Cognitive Design Review: drafted for review.
 
-The repository has an official checkpoint through Phase 4.5:
+The repository has an official checkpoint through Phase 4.6:
 
 - branch: `master`
-- commit: `9a93a1625a93fad24dec40d98cc5df5d189938ce`
-- tag: `v0.4.5-kernel-decomposition`
+- commit: `a289a08cdedc4b5b4f53c101ec7df9a8bd22dc5e`
+- tag: `v0.4.6-aether-engineering-protocol`
 
-Do not start Phase 5 without explicit user authorization.
+Do not start Cognitive Era implementation without explicit user authorization
+and approval of CDR-0001 plus the relevant domain RFC.
 
-The official Phase 4.5 checkpoint is `v0.4.5-kernel-decomposition`.
-Phase 4.6 has no commit or tag yet.
+The official Phase 4.6 checkpoint is `v0.4.6-aether-engineering-protocol`.
 
 ## What Was Done
 
@@ -377,6 +379,38 @@ Updated governance documents:
 Phase 4.6 does not implement Memory, Knowledge, AI, agents, new services, new
 managers, new drivers, or functional behavior.
 
+### CDR-0001: Cognitive Design Review
+
+Drafted the official cognitive architecture review:
+
+- `docs/CDR/CDR-0001-Cognitive-Design-Review.md`
+
+The CDR defines:
+
+- Cognitive Philosophy;
+- Cognitive Pipeline;
+- Domain Boundaries;
+- Memory Model;
+- Knowledge Model;
+- Context Model;
+- Planning Model;
+- Reasoning Model;
+- Decision Model;
+- Action Model;
+- Learning Model;
+- Inference Model;
+- future Cognitive Managers;
+- future Cognitive Services;
+- future Cognitive Policies;
+- anti-patterns;
+- cognitive principles;
+- RFC order for Era II;
+- risks;
+- acceptance criteria.
+
+CDR-0001 does not implement Memory, Knowledge, AI, agents, services, managers,
+drivers, APIs, contracts, or runtime behavior.
+
 Created Phase 4.5 documentation:
 
 - `docs/Architecture/kernel-architecture.md`
@@ -462,7 +496,7 @@ Validation coverage includes:
 - System service CLI validation
 - Bus CLI validation
 
-Rust workspace test count after Phase 4.5: 96 tests passed.
+Rust workspace test count after Phase 4.6: 96 tests passed.
 
 The official Phase 4 checkpoint validation passed immediately before commit:
 
@@ -486,17 +520,16 @@ The official Phase 4 checkpoint validation passed immediately before commit:
 
 ## Current Git State
 
-The official repository checkpoint is clean through Phase 4 before the Phase
-4.5 closure commit. Phase 4.5 changes are expected to be committed and tagged
-by the official checkpoint task.
+The official repository checkpoint is clean through Phase 4.6 before CDR-0001
+drafting.
 
 Checkpoint:
 
-- commit: `87d3d2edbb9ffd3ad60b949bbe610be00f381e4c`
-- tag: `v0.4.0-core-system-services`
+- commit: `a289a08cdedc4b5b4f53c101ec7df9a8bd22dc5e`
+- tag: `v0.4.6-aether-engineering-protocol`
 - branch: `master`
 
-The official Phase 4.5 checkpoint tag is `v0.4.5-kernel-decomposition`.
+CDR-0001 is drafted in the working tree and is not committed or tagged.
 
 ### Phase 4.5 Checkpoint Contents
 
@@ -591,18 +624,18 @@ The following remain out of scope and were not implemented:
 
 ## Next Recommended Steps
 
-The next section should begin with an explicit user decision, not automatic
-Phase 5 implementation. The Foundation Era is closed. Future approved phases
-will move from infrastructure foundation toward cognitive capabilities under
-AEP governance.
+The next section should begin with architecture review of CDR-0001, not
+automatic Cognitive Era implementation. The Foundation Era is closed. Future
+approved phases will move from infrastructure foundation toward cognitive
+capabilities under AEP governance only after CDR and RFC approval.
 
 Recommended order:
 
 1. Start from `git status --short`.
-2. Review the Phase 4.5 checkpoint if needed:
-   `git show --stat v0.4.5-kernel-decomposition`.
-3. Review Phase 4.6 governance docs before authorizing the Cognitive Era.
-4. Wait for the user to authorize Phase 5 before implementing anything.
+2. Review the Phase 4.6 checkpoint if needed:
+   `git show --stat v0.4.6-aether-engineering-protocol`.
+3. Review `docs/CDR/CDR-0001-Cognitive-Design-Review.md`.
+4. If approved, authorize only the CDR checkpoint.
 5. Do not implement AI, agents, Memory Engine, Knowledge Graph, authentication,
    frontend, desktop, or business persistence unless a future phase explicitly
    authorizes it.
@@ -646,33 +679,33 @@ Manager, Driver, Domain, and Policy layers plus the Contract Bus base. It is
 intentionally not yet a product runtime, AI system, agent system, desktop shell,
 memory engine, knowledge graph, or data platform. Phase 4.6 establishes the
 Aether Engineering Protocols and Architecture Constitution v2 that will govern
-future cognitive implementation.
+future cognitive implementation. CDR-0001 now drafts the cognitive architecture
+for review before any Cognitive Era implementation.
 
 ## Session Closure Note
 
-This session is being closed after Phase 4.6 governance implementation and
-validation, pending architecture review.
+This session now contains the drafted CDR-0001 architecture review after the
+official Phase 4.6 checkpoint.
 
 Important continuation point:
 
 - The Phase 4.5 Kernel Decomposition is the structural close of the Foundation
   Era.
 - Phase 4.6 is the constitutional close of the Foundation Era.
-- The official Phase 4.5 tag is `v0.4.5-kernel-decomposition`.
-- Phase 4.6 is implemented and validated in the working tree, but it is not
-  committed or tagged.
-- Suggested Phase 4.6 commit:
-  `docs(aep): establish Aether Engineering Protocol`.
-- Suggested Phase 4.6 tag is `v0.4.6-aether-engineering-protocol`.
-- The previous official checkpoint was Phase 4.5:
-  `9a93a1625a93fad24dec40d98cc5df5d189938ce`
-  / `v0.4.5-kernel-decomposition`.
+- The official Phase 4.6 tag is `v0.4.6-aether-engineering-protocol`.
+- The official Phase 4.6 commit is
+  `a289a08cdedc4b5b4f53c101ec7df9a8bd22dc5e`.
+- CDR-0001 is drafted and awaits architecture review.
+- Suggested CDR-0001 commit:
+  `docs(cdr): establish Cognitive Design Review`.
+- Suggested CDR-0001 tag is `v0.5.0-cognitive-design-review`.
 - The next session should start by checking `git status --short`.
-- If the user approves the Phase 4.6 checkpoint, run validation first and then
-  create only the approved commit and tag.
-- If the user authorizes Phase 5 later, read this handoff first and preserve the
-  Phase 4.5 architecture boundaries and Phase 4.6 AEP governance.
-- Do not start Phase 5 automatically.
+- If the user approves the CDR checkpoint, run validation first and then create
+  only the approved commit and tag.
+- If the user authorizes Cognitive Era implementation later, read this handoff
+  first and preserve the Phase 4.5 architecture boundaries, Phase 4.6 AEP
+  governance, and CDR-0001 cognitive boundaries.
+- Do not start Cognitive Era implementation automatically.
 
 ### Phase 4.6 Closing Snapshot
 
@@ -720,6 +753,23 @@ Phase 4.6 changed documentation and governance only. It did not change runtime
 behavior, public APIs, crates, services, managers, drivers, Memory, Knowledge,
 AI, agents, frontend, desktop, or business persistence.
 
+### CDR-0001 Closing Snapshot
+
+Files changed by CDR-0001:
+
+- `CHANGELOG.md`
+- `docs/CDR/CDR-0001-Cognitive-Design-Review.md`
+- `docs/Roadmap/README.md`
+- `docs/SESSION-HANDOFF.md`
+
+Suggested CDR-0001 commit:
+
+- `docs(cdr): establish Cognitive Design Review`
+
+Suggested CDR-0001 tag:
+
+- `v0.5.0-cognitive-design-review`
+
 The next session should not start the Cognitive Era automatically. It should
-first review Phase 4.6, then wait for explicit approval for either the Phase 4.6
-Git checkpoint or the formal next phase.
+first review CDR-0001, then wait for explicit approval for either the CDR
+checkpoint or a future RFC phase.
