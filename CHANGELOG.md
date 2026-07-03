@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+No unreleased product, runtime, or architecture implementation changes.
+
+## v0.5.1-memory-domain-rfc
+
 - RFC-0001 Revision 1 Memory Domain Architectural Review drafted.
 - RFC-0001 Memory Domain drafted.
 - Proposed AEP-0016 Cognitive Traceability.
