@@ -38,6 +38,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "aether-domains"
+version = "0.1.0"
+dependencies = [
+ "aether-ids",
+ "thiserror",
+]
+
+[[package]]
+name = "aether-drivers"
+version = "0.1.0"
+dependencies = [
+ "aether-core",
+ "aether-ids",
+ "aether-resources",
+ "thiserror",
+]
+
+[[package]]
 name = "aether-events"
 version = "0.1.0"
 dependencies = [
@@ -67,6 +85,7 @@ dependencies = [
  "aether-events",
  "aether-ids",
  "aether-logging",
+ "aether-managers",
  "aether-runtime",
  "aether-service",
  "aether-service-bus",
@@ -85,10 +104,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "aether-managers"
+version = "0.1.0"
+dependencies = [
+ "aether-core",
+ "aether-ids",
+ "aether-permissions",
+ "aether-resources",
+ "aether-service",
+ "aether-service-bus",
+ "thiserror",
+]
+
+[[package]]
 name = "aether-permissions"
 version = "0.1.0"
 dependencies = [
  "serde",
+ "thiserror",
+]
+
+[[package]]
+name = "aether-policies"
+version = "0.1.0"
+dependencies = [
+ "aether-ids",
  "thiserror",
 ]
 

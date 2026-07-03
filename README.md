@@ -7,6 +7,11 @@ contains no product features, no agents, no embeddings, no memory engine, no
 chat, no business APIs, and no authentication. Its purpose is to establish the
 engineering baseline for future decades of work.
 
+The Foundation Era is complete through Phase 4.5. Future approved phases will
+build cognitive capabilities on top of the Kernel, Manager Layer, Service
+Platform, Driver contracts, Domain model, Policy model, ASB, and Contract Bus
+base established here.
+
 ## Phase 0 Scope
 
 - Professional monorepo structure.
@@ -72,6 +77,20 @@ database schemas, frontend, desktop functionality, and production sandboxing.
 
 Phase 4 still excludes AI, agents, Memory Engine, Knowledge Graph,
 authentication, frontend, desktop functionality, and business persistence.
+
+## Phase 4.5 Scope
+
+- Kernel decomposition to prevent growth into a God Object.
+- Official Manager Layer infrastructure.
+- Driver Layer contracts.
+- Domain Layer contracts.
+- Policy Layer contracts.
+- Contract Bus base on top of the ASB.
+- Public compatibility facade preserved on the Kernel.
+
+Phase 4.5 closes the Foundation Era. It still excludes AI, agents, Memory
+Engine, Knowledge Graph, authentication, frontend, desktop functionality, and
+business persistence.
 
 ## Quick Start
 

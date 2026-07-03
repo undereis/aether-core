@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.4.5-kernel-decomposition
+
+- Phase 4.5 approved.
+- Foundation Era completed.
+- Kernel Decomposition completed.
+- Manager Layer made official.
+- Driver Layer made official.
+- Domain Layer made official.
+- Policy Layer made official.
+- Contract Bus Base introduced.
+- Added the Manager Layer infrastructure.
+- Moved module registry and lifecycle ownership behind `LifecycleManager`.
+- Moved service registry and service health ownership behind `ServiceManager`.
+- Added Driver, Domain, and Policy layer contracts.
+- Added typed IDs for managers, drivers, domains, and policies.
+- Added the Contract Bus base on top of the existing ASB.
+- Added Phase 4.5 architecture documentation.
+
 ## v0.4.0-core-system-services
 
 - Added the official Aether service map across Foundation, Cognitive, AI,

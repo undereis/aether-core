@@ -26,14 +26,27 @@ loading and runtime health checks to it.
 
 The Kernel adds orchestration state that the Runtime intentionally does not own:
 
-- module registry
-- dependency validation
-- capability index
-- lifecycle state snapshots
+- Manager registry
+- Lifecycle Manager facade
+- Service Manager facade
 - kernel-level telemetry
 
 This keeps the Runtime small and preserves the Phase 1 contract while allowing
 the Kernel to evolve as the central coordination layer.
+
+## Phase 4.5 Decomposition
+
+The Kernel no longer owns module registry and service registry internals
+directly.
+
+- `LifecycleManager` owns module registration, dependency validation,
+  lifecycle transitions, capability index snapshots, and module health reports.
+- `ServiceManager` owns service registration, discovery, inspection, health
+  aggregation, and ASB permission registration.
+- `ManagerRegistry` records the built-in platform Managers.
+
+`AetherKernel` still exposes compatible public methods for earlier phases, but
+the implementation delegates to Managers.
 
 ## Crate Boundaries
 
@@ -42,8 +55,10 @@ the Kernel to evolve as the central coordination layer.
 - `aether-events`: event contracts and `EventBusPort` abstraction.
 - `aether-config`: configuration model and `ConfigProvider` abstraction.
 - `aether-telemetry`: telemetry emitter and sink contracts.
+- `aether-managers`: Manager layer, ServiceManager, LifecycleManager, and
+  manager descriptors.
 - `aether-runtime`: concrete runtime bootstrap and module execution.
-- `aether-kernel`: registry, lifecycle orchestration, health, and discovery.
+- `aether-kernel`: reduced coordination facade above Runtime and Managers.
 - `aether-cli`: validation commands for runtime and kernel.
 
 ## Current Limits

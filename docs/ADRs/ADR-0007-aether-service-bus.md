@@ -39,3 +39,9 @@ must pass through the Aether Service Bus.
 - Future transports can be introduced behind the ASB abstraction.
 - Permission checks have a natural enforcement point.
 - The initial implementation remains local and simple.
+
+## Phase 4.5 Addendum
+
+Phase 4.5 introduces the Contract Bus base on top of the ASB. The implementation
+remains local and in-memory, but typed contracts now have an official extension
+point for future strongly typed internal communication.

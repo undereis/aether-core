@@ -27,9 +27,13 @@ Aether/
 
 - `aether-events`: base events and internal event bus.
 - `aether-config`: local runtime configuration.
+- `aether-domains`: permanent system domain boundaries.
+- `aether-drivers`: future driver contracts and registry.
 - `aether-ids`: typed identifier strategy.
 - `aether-logging`: structured logging primitives.
+- `aether-managers`: manager layer, ServiceManager, and LifecycleManager.
 - `aether-permissions`: internal service permission model.
+- `aether-policies`: policy contracts and registry.
 - `aether-resources`: service resource declaration model.
 - `aether-service`: service manifest, descriptor, registry, and health aggregation.
 - `aether-service-bus`: Aether Service Bus abstraction and in-memory implementation.
@@ -37,5 +41,5 @@ Aether/
 - `aether-telemetry`: telemetry abstraction.
 - `aether-core`: module lifecycle contracts.
 - `aether-runtime`: runtime bootstrap.
-- `aether-kernel`: kernel orchestration, registry, lifecycle, health, and discovery.
+- `aether-kernel`: reduced coordination facade above Runtime and Managers.
 - `aether-cli`: validation CLI.

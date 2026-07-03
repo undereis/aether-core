@@ -18,6 +18,12 @@ not define business domains yet.
 The native Rust runtime is described in `docs/Architecture/core-runtime.md`.
 The kernel orchestration layer is described in
 `docs/Architecture/aether-kernel.md`.
+The Phase 4.5 Kernel decomposition is described in
+`docs/Architecture/kernel-architecture.md`,
+`docs/Architecture/manager-architecture.md`,
+`docs/Architecture/driver-architecture.md`,
+`docs/Architecture/domain-architecture.md`, and
+`docs/Architecture/policy-architecture.md`.
 Module lifecycle rules are described in
 `docs/Architecture/module-lifecycle.md`.
 Telemetry is described in `docs/Architecture/telemetry.md`.
@@ -44,3 +50,18 @@ transport, framework, storage, or UI details.
 Synchronous APIs are allowed for platform health and version checks. Future
 cross-module workflows should prefer events once domain capabilities exist.
 Service-to-service communication must pass through the Aether Service Bus.
+
+## Architecture Milestones
+
+| Version | Milestone | Architectural Outcome |
+| --- | --- | --- |
+| `v0.2.0` | Kernel | Kernel orchestration above the Core Runtime. |
+| `v0.3.0` | Service Platform | Service Model, manifests, permissions, resources, and ASB. |
+| `v0.4.0` | Core System Services | Official service map and base system services. |
+| `v0.4.5` | Kernel Decomposition | Manager, Driver, Domain, Policy layers and Contract Bus base. |
+
+## Foundation Era Closure
+
+Phase 4.5 closes the Foundation Era. The architecture now has the platform
+boundaries required for future cognitive capabilities without introducing those
+capabilities yet.

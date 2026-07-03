@@ -22,6 +22,14 @@ pub enum IdPrefix {
     Capability,
     /// Service identifiers use the `svc_` prefix.
     Service,
+    /// Manager identifiers use the `mgr_` prefix.
+    Manager,
+    /// Driver identifiers use the `drv_` prefix.
+    Driver,
+    /// Domain identifiers use the `dom_` prefix.
+    Domain,
+    /// Policy identifiers use the `pol_` prefix.
+    Policy,
 }
 
 impl IdPrefix {
@@ -34,6 +42,10 @@ impl IdPrefix {
             Self::Kernel => "ker",
             Self::Capability => "cap",
             Self::Service => "svc",
+            Self::Manager => "mgr",
+            Self::Driver => "drv",
+            Self::Domain => "dom",
+            Self::Policy => "pol",
         }
     }
 }
@@ -311,6 +323,166 @@ impl fmt::Display for ServiceId {
     }
 }
 
+/// Typed manager identifier.
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(transparent)]
+pub struct ManagerId(TypedId);
+
+impl ManagerId {
+    /// Generate a typed manager identifier.
+    #[must_use]
+    pub fn generate() -> Self {
+        Self(TypedId::generate(IdPrefix::Manager))
+    }
+
+    /// Create a typed manager identifier from a stable suffix.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`IdError`] when the suffix is invalid.
+    pub fn new(suffix: impl Into<String>) -> Result<Self, IdError> {
+        Ok(Self(TypedId::new(IdPrefix::Manager, suffix)?))
+    }
+
+    /// Return the raw typed identifier.
+    #[must_use]
+    pub const fn typed(&self) -> &TypedId {
+        &self.0
+    }
+
+    /// Return the identifier as a string slice.
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        self.0.as_str()
+    }
+}
+
+impl fmt::Display for ManagerId {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.0.fmt(formatter)
+    }
+}
+
+/// Typed driver identifier.
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(transparent)]
+pub struct DriverId(TypedId);
+
+impl DriverId {
+    /// Generate a typed driver identifier.
+    #[must_use]
+    pub fn generate() -> Self {
+        Self(TypedId::generate(IdPrefix::Driver))
+    }
+
+    /// Create a typed driver identifier from a stable suffix.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`IdError`] when the suffix is invalid.
+    pub fn new(suffix: impl Into<String>) -> Result<Self, IdError> {
+        Ok(Self(TypedId::new(IdPrefix::Driver, suffix)?))
+    }
+
+    /// Return the raw typed identifier.
+    #[must_use]
+    pub const fn typed(&self) -> &TypedId {
+        &self.0
+    }
+
+    /// Return the identifier as a string slice.
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        self.0.as_str()
+    }
+}
+
+impl fmt::Display for DriverId {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.0.fmt(formatter)
+    }
+}
+
+/// Typed domain identifier.
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(transparent)]
+pub struct DomainId(TypedId);
+
+impl DomainId {
+    /// Generate a typed domain identifier.
+    #[must_use]
+    pub fn generate() -> Self {
+        Self(TypedId::generate(IdPrefix::Domain))
+    }
+
+    /// Create a typed domain identifier from a stable suffix.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`IdError`] when the suffix is invalid.
+    pub fn new(suffix: impl Into<String>) -> Result<Self, IdError> {
+        Ok(Self(TypedId::new(IdPrefix::Domain, suffix)?))
+    }
+
+    /// Return the raw typed identifier.
+    #[must_use]
+    pub const fn typed(&self) -> &TypedId {
+        &self.0
+    }
+
+    /// Return the identifier as a string slice.
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        self.0.as_str()
+    }
+}
+
+impl fmt::Display for DomainId {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.0.fmt(formatter)
+    }
+}
+
+/// Typed policy identifier.
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(transparent)]
+pub struct PolicyId(TypedId);
+
+impl PolicyId {
+    /// Generate a typed policy identifier.
+    #[must_use]
+    pub fn generate() -> Self {
+        Self(TypedId::generate(IdPrefix::Policy))
+    }
+
+    /// Create a typed policy identifier from a stable suffix.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`IdError`] when the suffix is invalid.
+    pub fn new(suffix: impl Into<String>) -> Result<Self, IdError> {
+        Ok(Self(TypedId::new(IdPrefix::Policy, suffix)?))
+    }
+
+    /// Return the raw typed identifier.
+    #[must_use]
+    pub const fn typed(&self) -> &TypedId {
+        &self.0
+    }
+
+    /// Return the identifier as a string slice.
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        self.0.as_str()
+    }
+}
+
+impl fmt::Display for PolicyId {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.0.fmt(formatter)
+    }
+}
+
 /// Identifier validation errors.
 #[derive(Debug, Error)]
 pub enum IdError {
@@ -348,7 +520,10 @@ fn validate_suffix(suffix: &str) -> Result<(), IdError> {
 
 #[cfg(test)]
 mod tests {
-    use super::{CapabilityId, IdError, IdPrefix, KernelId, ServiceId, TypedId};
+    use super::{
+        CapabilityId, DomainId, DriverId, IdError, IdPrefix, KernelId, ManagerId, PolicyId,
+        ServiceId, TypedId,
+    };
 
     #[test]
     fn generated_kernel_id_uses_kernel_prefix() {
@@ -383,5 +558,27 @@ mod tests {
         let id = ServiceId::new("telemetry-service").expect("service id");
 
         assert_eq!(id.as_str(), "svc_telemetry-service");
+    }
+
+    #[test]
+    fn phase_4_5_ids_use_layer_prefixes() {
+        assert_eq!(
+            ManagerId::new("service-manager")
+                .expect("manager id")
+                .as_str(),
+            "mgr_service-manager"
+        );
+        assert_eq!(
+            DriverId::new("filesystem").expect("driver id").as_str(),
+            "drv_filesystem"
+        );
+        assert_eq!(
+            DomainId::new("telemetry").expect("domain id").as_str(),
+            "dom_telemetry"
+        );
+        assert_eq!(
+            PolicyId::new("privacy").expect("policy id").as_str(),
+            "pol_privacy"
+        );
     }
 }

@@ -1,22 +1,18 @@
 [package]
-name = "aether-kernel"
-description = "Aether kernel orchestration layer."
+name = "aether-managers"
+description = "Manager layer infrastructure for Aether Kernel decomposition."
 edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
 version.workspace = true
 
 [dependencies]
-aether-config.workspace = true
 aether-core.workspace = true
-aether-events.workspace = true
 aether-ids.workspace = true
-aether-logging.workspace = true
-aether-managers.workspace = true
-aether-runtime.workspace = true
+aether-permissions.workspace = true
+aether-resources.workspace = true
 aether-service.workspace = true
 aether-service-bus.workspace = true
-aether-telemetry.workspace = true
 thiserror.workspace = true
 
 [lints]

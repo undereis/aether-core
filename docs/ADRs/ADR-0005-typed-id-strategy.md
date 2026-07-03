@@ -27,6 +27,14 @@ Initial prefixes:
 - `ker_` for kernels
 - `cap_` for capabilities
 
+Phase 3 and Phase 4.5 extend the same strategy with:
+
+- `svc_` for services
+- `mgr_` for managers
+- `drv_` for drivers
+- `dom_` for domains
+- `pol_` for policies
+
 Typed IDs support generated `UUIDv7` suffixes and stable human-provided suffixes
 for local descriptors.
 

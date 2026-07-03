@@ -1,0 +1,16 @@
+[package]
+name = "aether-drivers"
+description = "Driver layer contracts for future Aether native integrations."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+aether-core.workspace = true
+aether-ids.workspace = true
+aether-resources.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true
