@@ -65,6 +65,15 @@
 - Architectural Gravity classification created.
 - Architecture Guardian role instituted.
 
+## CDR-0001: Cognitive Design Review
+
+- CDR-0001 drafted.
+- Official cognitive architecture defined for review.
+- Cognitive Pipeline defined before any Era II implementation.
+- Memory, Knowledge, Context, Planning, Reasoning, Decision, Action, Learning,
+  and Inference boundaries documented.
+- Era II implementation remains blocked until CDR and domain RFC approval.
+
 ## Architecture Milestones
 
 | Version | Milestone |

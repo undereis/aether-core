@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- CDR-0001 Cognitive Design Review drafted.
+
 ## v0.4.6-aether-engineering-protocol
 
 - Established the Aether Engineering Protocols.
