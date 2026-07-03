@@ -5,8 +5,10 @@ Last updated: 2026-07-03
 ## Current Status
 
 The Aether foundation is complete through Phase 4.6. The Foundation Era is
-closed structurally and constitutionally. CDR-0001 has been drafted for
-architecture review; the Cognitive Era has not started implementation.
+closed structurally and constitutionally. CDR-0001 has been approved and
+checkpointed. RFC-0001 Memory Domain has been drafted and revised through
+Revision 1 for architecture review; the Cognitive Era has not started
+implementation.
 
 - Phase 0: approved.
 - Foundation hardening: completed.
@@ -19,18 +21,20 @@ architecture review; the Cognitive Era has not started implementation.
   and tagged.
 - Phase 4.6 Aether Engineering Protocol: implemented, validated, approved,
   committed, and tagged.
-- CDR-0001 Cognitive Design Review: drafted for review.
+- CDR-0001 Cognitive Design Review: drafted, approved, committed, and tagged.
+- RFC-0001 Memory Domain: drafted and revised through Revision 1 for review.
+- AEP-0016 Cognitive Traceability: proposed for governance review.
 
-The repository has an official checkpoint through Phase 4.6:
+The repository has an official checkpoint through CDR-0001:
 
 - branch: `master`
-- commit: `a289a08cdedc4b5b4f53c101ec7df9a8bd22dc5e`
-- tag: `v0.4.6-aether-engineering-protocol`
+- commit: `dd35cf9d99ec071ec94089a332aebed4ac350478`
+- tag: `v0.5.0-cognitive-design-review`
 
 Do not start Cognitive Era implementation without explicit user authorization
 and approval of CDR-0001 plus the relevant domain RFC.
 
-The official Phase 4.6 checkpoint is `v0.4.6-aether-engineering-protocol`.
+The official CDR-0001 checkpoint is `v0.5.0-cognitive-design-review`.
 
 ## What Was Done
 
@@ -411,6 +415,60 @@ The CDR defines:
 CDR-0001 does not implement Memory, Knowledge, AI, agents, services, managers,
 drivers, APIs, contracts, or runtime behavior.
 
+### RFC-0001: Memory Domain
+
+Drafted the official Memory Domain RFC:
+
+- `docs/RFC/RFC-0001-Memory-Domain.md`
+
+The RFC defines:
+
+- Memory philosophy;
+- Memory Domain boundaries;
+- memory types;
+- memory lifecycle;
+- conceptual Memory Record;
+- provenance model;
+- confidence model;
+- retention model;
+- forgetting model;
+- retrieval strategies;
+- promotion rules;
+- Memory vs Knowledge boundary;
+- Memory vs Context boundary;
+- future Memory Manager responsibilities;
+- future Memory Service responsibilities;
+- required Memory Policies;
+- future conceptual contracts;
+- future storage strategy;
+- Cognitive Memory Metabolism;
+- Memory Score Model;
+- Cognitive DNA;
+- Memory Relationship Model;
+- Cognitive Memory Events;
+- Memory Evolution Model;
+- Memory Conflict Resolution;
+- Memory Explainability;
+- Cognitive Retrieval Capabilities;
+- Cognitive Memory Principles;
+- Cognitive Memory Ecosystem;
+- risks and anti-patterns;
+- acceptance criteria.
+
+RFC-0001 does not implement Memory Engine, Memory Service, Memory Manager,
+database schemas, vector indexes, APIs, runtime behavior, AI, or agents.
+
+### AEP-0016 Proposal: Cognitive Traceability
+
+Drafted the proposed governance protocol:
+
+- `docs/AEP/AEP-0016-cognitive-traceability.md`
+
+The proposal requires future cognitive components, records, decisions, events,
+and lifecycle transitions to be traceable, explainable, and auditable across
+their full lifecycle. It is proposed governance only and does not alter runtime
+behavior.
+
 Created Phase 4.5 documentation:
 
 - `docs/Architecture/kernel-architecture.md`
@@ -517,19 +575,21 @@ The official Phase 4 checkpoint validation passed immediately before commit:
 | `v0.4.0` | Core System Services |
 | `v0.4.5` | Kernel Decomposition |
 | `v0.4.6` | Aether Engineering Protocol |
+| `v0.5.0` | Cognitive Design Review |
 
 ## Current Git State
 
-The official repository checkpoint is clean through Phase 4.6 before CDR-0001
+The official repository checkpoint is clean through CDR-0001 before RFC-0001
 drafting.
 
 Checkpoint:
 
-- commit: `a289a08cdedc4b5b4f53c101ec7df9a8bd22dc5e`
-- tag: `v0.4.6-aether-engineering-protocol`
+- commit: `dd35cf9d99ec071ec94089a332aebed4ac350478`
+- tag: `v0.5.0-cognitive-design-review`
 - branch: `master`
 
-CDR-0001 is drafted in the working tree and is not committed or tagged.
+RFC-0001 Revision 1 and the AEP-0016 proposal are drafted in the working tree
+and are not committed or tagged.
 
 ### Phase 4.5 Checkpoint Contents
 
@@ -624,19 +684,21 @@ The following remain out of scope and were not implemented:
 
 ## Next Recommended Steps
 
-The next section should begin with architecture review of CDR-0001, not
-automatic Cognitive Era implementation. The Foundation Era is closed. Future
-approved phases will move from infrastructure foundation toward cognitive
-capabilities under AEP governance only after CDR and RFC approval.
+The next section should begin with architecture review of RFC-0001 Revision 1
+and AEP-0016, not automatic Memory implementation. The Foundation Era is
+closed. Future approved phases will move from infrastructure foundation toward
+cognitive capabilities under AEP governance only after domain RFC, ADR,
+contract, policy, and test strategy approval.
 
 Recommended order:
 
 1. Start from `git status --short`.
-2. Review the Phase 4.6 checkpoint if needed:
-   `git show --stat v0.4.6-aether-engineering-protocol`.
-3. Review `docs/CDR/CDR-0001-Cognitive-Design-Review.md`.
-4. If approved, authorize only the CDR checkpoint.
-5. Do not implement AI, agents, Memory Engine, Knowledge Graph, authentication,
+2. Review the CDR-0001 checkpoint if needed:
+   `git show --stat v0.5.0-cognitive-design-review`.
+3. Review `docs/RFC/RFC-0001-Memory-Domain.md`.
+4. Review `docs/AEP/AEP-0016-cognitive-traceability.md`.
+5. If approved, authorize only the RFC/AEP proposal checkpoint.
+6. Do not implement AI, agents, Memory Engine, Knowledge Graph, authentication,
    frontend, desktop, or business persistence unless a future phase explicitly
    authorizes it.
 
@@ -679,13 +741,15 @@ Manager, Driver, Domain, and Policy layers plus the Contract Bus base. It is
 intentionally not yet a product runtime, AI system, agent system, desktop shell,
 memory engine, knowledge graph, or data platform. Phase 4.6 establishes the
 Aether Engineering Protocols and Architecture Constitution v2 that will govern
-future cognitive implementation. CDR-0001 now drafts the cognitive architecture
-for review before any Cognitive Era implementation.
+future cognitive implementation. CDR-0001 defines the cognitive architecture.
+RFC-0001 now drafts and revises the Memory Domain boundary for review before
+any Memory implementation. AEP-0016 proposes Cognitive Traceability as future
+governance.
 
 ## Session Closure Note
 
-This session now contains the drafted CDR-0001 architecture review after the
-official Phase 4.6 checkpoint.
+This session now contains RFC-0001 Revision 1 and the proposed AEP-0016 after
+the official CDR-0001 checkpoint.
 
 Important continuation point:
 
@@ -695,16 +759,19 @@ Important continuation point:
 - The official Phase 4.6 tag is `v0.4.6-aether-engineering-protocol`.
 - The official Phase 4.6 commit is
   `a289a08cdedc4b5b4f53c101ec7df9a8bd22dc5e`.
-- CDR-0001 is drafted and awaits architecture review.
-- Suggested CDR-0001 commit:
-  `docs(cdr): establish Cognitive Design Review`.
-- Suggested CDR-0001 tag is `v0.5.0-cognitive-design-review`.
+- CDR-0001 is approved and checkpointed as `v0.5.0-cognitive-design-review`.
+- RFC-0001 Revision 1 is drafted and awaits architecture review.
+- AEP-0016 Cognitive Traceability is proposed and awaits governance review.
+- Suggested RFC-0001 commit:
+  `docs(rfc): define Memory Domain`.
+- Suggested RFC-0001 tag is `v0.5.1-memory-domain-rfc`.
 - The next session should start by checking `git status --short`.
-- If the user approves the CDR checkpoint, run validation first and then create
+- If the user approves the RFC checkpoint, run validation first and then create
   only the approved commit and tag.
 - If the user authorizes Cognitive Era implementation later, read this handoff
   first and preserve the Phase 4.5 architecture boundaries, Phase 4.6 AEP
-  governance, and CDR-0001 cognitive boundaries.
+  governance, CDR-0001 cognitive boundaries, RFC-0001 Memory boundaries, and
+  AEP-0016 traceability expectations if approved.
 - Do not start Cognitive Era implementation automatically.
 
 ### Phase 4.6 Closing Snapshot
@@ -770,6 +837,25 @@ Suggested CDR-0001 tag:
 
 - `v0.5.0-cognitive-design-review`
 
-The next session should not start the Cognitive Era automatically. It should
-first review CDR-0001, then wait for explicit approval for either the CDR
-checkpoint or a future RFC phase.
+### RFC-0001 Closing Snapshot
+
+Files changed by RFC-0001 Revision 1:
+
+- `CHANGELOG.md`
+- `docs/AEP/AEP-0016-cognitive-traceability.md`
+- `docs/AEP/README.md`
+- `docs/RFC/RFC-0001-Memory-Domain.md`
+- `docs/Roadmap/README.md`
+- `docs/SESSION-HANDOFF.md`
+
+Suggested RFC-0001 commit:
+
+- `docs(rfc): define Memory Domain`
+
+Suggested RFC-0001 tag:
+
+- `v0.5.1-memory-domain-rfc`
+
+The next session should not start Memory implementation automatically. It
+should first review RFC-0001 Revision 1 and AEP-0016, then wait for explicit
+approval for either the RFC checkpoint or a future implementation ADR phase.

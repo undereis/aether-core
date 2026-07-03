@@ -74,6 +74,20 @@
   and Inference boundaries documented.
 - Era II implementation remains blocked until CDR and domain RFC approval.
 
+## RFC-0001: Memory Domain
+
+- RFC-0001 Memory Domain drafted.
+- Memory philosophy, boundaries, types, lifecycle, provenance, confidence,
+  retention, forgetting, retrieval, promotion, and storage strategy defined for
+  architecture review.
+- RFC-0001 Revision 1 drafted with Cognitive Memory Metabolism, Memory Score
+  Model, Cognitive DNA, Memory Relationship Model, Cognitive Memory Events,
+  Memory Evolution, Conflict Resolution, Explainability, Cognitive Retrieval,
+  Cognitive Memory Principles, and Cognitive Memory Ecosystem.
+- AEP-0016 Cognitive Traceability proposed for future governance review.
+- Memory implementation remains blocked until RFC approval, ADR approval,
+  public contracts, policies, and test strategy are complete.
+
 ## Architecture Milestones
 
 | Version | Milestone |
@@ -83,6 +97,7 @@
 | `v0.4.0` | Core System Services |
 | `v0.4.5` | Kernel Decomposition |
 | `v0.4.6` | Aether Engineering Protocol |
+| `v0.5.0` | Cognitive Design Review |
 
 ## Era Roadmap
 

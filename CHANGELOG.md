@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- RFC-0001 Revision 1 Memory Domain Architectural Review drafted.
+- RFC-0001 Memory Domain drafted.
+- Proposed AEP-0016 Cognitive Traceability.
+
+## v0.5.0-cognitive-design-review
+
 - CDR-0001 Cognitive Design Review drafted.
 
 ## v0.4.6-aether-engineering-protocol
