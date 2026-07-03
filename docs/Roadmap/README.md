@@ -56,6 +56,15 @@
 - Contract Bus base introduced on top of the ASB.
 - Foundation Era completed.
 
+## Phase 4.6: Aether Engineering Protocol
+
+- Aether Engineering Protocols established.
+- Architecture Constitution v2 created.
+- Architecture Bible created.
+- Architecture Evolution Roadmap created.
+- Architectural Gravity classification created.
+- Architecture Guardian role instituted.
+
 ## Architecture Milestones
 
 | Version | Milestone |
@@ -64,13 +73,19 @@
 | `v0.3.0` | Service Platform |
 | `v0.4.0` | Core System Services |
 | `v0.4.5` | Kernel Decomposition |
+| `v0.4.6` | Aether Engineering Protocol |
+
+## Era Roadmap
+
+The formal Era roadmap is maintained in
+`docs/Architecture/Architecture-Evolution-Roadmap.md`.
 
 ## Later Phases
 
-- Memory engine.
-- Knowledge graph.
-- AI integration.
-- Agent orchestration.
-- Product UI and desktop shell.
+- Era II: Cognitive Core.
+- Era III: Intelligence.
+- Era IV: Automation.
+- Era V: Enterprise.
+- Era VI: Distributed.
 
 Each phase requires updated ADRs before implementation.

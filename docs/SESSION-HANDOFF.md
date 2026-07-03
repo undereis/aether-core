@@ -4,8 +4,8 @@ Last updated: 2026-07-03
 
 ## Current Status
 
-The Aether foundation is complete through Phase 4.5. The Foundation Era is
-closed after the official Phase 4.5 architecture checkpoint.
+The Aether foundation is complete through Phase 4.6. The Foundation Era is
+closed structurally and constitutionally.
 
 - Phase 0: approved.
 - Foundation hardening: completed.
@@ -14,19 +14,21 @@ closed after the official Phase 4.5 architecture checkpoint.
 - Phase 3 Aether Service Platform: implemented, validated, committed, and tagged.
 - Phase 4 Official Service Map + Core System Services: implemented, validated,
   committed, and tagged.
-- Phase 4.5 Kernel Decomposition: implemented, validated, approved, and ready
-  for official checkpoint.
+- Phase 4.5 Kernel Decomposition: implemented, validated, approved, committed,
+  and tagged.
+- Phase 4.6 Aether Engineering Protocol: governance documentation created and
+  awaiting review.
 
-The repository had an official checkpoint through Phase 4 before this closure
-run:
+The repository has an official checkpoint through Phase 4.5:
 
 - branch: `master`
-- commit: `87d3d2edbb9ffd3ad60b949bbe610be00f381e4c`
-- tag: `v0.4.0-core-system-services`
+- commit: `9a93a1625a93fad24dec40d98cc5df5d189938ce`
+- tag: `v0.4.5-kernel-decomposition`
 
 Do not start Phase 5 without explicit user authorization.
 
 The official Phase 4.5 checkpoint is `v0.4.5-kernel-decomposition`.
+Phase 4.6 has no commit or tag yet.
 
 ## What Was Done
 
@@ -336,6 +338,45 @@ Implemented the Kernel decomposition and Manager Layer:
 - Contract Bus Base introduced.
 - Foundation Era completed.
 
+### Phase 4.6: Aether Engineering Protocol
+
+Created the governance layer for all future work:
+
+- `docs/AEP/README.md`
+- `docs/AEP/AEP-0001-read-before-modify.md`
+- `docs/AEP/AEP-0002-preserve-public-contracts.md`
+- `docs/AEP/AEP-0003-refactor-before-expand.md`
+- `docs/AEP/AEP-0004-architecture-first.md`
+- `docs/AEP/AEP-0005-domain-first.md`
+- `docs/AEP/AEP-0006-everything-is-discoverable.md`
+- `docs/AEP/AEP-0007-kernel-is-sacred.md`
+- `docs/AEP/AEP-0008-managers-own-domains.md`
+- `docs/AEP/AEP-0009-services-execute-capabilities.md`
+- `docs/AEP/AEP-0010-drivers-touch-the-outside-world.md`
+- `docs/AEP/AEP-0011-policies-govern-behavior.md`
+- `docs/AEP/AEP-0012-communication-is-explicit.md`
+- `docs/AEP/AEP-0013-everything-has-contracts.md`
+- `docs/AEP/AEP-0014-compatibility-first.md`
+- `docs/AEP/AEP-0015-git-checkpoint-discipline.md`
+
+Created the constitutional architecture documents:
+
+- `docs/Architecture/Aether-Architecture-Constitution-v2.md`
+- `docs/Architecture/Architecture-Bible.md`
+- `docs/Architecture/Architecture-Evolution-Roadmap.md`
+- `docs/Architecture/Architectural-Gravity.md`
+
+Updated governance documents:
+
+- `docs/Engineering-Constitution/README.md`
+- `docs/Roadmap/README.md`
+- `docs/Architecture/README.md`
+- `CHANGELOG.md`
+- `docs/SESSION-HANDOFF.md`
+
+Phase 4.6 does not implement Memory, Knowledge, AI, agents, new services, new
+managers, new drivers, or functional behavior.
+
 Created Phase 4.5 documentation:
 
 - `docs/Architecture/kernel-architecture.md`
@@ -441,6 +482,7 @@ The official Phase 4 checkpoint validation passed immediately before commit:
 | `v0.3.0` | Service Platform |
 | `v0.4.0` | Core System Services |
 | `v0.4.5` | Kernel Decomposition |
+| `v0.4.6` | Aether Engineering Protocol |
 
 ## Current Git State
 
@@ -551,15 +593,17 @@ The following remain out of scope and were not implemented:
 
 The next section should begin with an explicit user decision, not automatic
 Phase 5 implementation. The Foundation Era is closed. Future approved phases
-will move from infrastructure foundation toward cognitive capabilities.
+will move from infrastructure foundation toward cognitive capabilities under
+AEP governance.
 
 Recommended order:
 
 1. Start from `git status --short`.
 2. Review the Phase 4.5 checkpoint if needed:
    `git show --stat v0.4.5-kernel-decomposition`.
-3. Wait for the user to authorize Phase 5 before implementing anything.
-4. Do not implement AI, agents, Memory Engine, Knowledge Graph, authentication,
+3. Review Phase 4.6 governance docs before authorizing the Cognitive Era.
+4. Wait for the user to authorize Phase 5 before implementing anything.
+5. Do not implement AI, agents, Memory Engine, Knowledge Graph, authentication,
    frontend, desktop, or business persistence unless a future phase explicitly
    authorizes it.
 
@@ -600,22 +644,82 @@ Aether Service Platform. Phase 4 adds the official service map and the first
 core system service base. Phase 4.5 completes Kernel decomposition with official
 Manager, Driver, Domain, and Policy layers plus the Contract Bus base. It is
 intentionally not yet a product runtime, AI system, agent system, desktop shell,
-memory engine, knowledge graph, or data platform.
+memory engine, knowledge graph, or data platform. Phase 4.6 establishes the
+Aether Engineering Protocols and Architecture Constitution v2 that will govern
+future cognitive implementation.
 
 ## Session Closure Note
 
-This session is being closed after Phase 4.5 implementation, validation,
-approval, and official architecture checkpoint.
+This session is being closed after Phase 4.6 governance implementation and
+validation, pending architecture review.
 
 Important continuation point:
 
-- The Phase 4.5 Kernel Decomposition is the official close of the Foundation
+- The Phase 4.5 Kernel Decomposition is the structural close of the Foundation
   Era.
+- Phase 4.6 is the constitutional close of the Foundation Era.
 - The official Phase 4.5 tag is `v0.4.5-kernel-decomposition`.
-- The previous official checkpoint was Phase 4:
-  `87d3d2edbb9ffd3ad60b949bbe610be00f381e4c`
-  / `v0.4.0-core-system-services`.
+- Phase 4.6 is implemented and validated in the working tree, but it is not
+  committed or tagged.
+- Suggested Phase 4.6 commit:
+  `docs(aep): establish Aether Engineering Protocol`.
+- Suggested Phase 4.6 tag is `v0.4.6-aether-engineering-protocol`.
+- The previous official checkpoint was Phase 4.5:
+  `9a93a1625a93fad24dec40d98cc5df5d189938ce`
+  / `v0.4.5-kernel-decomposition`.
 - The next session should start by checking `git status --short`.
+- If the user approves the Phase 4.6 checkpoint, run validation first and then
+  create only the approved commit and tag.
 - If the user authorizes Phase 5 later, read this handoff first and preserve the
-  Phase 4.5 architecture boundaries.
+  Phase 4.5 architecture boundaries and Phase 4.6 AEP governance.
 - Do not start Phase 5 automatically.
+
+### Phase 4.6 Closing Snapshot
+
+Tracked files modified by Phase 4.6:
+
+- `CHANGELOG.md`
+- `README.md`
+- `docs/Architecture/README.md`
+- `docs/Engineering-Constitution/README.md`
+- `docs/Roadmap/README.md`
+- `docs/SESSION-HANDOFF.md`
+
+New Phase 4.6 files:
+
+- `docs/AEP/README.md`
+- `docs/AEP/AEP-0001-read-before-modify.md`
+- `docs/AEP/AEP-0002-preserve-public-contracts.md`
+- `docs/AEP/AEP-0003-refactor-before-expand.md`
+- `docs/AEP/AEP-0004-architecture-first.md`
+- `docs/AEP/AEP-0005-domain-first.md`
+- `docs/AEP/AEP-0006-everything-is-discoverable.md`
+- `docs/AEP/AEP-0007-kernel-is-sacred.md`
+- `docs/AEP/AEP-0008-managers-own-domains.md`
+- `docs/AEP/AEP-0009-services-execute-capabilities.md`
+- `docs/AEP/AEP-0010-drivers-touch-the-outside-world.md`
+- `docs/AEP/AEP-0011-policies-govern-behavior.md`
+- `docs/AEP/AEP-0012-communication-is-explicit.md`
+- `docs/AEP/AEP-0013-everything-has-contracts.md`
+- `docs/AEP/AEP-0014-compatibility-first.md`
+- `docs/AEP/AEP-0015-git-checkpoint-discipline.md`
+- `docs/Architecture/Aether-Architecture-Constitution-v2.md`
+- `docs/Architecture/Architectural-Gravity.md`
+- `docs/Architecture/Architecture-Bible.md`
+- `docs/Architecture/Architecture-Evolution-Roadmap.md`
+
+Last Phase 4.6 validation in this session:
+
+- `make validate`: passed.
+- `cargo test --workspace`: passed, 96 Rust tests.
+- `cargo check --workspace`: passed.
+- Docker validation: passed for PostgreSQL, Redis, and Qdrant.
+- Backend smoke test: passed.
+
+Phase 4.6 changed documentation and governance only. It did not change runtime
+behavior, public APIs, crates, services, managers, drivers, Memory, Knowledge,
+AI, agents, frontend, desktop, or business persistence.
+
+The next session should not start the Cognitive Era automatically. It should
+first review Phase 4.6, then wait for explicit approval for either the Phase 4.6
+Git checkpoint or the formal next phase.

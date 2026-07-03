@@ -24,6 +24,12 @@ The Phase 4.5 Kernel decomposition is described in
 `docs/Architecture/driver-architecture.md`,
 `docs/Architecture/domain-architecture.md`, and
 `docs/Architecture/policy-architecture.md`.
+The Phase 4.6 Architecture Constitution and governance documents are described
+in `docs/Architecture/Aether-Architecture-Constitution-v2.md`,
+`docs/Architecture/Architecture-Bible.md`,
+`docs/Architecture/Architecture-Evolution-Roadmap.md`, and
+`docs/Architecture/Architectural-Gravity.md`.
+The active engineering protocols are indexed in `docs/AEP/README.md`.
 Module lifecycle rules are described in
 `docs/Architecture/module-lifecycle.md`.
 Telemetry is described in `docs/Architecture/telemetry.md`.
@@ -59,9 +65,11 @@ Service-to-service communication must pass through the Aether Service Bus.
 | `v0.3.0` | Service Platform | Service Model, manifests, permissions, resources, and ASB. |
 | `v0.4.0` | Core System Services | Official service map and base system services. |
 | `v0.4.5` | Kernel Decomposition | Manager, Driver, Domain, Policy layers and Contract Bus base. |
+| `v0.4.6` | Aether Engineering Protocol | Architecture Constitution v2, AEP governance, Architecture Bible, and Architecture Guardian. |
 
 ## Foundation Era Closure
 
-Phase 4.5 closes the Foundation Era. The architecture now has the platform
-boundaries required for future cognitive capabilities without introducing those
-capabilities yet.
+Phase 4.5 closes the Foundation Era structurally. Phase 4.6 closes it
+constitutionally by defining how future work must proceed. The architecture now
+has the platform boundaries and governance required for future cognitive
+capabilities without introducing those capabilities yet.
