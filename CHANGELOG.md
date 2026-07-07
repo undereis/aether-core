@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- RFC-0002 Knowledge Domain drafted.
+
 No unreleased product, runtime, or architecture implementation changes.
 
 ## v0.5.3-architecture-readiness-review
