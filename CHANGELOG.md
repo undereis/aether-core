@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- ARR-0001 Architecture Readiness Review drafted.
 - ADR-0010 Memory Domain Implementation Architecture drafted.
 
 ## v0.5.1-memory-domain-rfc

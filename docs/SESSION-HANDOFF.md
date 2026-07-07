@@ -10,7 +10,8 @@ checkpointed. RFC-0001 Memory Domain has been drafted and revised through
 Revision 1, approved, checkpointed, and tagged. AEP-0016 Cognitive
 Traceability is registered as a proposal. The Cognitive Era has not started
 implementation. ADR-0010 Memory Domain Implementation Architecture has been
-drafted for architectural review only.
+drafted, checkpointed, and tagged. ARR-0001 Architecture Readiness Review has
+been drafted for review only.
 
 - Phase 0: approved.
 - Foundation hardening: completed.
@@ -28,14 +29,16 @@ drafted for architectural review only.
   committed, and tagged.
 - AEP-0016 Cognitive Traceability: registered as a proposed governance
   protocol.
-- ADR-0010 Memory Domain Implementation Architecture: drafted for review, not
-  committed or tagged.
+- ADR-0010 Memory Domain Implementation Architecture: drafted, committed, and
+  tagged.
+- ARR-0001 Architecture Readiness Review: drafted for review, not committed or
+  tagged.
 
-The repository has an official checkpoint through RFC-0001:
+The repository has an official checkpoint through ADR-0010:
 
 - branch: `master`
-- commit: `fd47d25b5671b909b0dd984a9abe12a003145d1a`
-- tag: `v0.5.1-memory-domain-rfc`
+- commit: `9672be86a425445c0538ba87f85e043f26c2f008`
+- tag: `v0.5.2-memory-implementation-adr`
 
 Do not start Cognitive Era implementation without explicit user authorization
 and approval of the relevant domain RFC, implementation ADR, public contracts,
@@ -47,7 +50,12 @@ lifecycle/events, traceability/explainability, PostgreSQL metadata, Qdrant
 retrieval, relationship/conflict, and compliance review phases. Memory remains
 unimplemented.
 
-The official RFC-0001 checkpoint is `v0.5.1-memory-domain-rfc`.
+The official ADR-0010 checkpoint is `v0.5.2-memory-implementation-adr`.
+
+ARR-0001 currently concludes that the project is ready with minor cautions to
+proceed to RFC-0002 Knowledge Domain as a documentation-only phase. AEP-0016
+should be treated as mandatory design input during RFC-0002 and accepted before
+Memory or Knowledge implementation.
 
 ## What Was Done
 
@@ -590,20 +598,21 @@ The official Phase 4 checkpoint validation passed immediately before commit:
 | `v0.4.6` | Aether Engineering Protocol |
 | `v0.5.0` | Cognitive Design Review |
 | `v0.5.1` | Memory Domain RFC |
+| `v0.5.2` | Memory Implementation ADR |
 
 ## Current Git State
 
-The official repository checkpoint is clean through RFC-0001 before this
-session-closure documentation update.
+The official repository checkpoint is clean through ADR-0010 before ARR-0001
+drafting.
 
 Checkpoint:
 
-- commit: `fd47d25b5671b909b0dd984a9abe12a003145d1a`
-- tag: `v0.5.1-memory-domain-rfc`
+- commit: `9672be86a425445c0538ba87f85e043f26c2f008`
+- tag: `v0.5.2-memory-implementation-adr`
 - branch: `master`
 
-This handoff update is intentionally not committed or tagged unless a future
-session explicitly asks for a documentation checkpoint.
+ARR-0001 is currently drafted for review and is intentionally not committed or
+tagged unless a future session explicitly asks for a documentation checkpoint.
 
 ### Phase 4.5 Checkpoint Contents
 
@@ -766,9 +775,8 @@ governance.
 
 ## Session Closure Note
 
-The previous session closed after the official RFC-0001 checkpoint and
-handoff/changelog update. The current architectural work has drafted ADR-0010
-for Memory implementation architecture review.
+The previous checkpoints closed RFC-0001 and ADR-0010. The current
+architectural work has drafted ARR-0001 for readiness review before RFC-0002.
 
 Important continuation point:
 
@@ -783,7 +791,9 @@ Important continuation point:
   `v0.5.1-memory-domain-rfc`.
 - AEP-0016 Cognitive Traceability is registered as a proposal inside the
   RFC-0001 checkpoint.
-- ADR-0010 is drafted only and is not committed or tagged.
+- ADR-0010 is approved for checkpoint, committed, and tagged as
+  `v0.5.2-memory-implementation-adr`.
+- ARR-0001 is drafted only and is not committed or tagged.
 - The next session should start by checking `git status --short`.
 - If the user authorizes Cognitive Era implementation later, read this handoff
   first and preserve the Phase 4.5 architecture boundaries, Phase 4.6 AEP
@@ -956,10 +966,12 @@ Existing ADRs remain:
 - `ADR-0007-aether-service-bus.md`
 - `ADR-0008-official-service-map.md`
 - `ADR-0009-core-system-services.md`
-- `ADR-0010-memory-domain-implementation-architecture.md`: drafted for review.
+- `ADR-0010-memory-domain-implementation-architecture.md`: checkpointed and
+  tagged as `v0.5.2-memory-implementation-adr`.
 
 ADR-0010 is the proposed Memory implementation architecture. It does not
-authorize implementation until reviewed and approved.
+authorize implementation until contracts, policies, storage strategy, test
+strategy, and Architecture Guardian approval are complete.
 
 ### RFCs
 
@@ -1001,9 +1013,9 @@ Proposed AEP:
 
 ### Pending Items
 
-- Review ADR-0010 Memory Domain Implementation Architecture.
+- Review ARR-0001 Architecture Readiness Review.
 - RFC-0002 Knowledge Domain has not started.
-- ADR-0010 is drafted but not approved, committed, or tagged.
+- ADR-0010 is checkpointed and tagged.
 - Memory contracts are conceptual only.
 - Memory Policies are not implemented.
 - Storage strategy is proposed only.
@@ -1013,23 +1025,24 @@ Proposed AEP:
 ### Recommended Next Steps
 
 1. Start next session with `git status --short`.
-2. Review ADR-0010 Memory Domain Implementation Architecture.
-3. If approved, create an official ADR-0010 checkpoint only after validation
+2. Review ARR-0001 Architecture Readiness Review.
+3. If approved, create an official ARR-0001 checkpoint only after validation
    and explicit commit authorization.
-4. Start RFC-0002 Knowledge Domain only after explicit authorization.
-5. Do not implement Memory before ADR-0010, contracts, policies, storage
+4. Start RFC-0002 Knowledge Domain only after explicit authorization and ARR
+   review.
+5. Do not implement Memory before contracts, policies, storage
    strategy, and test strategy are approved.
 
 ### Recommended Execution Order
 
-1. ADR-0010 architectural review.
-2. ADR-0010 checkpoint if approved.
+1. ARR-0001 architectural readiness review.
+2. ARR-0001 checkpoint if approved.
 3. RFC-0002 Knowledge Domain.
 4. RFC-0003 Context Domain.
 5. RFC-0004 Planning Domain.
-5. RFC-0005 Reasoning Domain.
-6. RFC-0006 Decision Domain.
-7. RFC-0007 Learning Domain.
+6. RFC-0005 Reasoning Domain.
+7. RFC-0006 Decision Domain.
+8. RFC-0007 Learning Domain.
 8. RFC-0008 Perception Domain.
 9. Only then consider implementation ADRs for approved domains.
 
