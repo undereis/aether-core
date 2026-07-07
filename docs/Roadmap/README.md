@@ -106,6 +106,19 @@
   Domain as a documentation-only phase.
 - Decision drafted as ready with minor cautions.
 
+## RFC-0002: Knowledge Domain
+
+- RFC-0002 Knowledge Domain drafted.
+- Knowledge defined as structured truth, separate from Memory experience and
+  Context present-state assembly.
+- Evidence, provenance, confidence, versioning, contradiction, invalidation,
+  policies, events, contracts, storage strategy, indexing strategy,
+  traceability, explainability, risks, and future implementation phases defined
+  for architecture review.
+- Knowledge implementation remains blocked until RFC approval, implementation
+  ADR approval, contracts, policies, storage strategy, and test strategy are
+  accepted.
+
 ## Architecture Milestones
 
 | Version | Milestone |

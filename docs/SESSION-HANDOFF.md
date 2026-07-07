@@ -11,9 +11,8 @@ Revision 1, approved, checkpointed, and tagged. AEP-0016 Cognitive
 Traceability is registered as a proposal. The Cognitive Era has not started
 implementation. ADR-0010 Memory Domain Implementation Architecture has been
 drafted, checkpointed, and tagged. ARR-0001 Architecture Readiness Review has
-been drafted, checkpointed, and tagged. The project is ready, with minor
-cautions, to proceed to RFC-0002 Knowledge Domain as a documentation-only
-phase after explicit authorization.
+been drafted, checkpointed, and tagged. RFC-0002 Knowledge Domain has been
+drafted as a documentation-only phase and is awaiting architectural review.
 
 - Phase 0: approved.
 - Foundation hardening: completed.
@@ -34,6 +33,7 @@ phase after explicit authorization.
 - ADR-0010 Memory Domain Implementation Architecture: drafted, committed, and
   tagged.
 - ARR-0001 Architecture Readiness Review: drafted, committed, and tagged.
+- RFC-0002 Knowledge Domain: drafted, awaiting review, not committed or tagged.
 
 The repository has an official checkpoint through ARR-0001:
 
@@ -57,6 +57,13 @@ ARR-0001 currently concludes that the project is ready with minor cautions to
 proceed to RFC-0002 Knowledge Domain as a documentation-only phase. AEP-0016
 should be treated as mandatory design input during RFC-0002 and accepted before
 Memory or Knowledge implementation.
+
+RFC-0002 defines Knowledge as structured truth, distinct from Memory
+experience and Context present-state assembly. It documents evidence,
+provenance, confidence, versioning, contradiction, invalidation, policies,
+events, conceptual contracts, storage and indexing strategy, traceability,
+explainability, future implementation phases, risks, and open questions.
+Knowledge remains unimplemented.
 
 ## What Was Done
 
@@ -1016,8 +1023,8 @@ Proposed AEP:
 
 ### Pending Items
 
-- Await explicit authorization to start RFC-0002 Knowledge Domain.
-- RFC-0002 Knowledge Domain has not started.
+- Await architectural review of RFC-0002 Knowledge Domain.
+- RFC-0002 Knowledge Domain has been drafted but not committed or tagged.
 - ADR-0010 is checkpointed and tagged.
 - ARR-0001 is checkpointed and tagged.
 - Memory contracts are conceptual only.
@@ -1031,7 +1038,7 @@ Proposed AEP:
 1. Start next session with `git status --short`.
 2. Confirm the latest checkpoint is
    `v0.5.3-architecture-readiness-review`.
-3. Start RFC-0002 Knowledge Domain only after explicit authorization.
+3. Review `docs/RFC/RFC-0002-Knowledge-Domain.md`.
 4. Keep RFC-0002 documentation-only unless a later prompt explicitly changes
    scope.
 5. Do not implement Memory before contracts, policies, storage
