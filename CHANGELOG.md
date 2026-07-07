@@ -2,7 +2,14 @@
 
 ## Unreleased
 
+No unreleased product, runtime, or architecture implementation changes.
+
+## v0.5.3-architecture-readiness-review
+
 - ARR-0001 Architecture Readiness Review drafted.
+
+## v0.5.2-memory-implementation-adr
+
 - ADR-0010 Memory Domain Implementation Architecture drafted.
 
 ## v0.5.1-memory-domain-rfc
