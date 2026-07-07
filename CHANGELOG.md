@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-No unreleased product, runtime, or architecture implementation changes.
+- ADR-0010 Memory Domain Implementation Architecture drafted.
 
 ## v0.5.1-memory-domain-rfc
 
