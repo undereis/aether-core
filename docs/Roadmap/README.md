@@ -99,6 +99,13 @@
   required contracts, policies, storage strategy, and test strategy are
   accepted.
 
+## ARR-0001: Architecture Readiness Review
+
+- ARR-0001 Architecture Readiness Review drafted.
+- Current architecture reviewed for readiness to proceed to RFC-0002 Knowledge
+  Domain as a documentation-only phase.
+- Decision drafted as ready with minor cautions.
+
 ## Architecture Milestones
 
 | Version | Milestone |
