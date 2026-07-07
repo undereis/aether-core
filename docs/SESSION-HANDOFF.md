@@ -1,6 +1,6 @@
 # Aether Session Handoff
 
-Last updated: 2026-07-03
+Last updated: 2026-07-07
 
 ## Current Status
 
@@ -11,7 +11,9 @@ Revision 1, approved, checkpointed, and tagged. AEP-0016 Cognitive
 Traceability is registered as a proposal. The Cognitive Era has not started
 implementation. ADR-0010 Memory Domain Implementation Architecture has been
 drafted, checkpointed, and tagged. ARR-0001 Architecture Readiness Review has
-been drafted for review only.
+been drafted, checkpointed, and tagged. The project is ready, with minor
+cautions, to proceed to RFC-0002 Knowledge Domain as a documentation-only
+phase after explicit authorization.
 
 - Phase 0: approved.
 - Foundation hardening: completed.
@@ -31,14 +33,13 @@ been drafted for review only.
   protocol.
 - ADR-0010 Memory Domain Implementation Architecture: drafted, committed, and
   tagged.
-- ARR-0001 Architecture Readiness Review: drafted for review, not committed or
-  tagged.
+- ARR-0001 Architecture Readiness Review: drafted, committed, and tagged.
 
-The repository has an official checkpoint through ADR-0010:
+The repository has an official checkpoint through ARR-0001:
 
 - branch: `master`
-- commit: `9672be86a425445c0538ba87f85e043f26c2f008`
-- tag: `v0.5.2-memory-implementation-adr`
+- commit: `4e7745b65f7c0312673ce9fc77a9af25adb7ad83`
+- tag: `v0.5.3-architecture-readiness-review`
 
 Do not start Cognitive Era implementation without explicit user authorization
 and approval of the relevant domain RFC, implementation ADR, public contracts,
@@ -50,7 +51,7 @@ lifecycle/events, traceability/explainability, PostgreSQL metadata, Qdrant
 retrieval, relationship/conflict, and compliance review phases. Memory remains
 unimplemented.
 
-The official ADR-0010 checkpoint is `v0.5.2-memory-implementation-adr`.
+The official ARR-0001 checkpoint is `v0.5.3-architecture-readiness-review`.
 
 ARR-0001 currently concludes that the project is ready with minor cautions to
 proceed to RFC-0002 Knowledge Domain as a documentation-only phase. AEP-0016
@@ -599,19 +600,20 @@ The official Phase 4 checkpoint validation passed immediately before commit:
 | `v0.5.0` | Cognitive Design Review |
 | `v0.5.1` | Memory Domain RFC |
 | `v0.5.2` | Memory Implementation ADR |
+| `v0.5.3` | Architecture Readiness Review |
 
 ## Current Git State
 
-The official repository checkpoint is clean through ADR-0010 before ARR-0001
-drafting.
+The official repository checkpoint is clean through ARR-0001 before this
+session-closure documentation update.
 
 Checkpoint:
 
-- commit: `9672be86a425445c0538ba87f85e043f26c2f008`
-- tag: `v0.5.2-memory-implementation-adr`
+- commit: `4e7745b65f7c0312673ce9fc77a9af25adb7ad83`
+- tag: `v0.5.3-architecture-readiness-review`
 - branch: `master`
 
-ARR-0001 is currently drafted for review and is intentionally not committed or
+This session-closure documentation update is intentionally not committed or
 tagged unless a future session explicitly asks for a documentation checkpoint.
 
 ### Phase 4.5 Checkpoint Contents
@@ -775,8 +777,8 @@ governance.
 
 ## Session Closure Note
 
-The previous checkpoints closed RFC-0001 and ADR-0010. The current
-architectural work has drafted ARR-0001 for readiness review before RFC-0002.
+The previous checkpoints closed RFC-0001, ADR-0010, and ARR-0001. The current
+session is closing after recording the post-ARR handoff for the next section.
 
 Important continuation point:
 
@@ -793,7 +795,8 @@ Important continuation point:
   RFC-0001 checkpoint.
 - ADR-0010 is approved for checkpoint, committed, and tagged as
   `v0.5.2-memory-implementation-adr`.
-- ARR-0001 is drafted only and is not committed or tagged.
+- ARR-0001 is checkpointed and tagged as
+  `v0.5.3-architecture-readiness-review`.
 - The next session should start by checking `git status --short`.
 - If the user authorizes Cognitive Era implementation later, read this handoff
   first and preserve the Phase 4.5 architecture boundaries, Phase 4.6 AEP
@@ -1013,9 +1016,10 @@ Proposed AEP:
 
 ### Pending Items
 
-- Review ARR-0001 Architecture Readiness Review.
+- Await explicit authorization to start RFC-0002 Knowledge Domain.
 - RFC-0002 Knowledge Domain has not started.
 - ADR-0010 is checkpointed and tagged.
+- ARR-0001 is checkpointed and tagged.
 - Memory contracts are conceptual only.
 - Memory Policies are not implemented.
 - Storage strategy is proposed only.
@@ -1025,26 +1029,24 @@ Proposed AEP:
 ### Recommended Next Steps
 
 1. Start next session with `git status --short`.
-2. Review ARR-0001 Architecture Readiness Review.
-3. If approved, create an official ARR-0001 checkpoint only after validation
-   and explicit commit authorization.
-4. Start RFC-0002 Knowledge Domain only after explicit authorization and ARR
-   review.
+2. Confirm the latest checkpoint is
+   `v0.5.3-architecture-readiness-review`.
+3. Start RFC-0002 Knowledge Domain only after explicit authorization.
+4. Keep RFC-0002 documentation-only unless a later prompt explicitly changes
+   scope.
 5. Do not implement Memory before contracts, policies, storage
    strategy, and test strategy are approved.
 
 ### Recommended Execution Order
 
-1. ARR-0001 architectural readiness review.
-2. ARR-0001 checkpoint if approved.
-3. RFC-0002 Knowledge Domain.
-4. RFC-0003 Context Domain.
-5. RFC-0004 Planning Domain.
-6. RFC-0005 Reasoning Domain.
-7. RFC-0006 Decision Domain.
-8. RFC-0007 Learning Domain.
-8. RFC-0008 Perception Domain.
-9. Only then consider implementation ADRs for approved domains.
+1. RFC-0002 Knowledge Domain.
+2. RFC-0003 Context Domain.
+3. RFC-0004 Planning Domain.
+4. RFC-0005 Reasoning Domain.
+5. RFC-0006 Decision Domain.
+6. RFC-0007 Learning Domain.
+7. RFC-0008 Perception Domain.
+8. Only then consider implementation ADRs for approved domains.
 
 ### Useful Commands
 
@@ -1052,7 +1054,7 @@ Proposed AEP:
 git status --short
 git log --oneline -6
 git tag --list
-git show --stat v0.5.1-memory-domain-rfc
+git show --stat v0.5.3-architecture-readiness-review
 make validate
 cargo test --workspace
 cargo check --workspace
@@ -1065,8 +1067,8 @@ make backend-smoke
 
 Official checkpoint:
 
-- clean at `fd47d25b5671b909b0dd984a9abe12a003145d1a`
-- tag `v0.5.1-memory-domain-rfc`
+- clean at `4e7745b65f7c0312673ce9fc77a9af25adb7ad83`
+- tag `v0.5.3-architecture-readiness-review`
 
 Expected working tree after this closure protocol:
 
@@ -1077,10 +1079,10 @@ These closure changes are intentionally uncommitted.
 
 ### Last Validation Result
 
-Before the RFC-0001 checkpoint:
+Before the ARR-0001 checkpoint:
 
 - `make validate`: passed.
-- `cargo test --workspace`: passed, 96 Rust tests.
+- `cargo test --workspace`: passed.
 - `cargo check --workspace`: passed.
 - Docker validation: passed for PostgreSQL, Redis, and Qdrant.
 - Backend smoke test: passed.
@@ -1107,15 +1109,17 @@ Before the RFC-0001 checkpoint:
 Aether now has a validated Foundation Era platform: Rust Core Runtime, Kernel,
 Manager Layer, Service Platform, System Services, Driver/Domain/Policy
 contracts, ASB, Contract Bus base, AEP governance, Architecture Constitution
-v2, CDR-0001, and RFC-0001 Memory Domain.
+v2, CDR-0001, RFC-0001 Memory Domain, ADR-0010 Memory implementation
+architecture, and ARR-0001 readiness review.
 
-The Cognitive Era is architecturally open but not implemented. The next
-architectural domain should be Knowledge, following the approved CDR order.
+The Cognitive Era is architecturally open but not implemented. ARR-0001
+concludes the project is ready with minor cautions to proceed to RFC-0002
+Knowledge Domain as a documentation-only phase.
 
 ### Exact Continuation Point
 
 Continue at:
 
 1. `git status --short`
-2. resolve/checkpoint closure documentation if desired;
+2. optionally checkpoint this closure documentation if desired;
 3. await explicit authorization for `RFC-0002 Knowledge Domain`.
