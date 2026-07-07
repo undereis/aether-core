@@ -88,6 +88,17 @@
 - Memory implementation remains blocked until RFC approval, ADR approval,
   public contracts, policies, and test strategy are complete.
 
+## ADR-0010: Memory Domain Implementation Architecture
+
+- ADR-0010 Memory Domain Implementation Architecture drafted.
+- Future Memory implementation architecture proposed without code changes.
+- Proposed future crates, contracts, policies, cognitive memory events, storage,
+  indexing, traceability, explainability, testing, and phased implementation
+  plan documented.
+- Memory implementation remains blocked until ADR-0010 is approved and the
+  required contracts, policies, storage strategy, and test strategy are
+  accepted.
+
 ## Architecture Milestones
 
 | Version | Milestone |

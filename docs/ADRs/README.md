@@ -23,3 +23,5 @@ record.
 - `ADR-0007-aether-service-bus.md`: Aether Service Bus.
 - `ADR-0008-official-service-map.md`: official Aether service map.
 - `ADR-0009-core-system-services.md`: Phase 4 core system services.
+- `ADR-0010-memory-domain-implementation-architecture.md`: proposed Memory
+  Domain implementation architecture.
