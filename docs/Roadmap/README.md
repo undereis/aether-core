@@ -129,6 +129,18 @@
 - Traceability governance remains documentation-only until future
   implementation phases define concrete contracts and tests.
 
+## RFC-0009: Efficient Intelligence & Energy-Aware Architecture
+
+- RFC-0009 Efficient Intelligence & Energy-Aware Architecture drafted as a
+  transversal architecture direction.
+- RFC-0003 through RFC-0008 remain reserved for the approved cognitive domain
+  sequence.
+- Future cognitive and intelligence work should consider cost, tokens, latency,
+  energy, model routing, cache, context compression, tool-first execution, and
+  safety governance from the design phase.
+- No functional implementation, dependency, routing layer, cache, model
+  selection, or execution mode is introduced by RFC-0009.
+
 ## Architecture Milestones
 
 | Version | Milestone |
