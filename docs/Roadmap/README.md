@@ -84,7 +84,8 @@
   Model, Cognitive DNA, Memory Relationship Model, Cognitive Memory Events,
   Memory Evolution, Conflict Resolution, Explainability, Cognitive Retrieval,
   Cognitive Memory Principles, and Cognitive Memory Ecosystem.
-- AEP-0016 Cognitive Traceability proposed for future governance review.
+- AEP-0016 Cognitive Traceability accepted as official governance for future
+  cognitive traceability.
 - Memory implementation remains blocked until RFC approval, ADR approval,
   public contracts, policies, and test strategy are complete.
 
@@ -118,6 +119,15 @@
 - Knowledge implementation remains blocked until RFC approval, implementation
   ADR approval, contracts, policies, storage strategy, and test strategy are
   accepted.
+
+## AEP-0016: Cognitive Traceability
+
+- AEP-0016 Cognitive Traceability accepted.
+- Future Memory and Knowledge implementations must comply with AEP-0016.
+- Future Context, Reasoning, Planning, Decision, Learning, and Action designs
+  must consider AEP-0016 from the start.
+- Traceability governance remains documentation-only until future
+  implementation phases define concrete contracts and tests.
 
 ## Architecture Milestones
 

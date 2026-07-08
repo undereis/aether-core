@@ -58,4 +58,4 @@ resolved or an explicit architecture review changes the relevant protocol.
 - [AEP-0013: Everything Has Contracts](AEP-0013-everything-has-contracts.md)
 - [AEP-0014: Compatibility First](AEP-0014-compatibility-first.md)
 - [AEP-0015: Git Checkpoint Discipline](AEP-0015-git-checkpoint-discipline.md)
-- [AEP-0016 Proposal: Cognitive Traceability](AEP-0016-cognitive-traceability.md)
+- [AEP-0016: Cognitive Traceability](AEP-0016-cognitive-traceability.md)

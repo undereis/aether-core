@@ -8,11 +8,11 @@ The Aether foundation is complete through Phase 4.6. The Foundation Era is
 closed structurally and constitutionally. CDR-0001 has been approved and
 checkpointed. RFC-0001 Memory Domain has been drafted and revised through
 Revision 1, approved, checkpointed, and tagged. AEP-0016 Cognitive
-Traceability is registered as a proposal. The Cognitive Era has not started
+Traceability is accepted as an official governance protocol. The Cognitive Era has not started
 implementation. ADR-0010 Memory Domain Implementation Architecture has been
 drafted, checkpointed, and tagged. ARR-0001 Architecture Readiness Review has
 been drafted, checkpointed, and tagged. RFC-0002 Knowledge Domain has been
-drafted as a documentation-only phase and is awaiting architectural review.
+drafted, checkpointed, and tagged.
 
 - Phase 0: approved.
 - Foundation hardening: completed.
@@ -28,18 +28,17 @@ drafted as a documentation-only phase and is awaiting architectural review.
 - CDR-0001 Cognitive Design Review: drafted, approved, committed, and tagged.
 - RFC-0001 Memory Domain: drafted, revised through Revision 1, approved,
   committed, and tagged.
-- AEP-0016 Cognitive Traceability: registered as a proposed governance
-  protocol.
+- AEP-0016 Cognitive Traceability: accepted as an official governance protocol.
 - ADR-0010 Memory Domain Implementation Architecture: drafted, committed, and
   tagged.
 - ARR-0001 Architecture Readiness Review: drafted, committed, and tagged.
-- RFC-0002 Knowledge Domain: drafted, awaiting review, not committed or tagged.
+- RFC-0002 Knowledge Domain: drafted, committed, and tagged.
 
-The repository has an official checkpoint through ARR-0001:
+The repository has an official checkpoint through RFC-0002:
 
 - branch: `master`
-- commit: `4e7745b65f7c0312673ce9fc77a9af25adb7ad83`
-- tag: `v0.5.3-architecture-readiness-review`
+- commit: `c20b6fac766ace8650945460a8aa9f05b99f4486`
+- tag: `v0.5.4-knowledge-domain-rfc`
 
 Do not start Cognitive Era implementation without explicit user authorization
 and approval of the relevant domain RFC, implementation ADR, public contracts,
@@ -51,11 +50,11 @@ lifecycle/events, traceability/explainability, PostgreSQL metadata, Qdrant
 retrieval, relationship/conflict, and compliance review phases. Memory remains
 unimplemented.
 
-The official ARR-0001 checkpoint is `v0.5.3-architecture-readiness-review`.
+The official RFC-0002 checkpoint is `v0.5.4-knowledge-domain-rfc`.
 
 ARR-0001 currently concludes that the project is ready with minor cautions to
-proceed to RFC-0002 Knowledge Domain as a documentation-only phase. AEP-0016
-should be treated as mandatory design input during RFC-0002 and accepted before
+proceed to RFC-0002 Knowledge Domain as a documentation-only phase. RFC-0002
+has been checkpointed, and AEP-0016 is now accepted governance before future
 Memory or Knowledge implementation.
 
 RFC-0002 defines Knowledge as structured truth, distinct from Memory
@@ -487,16 +486,16 @@ The RFC defines:
 RFC-0001 does not implement Memory Engine, Memory Service, Memory Manager,
 database schemas, vector indexes, APIs, runtime behavior, AI, or agents.
 
-### AEP-0016 Proposal: Cognitive Traceability
+### AEP-0016: Cognitive Traceability
 
-Drafted the proposed governance protocol:
+Accepted the Cognitive Traceability governance protocol:
 
 - `docs/AEP/AEP-0016-cognitive-traceability.md`
 
-The proposal requires future cognitive components, records, decisions, events,
-and lifecycle transitions to be traceable, explainable, and auditable across
-their full lifecycle. It is proposed governance only and does not alter runtime
-behavior.
+AEP-0016 requires future cognitive components, records, decisions, events, and
+lifecycle transitions to be traceable, explainable, and auditable across their
+full lifecycle. It governs future implementations, but it does not implement
+traceability or alter runtime behavior.
 
 Created Phase 4.5 documentation:
 
@@ -798,8 +797,8 @@ Important continuation point:
 - CDR-0001 is approved and checkpointed as `v0.5.0-cognitive-design-review`.
 - RFC-0001 Revision 1 is approved and checkpointed as
   `v0.5.1-memory-domain-rfc`.
-- AEP-0016 Cognitive Traceability is registered as a proposal inside the
-  RFC-0001 checkpoint.
+- AEP-0016 Cognitive Traceability was registered as a proposal inside the
+  RFC-0001 checkpoint and is now accepted governance.
 - ADR-0010 is approved for checkpoint, committed, and tagged as
   `v0.5.2-memory-implementation-adr`.
 - ARR-0001 is checkpointed and tagged as
@@ -996,12 +995,7 @@ Next expected RFC by CDR order:
 
 Active AEPs:
 
-- AEP-0001 through AEP-0015.
-
-Proposed AEP:
-
-- `AEP-0016-cognitive-traceability.md`: proposed, not yet treated as active
-  governance unless explicitly approved as active in a future checkpoint.
+- AEP-0001 through AEP-0016.
 
 ### CDRs
 
@@ -1023,8 +1017,8 @@ Proposed AEP:
 
 ### Pending Items
 
-- Await architectural review of RFC-0002 Knowledge Domain.
-- RFC-0002 Knowledge Domain has been drafted but not committed or tagged.
+- Await checkpoint review for AEP-0016 Cognitive Traceability acceptance.
+- RFC-0002 Knowledge Domain has been drafted, committed, and tagged.
 - ADR-0010 is checkpointed and tagged.
 - ARR-0001 is checkpointed and tagged.
 - Memory contracts are conceptual only.
@@ -1037,23 +1031,23 @@ Proposed AEP:
 
 1. Start next session with `git status --short`.
 2. Confirm the latest checkpoint is
-   `v0.5.3-architecture-readiness-review`.
-3. Review `docs/RFC/RFC-0002-Knowledge-Domain.md`.
-4. Keep RFC-0002 documentation-only unless a later prompt explicitly changes
-   scope.
+   `v0.5.4-knowledge-domain-rfc`.
+3. Review `docs/AEP/AEP-0016-cognitive-traceability.md`.
+4. Checkpoint AEP-0016 acceptance only after explicit authorization.
 5. Do not implement Memory before contracts, policies, storage
    strategy, and test strategy are approved.
 
 ### Recommended Execution Order
 
-1. RFC-0002 Knowledge Domain.
-2. RFC-0003 Context Domain.
-3. RFC-0004 Planning Domain.
-4. RFC-0005 Reasoning Domain.
-5. RFC-0006 Decision Domain.
-6. RFC-0007 Learning Domain.
-7. RFC-0008 Perception Domain.
-8. Only then consider implementation ADRs for approved domains.
+1. Final review of AEP-0016 Cognitive Traceability acceptance.
+2. Official checkpoint for AEP-0016 acceptance.
+3. RFC-0003 Context Domain only after the AEP-0016 checkpoint.
+4. RFC-0004 Planning Domain.
+5. RFC-0005 Reasoning Domain.
+6. RFC-0006 Decision Domain.
+7. RFC-0007 Learning Domain.
+8. RFC-0008 Perception Domain.
+9. Only then consider implementation ADRs for approved domains.
 
 ### Useful Commands
 
@@ -1061,7 +1055,7 @@ Proposed AEP:
 git status --short
 git log --oneline -6
 git tag --list
-git show --stat v0.5.3-architecture-readiness-review
+git show --stat v0.5.4-knowledge-domain-rfc
 make validate
 cargo test --workspace
 cargo check --workspace
@@ -1074,19 +1068,22 @@ make backend-smoke
 
 Official checkpoint:
 
-- clean at `4e7745b65f7c0312673ce9fc77a9af25adb7ad83`
-- tag `v0.5.3-architecture-readiness-review`
+- clean at `c20b6fac766ace8650945460a8aa9f05b99f4486`
+- tag `v0.5.4-knowledge-domain-rfc`
 
-Expected working tree after this closure protocol:
+Current working tree before AEP-0016 checkpoint:
 
 - `CHANGELOG.md`
+- `docs/AEP/AEP-0016-cognitive-traceability.md`
+- `docs/AEP/README.md`
+- `docs/Roadmap/README.md`
 - `docs/SESSION-HANDOFF.md`
 
-These closure changes are intentionally uncommitted.
+These AEP-0016 acceptance review changes are intentionally uncommitted.
 
 ### Last Validation Result
 
-Before the ARR-0001 checkpoint:
+After the AEP-0016 Acceptance Review:
 
 - `make validate`: passed.
 - `cargo test --workspace`: passed.
@@ -1105,9 +1102,12 @@ Before the ARR-0001 checkpoint:
 - Domains define responsibility boundaries before code.
 - No service-to-service direct calls.
 - No hidden cognitive state.
+- AEP-0016 Cognitive Traceability must govern future cognitive implementations.
 - No Memory implementation before approved ADR, contracts, policies, storage,
   and tests.
-- No Knowledge implementation before RFC-0002 approval.
+- No Knowledge implementation before approved ADR, contracts, policies,
+  storage, and tests.
+- No RFC-0003 Context Domain before checkpointing AEP-0016 acceptance.
 - No IA or agents before their approved era and governance.
 - LLMs remain inference providers, not owners of intelligence.
 
@@ -1117,16 +1117,81 @@ Aether now has a validated Foundation Era platform: Rust Core Runtime, Kernel,
 Manager Layer, Service Platform, System Services, Driver/Domain/Policy
 contracts, ASB, Contract Bus base, AEP governance, Architecture Constitution
 v2, CDR-0001, RFC-0001 Memory Domain, ADR-0010 Memory implementation
-architecture, and ARR-0001 readiness review.
+architecture, ARR-0001 readiness review, RFC-0002 Knowledge Domain, and
+AEP-0016 Cognitive Traceability.
 
-The Cognitive Era is architecturally open but not implemented. ARR-0001
-concludes the project is ready with minor cautions to proceed to RFC-0002
-Knowledge Domain as a documentation-only phase.
+The Cognitive Era is architecturally open but not implemented. AEP-0016 is now
+accepted governance for future cognitive traceability.
 
 ### Exact Continuation Point
 
 Continue at:
 
 1. `git status --short`
-2. optionally checkpoint this closure documentation if desired;
-3. await explicit authorization for `RFC-0002 Knowledge Domain`.
+2. verify only these files are modified:
+   - `CHANGELOG.md`
+   - `docs/AEP/AEP-0016-cognitive-traceability.md`
+   - `docs/AEP/README.md`
+   - `docs/Roadmap/README.md`
+   - `docs/SESSION-HANDOFF.md`
+3. run final documentary review for AEP-0016 acceptance;
+4. verify no current references incorrectly say AEP-0016 is still Proposed;
+5. if approved, create checkpoint:
+   - commit: `docs(aep): accept Cognitive Traceability protocol`
+   - tag: `v0.5.5-cognitive-traceability-aep`
+
+## Session Closure: AEP-0016 Acceptance Review
+
+Last official checkpoint before this session closure:
+
+- commit: `c20b6fac766ace8650945460a8aa9f05b99f4486`
+- tag: `v0.5.4-knowledge-domain-rfc`
+
+Current phase:
+
+- AEP-0016 Acceptance Review executed.
+- AEP-0016 changed from Proposed to Accepted in the working tree.
+- Final review before checkpoint is still pending.
+- Official commit and tag are still pending.
+
+Current modified files:
+
+- `CHANGELOG.md`
+- `docs/AEP/AEP-0016-cognitive-traceability.md`
+- `docs/AEP/README.md`
+- `docs/Roadmap/README.md`
+- `docs/SESSION-HANDOFF.md`
+
+Validation already executed after the AEP-0016 acceptance changes:
+
+- `make validate`: passed.
+- `cargo test --workspace`: passed.
+- `cargo check --workspace`: passed.
+
+Not done:
+
+- No functional code changed.
+- Memory was not implemented.
+- Knowledge was not implemented.
+- Context was not started.
+- AI was not started.
+- Agents were not started.
+- No commit was created.
+- No tag was created.
+
+Next exact action:
+
+1. Run `git status --short`.
+2. Review `docs/AEP/AEP-0016-cognitive-traceability.md`.
+3. Verify there are no current references incorrectly stating that AEP-0016 is
+   still Proposed.
+4. If approved, checkpoint:
+   - commit: `docs(aep): accept Cognitive Traceability protocol`
+   - tag: `v0.5.5-cognitive-traceability-aep`
+
+Restrictions:
+
+- Do not start RFC-0003 Context Domain before checkpointing AEP-0016.
+- Do not implement Memory or Knowledge.
+- Do not create code, crates, APIs, database schemas, or migrations.
+- Do not start AI or agents.
