@@ -1,6 +1,6 @@
 # Aether Session Handoff
 
-Last updated: 2026-07-07
+Last updated: 2026-07-08
 
 ## Current Status
 
@@ -12,7 +12,9 @@ Traceability is accepted as an official governance protocol. The Cognitive Era h
 implementation. ADR-0010 Memory Domain Implementation Architecture has been
 drafted, checkpointed, and tagged. ARR-0001 Architecture Readiness Review has
 been drafted, checkpointed, and tagged. RFC-0002 Knowledge Domain has been
-drafted, checkpointed, and tagged.
+drafted, checkpointed, and tagged. RFC-0009 Efficient Intelligence &
+Energy-Aware Architecture has been drafted as a transversal documentation-only
+architecture direction.
 
 - Phase 0: approved.
 - Foundation hardening: completed.
@@ -33,12 +35,14 @@ drafted, checkpointed, and tagged.
   tagged.
 - ARR-0001 Architecture Readiness Review: drafted, committed, and tagged.
 - RFC-0002 Knowledge Domain: drafted, committed, and tagged.
+- RFC-0009 Efficient Intelligence & Energy-Aware Architecture: drafted as
+  documentation only.
 
-The repository has an official checkpoint through RFC-0002:
+The repository has an official checkpoint through AEP-0016 acceptance:
 
 - branch: `master`
-- commit: `c20b6fac766ace8650945460a8aa9f05b99f4486`
-- tag: `v0.5.4-knowledge-domain-rfc`
+- commit: `2c66d56d16007886742eb315bd652a12d362474f`
+- tag: `v0.5.5-cognitive-traceability-aep`
 
 Do not start Cognitive Era implementation without explicit user authorization
 and approval of the relevant domain RFC, implementation ADR, public contracts,
@@ -63,6 +67,10 @@ provenance, confidence, versioning, contradiction, invalidation, policies,
 events, conceptual contracts, storage and indexing strategy, traceability,
 explainability, future implementation phases, risks, and open questions.
 Knowledge remains unimplemented.
+
+RFC-0009 records a transversal Efficient Intelligence and Energy-Aware
+Architecture direction. It preserves RFC-0003 through RFC-0008 for the approved
+cognitive domain sequence and introduces no functional implementation.
 
 ## What Was Done
 
@@ -1031,23 +1039,23 @@ Active AEPs:
 
 1. Start next session with `git status --short`.
 2. Confirm the latest checkpoint is
-   `v0.5.4-knowledge-domain-rfc`.
-3. Review `docs/AEP/AEP-0016-cognitive-traceability.md`.
-4. Checkpoint AEP-0016 acceptance only after explicit authorization.
+   `v0.5.5-cognitive-traceability-aep`.
+3. Review `docs/RFC/RFC-0009-Efficient-Intelligence-Energy-Aware-Architecture.md`.
+4. Checkpoint RFC-0009 only after explicit authorization.
 5. Do not implement Memory before contracts, policies, storage
    strategy, and test strategy are approved.
 
 ### Recommended Execution Order
 
-1. Final review of AEP-0016 Cognitive Traceability acceptance.
-2. Official checkpoint for AEP-0016 acceptance.
-3. RFC-0003 Context Domain only after the AEP-0016 checkpoint.
-4. RFC-0004 Planning Domain.
-5. RFC-0005 Reasoning Domain.
-6. RFC-0006 Decision Domain.
-7. RFC-0007 Learning Domain.
-8. RFC-0008 Perception Domain.
-9. Only then consider implementation ADRs for approved domains.
+1. Review and checkpoint RFC-0009 Efficient Intelligence & Energy-Aware
+   Architecture if approved.
+2. RFC-0003 Context Domain.
+3. RFC-0004 Planning Domain.
+4. RFC-0005 Reasoning Domain.
+5. RFC-0006 Decision Domain.
+6. RFC-0007 Learning Domain.
+7. RFC-0008 Perception Domain.
+8. Only then consider implementation ADRs for approved domains.
 
 ### Useful Commands
 
@@ -1055,7 +1063,7 @@ Active AEPs:
 git status --short
 git log --oneline -6
 git tag --list
-git show --stat v0.5.4-knowledge-domain-rfc
+git show --stat v0.5.5-cognitive-traceability-aep
 make validate
 cargo test --workspace
 cargo check --workspace
@@ -1068,18 +1076,18 @@ make backend-smoke
 
 Official checkpoint:
 
-- clean at `c20b6fac766ace8650945460a8aa9f05b99f4486`
-- tag `v0.5.4-knowledge-domain-rfc`
+- clean at `2c66d56d16007886742eb315bd652a12d362474f`
+- tag `v0.5.5-cognitive-traceability-aep`
 
-Current working tree before AEP-0016 checkpoint:
+Current working tree after RFC-0009 drafting:
 
 - `CHANGELOG.md`
-- `docs/AEP/AEP-0016-cognitive-traceability.md`
-- `docs/AEP/README.md`
+- `docs/RFC/README.md`
+- `docs/RFC/RFC-0009-Efficient-Intelligence-Energy-Aware-Architecture.md`
 - `docs/Roadmap/README.md`
 - `docs/SESSION-HANDOFF.md`
 
-These AEP-0016 acceptance review changes are intentionally uncommitted.
+These RFC-0009 documentation changes are intentionally uncommitted.
 
 ### Last Validation Result
 
@@ -1103,11 +1111,14 @@ After the AEP-0016 Acceptance Review:
 - No service-to-service direct calls.
 - No hidden cognitive state.
 - AEP-0016 Cognitive Traceability must govern future cognitive implementations.
+- Efficiency, cost, token, latency, and energy optimization must not bypass
+  safety, policy, permissions, traceability, or auditability.
 - No Memory implementation before approved ADR, contracts, policies, storage,
   and tests.
 - No Knowledge implementation before approved ADR, contracts, policies,
   storage, and tests.
-- No RFC-0003 Context Domain before checkpointing AEP-0016 acceptance.
+- RFC-0003 through RFC-0008 remain reserved for the approved cognitive domain
+  sequence.
 - No IA or agents before their approved era and governance.
 - LLMs remain inference providers, not owners of intelligence.
 
@@ -1118,10 +1129,13 @@ Manager Layer, Service Platform, System Services, Driver/Domain/Policy
 contracts, ASB, Contract Bus base, AEP governance, Architecture Constitution
 v2, CDR-0001, RFC-0001 Memory Domain, ADR-0010 Memory implementation
 architecture, ARR-0001 readiness review, RFC-0002 Knowledge Domain, and
-AEP-0016 Cognitive Traceability.
+AEP-0016 Cognitive Traceability. RFC-0009 now adds a transversal
+documentation-only direction for efficient, energy-aware intelligence.
 
 The Cognitive Era is architecturally open but not implemented. AEP-0016 is now
-accepted governance for future cognitive traceability.
+accepted governance for future cognitive traceability. RFC-0009 does not start
+Context, Memory, Knowledge, IA, agents, model routing, cache, or execution
+modes.
 
 ### Exact Continuation Point
 
@@ -1130,39 +1144,42 @@ Continue at:
 1. `git status --short`
 2. verify only these files are modified:
    - `CHANGELOG.md`
-   - `docs/AEP/AEP-0016-cognitive-traceability.md`
-   - `docs/AEP/README.md`
+   - `docs/RFC/README.md`
+   - `docs/RFC/RFC-0009-Efficient-Intelligence-Energy-Aware-Architecture.md`
    - `docs/Roadmap/README.md`
    - `docs/SESSION-HANDOFF.md`
-3. run final documentary review for AEP-0016 acceptance;
-4. verify no current references incorrectly say AEP-0016 is still Proposed;
+3. run final documentary review for RFC-0009;
+4. verify RFC-0003 through RFC-0008 remain reserved for the approved cognitive
+   domain sequence;
 5. if approved, create checkpoint:
-   - commit: `docs(aep): accept Cognitive Traceability protocol`
-   - tag: `v0.5.5-cognitive-traceability-aep`
+   - commit: `docs(rfc): define efficient intelligence architecture`
+   - tag: `v0.5.6-efficient-intelligence-rfc`
 
-## Session Closure: AEP-0016 Acceptance Review
+## Session Closure: RFC-0009 Efficient Intelligence Draft
 
-Last official checkpoint before this session closure:
+Last official checkpoint before this draft:
 
-- commit: `c20b6fac766ace8650945460a8aa9f05b99f4486`
-- tag: `v0.5.4-knowledge-domain-rfc`
+- commit: `2c66d56d16007886742eb315bd652a12d362474f`
+- tag: `v0.5.5-cognitive-traceability-aep`
 
 Current phase:
 
-- AEP-0016 Acceptance Review executed.
-- AEP-0016 changed from Proposed to Accepted in the working tree.
-- Final review before checkpoint is still pending.
-- Official commit and tag are still pending.
+- RFC-0009 Efficient Intelligence & Energy-Aware Architecture drafted.
+- RFC-0009 is a transversal architecture document.
+- RFC-0003 through RFC-0008 remain preserved for the approved cognitive domain
+  sequence.
+- Final review before checkpoint is pending.
+- Official commit and tag are pending.
 
 Current modified files:
 
 - `CHANGELOG.md`
-- `docs/AEP/AEP-0016-cognitive-traceability.md`
-- `docs/AEP/README.md`
+- `docs/RFC/README.md`
+- `docs/RFC/RFC-0009-Efficient-Intelligence-Energy-Aware-Architecture.md`
 - `docs/Roadmap/README.md`
 - `docs/SESSION-HANDOFF.md`
 
-Validation already executed after the AEP-0016 acceptance changes:
+Validation executed after RFC-0009 drafting:
 
 - `make validate`: passed.
 - `cargo test --workspace`: passed.
@@ -1176,22 +1193,25 @@ Not done:
 - Context was not started.
 - AI was not started.
 - Agents were not started.
+- No model routing, cache, execution modes, or context compression were
+  implemented.
 - No commit was created.
 - No tag was created.
 
 Next exact action:
 
 1. Run `git status --short`.
-2. Review `docs/AEP/AEP-0016-cognitive-traceability.md`.
-3. Verify there are no current references incorrectly stating that AEP-0016 is
-   still Proposed.
+2. Review
+   `docs/RFC/RFC-0009-Efficient-Intelligence-Energy-Aware-Architecture.md`.
+3. Verify RFC-0003 through RFC-0008 remain reserved for Context, Planning,
+   Reasoning, Decision, Learning, and Perception.
 4. If approved, checkpoint:
-   - commit: `docs(aep): accept Cognitive Traceability protocol`
-   - tag: `v0.5.5-cognitive-traceability-aep`
+   - commit: `docs(rfc): define efficient intelligence architecture`
+   - tag: `v0.5.6-efficient-intelligence-rfc`
 
 Restrictions:
 
-- Do not start RFC-0003 Context Domain before checkpointing AEP-0016.
+- Do not start RFC-0003 Context Domain as part of RFC-0009.
 - Do not implement Memory or Knowledge.
 - Do not create code, crates, APIs, database schemas, or migrations.
 - Do not start AI or agents.

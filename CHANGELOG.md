@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- RFC-0009 Efficient Intelligence & Energy-Aware Architecture drafted.
 - AEP-0016 Cognitive Traceability accepted.
 - RFC-0002 Knowledge Domain drafted.
 
