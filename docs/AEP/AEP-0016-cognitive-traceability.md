@@ -1,6 +1,20 @@
-# AEP-0016 Proposal: Cognitive Traceability
+# AEP-0016: Cognitive Traceability
 
-Status: Proposed.
+Status: Accepted.
+
+## Acceptance Note
+
+AEP-0016 is now the official Cognitive Traceability protocol for Aether.
+
+All future Memory and Knowledge implementations must comply with AEP-0016.
+Future Context, Reasoning, Planning, Decision, Learning, and Action designs
+must consider AEP-0016 from the beginning of their architecture reviews.
+
+Events, logs, and traces must not leak sensitive content by default.
+Traceability must record enough metadata for explainability and auditability
+without exposing data outside its policy, owner, or visibility boundary.
+
+AEP-0016 does not implement traceability. It governs future implementations.
 
 ## Objective
 

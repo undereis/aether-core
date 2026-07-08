@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- AEP-0016 Cognitive Traceability accepted.
 - RFC-0002 Knowledge Domain drafted.
 
 No unreleased product, runtime, or architecture implementation changes.
