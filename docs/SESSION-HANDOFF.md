@@ -1,6 +1,6 @@
 # Aether Session Handoff
 
-Last updated: 2026-07-08
+Last updated: 2026-07-09
 
 ## Current State
 
@@ -8,11 +8,14 @@ Aether is published remotely through:
 
 - branch: `main`
 - remote branch: `origin/main`
-- commit: `3229b22b710254f3d4acffdac36abe1660689ab1`
+- commit: `252fd01a4fa8313f813d73e9a79819eed22f0754`
 - current published tag: `v0.5.6-efficient-intelligence-rfc`
 
-The working tree was clean immediately after the controlled remote publication.
-In the current session, only this handoff file is modified.
+The latest published tag remains on
+`3229b22b710254f3d4acffdac36abe1660689ab1`.
+
+The working tree was clean immediately after the controlled handoff
+publication. The current documentation task drafts RFC-0003 Context Domain.
 
 The Foundation Era is complete. The Cognitive Era has been architecturally
 opened through CDR/RFC governance, but no cognitive implementation has started.
@@ -68,6 +71,7 @@ Aether currently has:
 - ADR-0010 Memory Domain Implementation Architecture.
 - ARR-0001 Architecture Readiness Review.
 - RFC-0002 Knowledge Domain.
+- RFC-0003 Context Domain drafted as documentation.
 - RFC-0009 Efficient Intelligence and Energy-Aware Architecture.
 
 RFC-0009 is a transversal architecture direction. It does not replace the
@@ -79,14 +83,14 @@ agents.
 
 The approved cognitive-domain sequence remains:
 
-1. RFC-0003 Context Domain.
-2. RFC-0004 Planning Domain.
-3. RFC-0005 Reasoning Domain.
-4. RFC-0006 Decision Domain.
-5. RFC-0007 Learning Domain.
-6. RFC-0008 Perception Domain.
+1. RFC-0003 Context Domain drafted.
+2. RFC-0004 Planning Domain reserved.
+3. RFC-0005 Reasoning Domain reserved.
+4. RFC-0006 Decision Domain reserved.
+5. RFC-0007 Learning Domain reserved.
+6. RFC-0008 Perception Domain reserved.
 
-RFC-0003 through RFC-0008 remain reserved for this sequence.
+RFC-0004 through RFC-0008 remain reserved for this sequence.
 
 ## Non-Breakable Restrictions
 
@@ -147,16 +151,18 @@ Start with:
 1. `git status --short`
 2. Confirm the branch is `main`.
 3. Confirm `origin/main` points to
-   `3229b22b710254f3d4acffdac36abe1660689ab1`.
+   `252fd01a4fa8313f813d73e9a79819eed22f0754`.
 4. Confirm the latest published tag is
    `v0.5.6-efficient-intelligence-rfc`.
 
 Recommended next steps:
 
 - Do not start implementation without a new explicit scope.
+- Review and checkpoint RFC-0003 Context Domain only after architectural
+  approval.
 - If needed, synchronize `v0.5.0` and `v0.5.1` in a separate controlled task.
-- The next cognitive-domain documentation phase should be RFC-0003 Context
-  Domain unless a new approved governance task supersedes it.
+- The next cognitive-domain documentation phase after RFC-0003 should be
+  RFC-0004 Planning Domain unless a new approved governance task supersedes it.
 - Future work must respect RFC-0009 efficiency, cost, energy, token, latency,
   and safety guidance.
 
@@ -165,7 +171,7 @@ Recommended next steps:
 Final remote state:
 
 - branch `main` published to `origin`.
-- remote `main` at `3229b22b710254f3d4acffdac36abe1660689ab1`.
+- remote `main` at `252fd01a4fa8313f813d73e9a79819eed22f0754`.
 - current published tag: `v0.5.6-efficient-intelligence-rfc`.
 - working tree was clean after publication.
 
@@ -197,14 +203,17 @@ Architecture state:
   registered and published as a transversal architecture direction.
 - RFC-0009 does not implement model routing, cache, execution modes, context
   compression, Memory, Knowledge, Context, AI, or agents.
-- RFC-0003 through RFC-0008 remain preserved for the approved cognitive domain
+- RFC-0003 Context Domain has been drafted as documentation in the current
+  worktree.
+- RFC-0004 through RFC-0008 remain preserved for the approved cognitive domain
   sequence.
-- Future work should start from `v0.5.6-efficient-intelligence-rfc` with a
-  clean working tree.
+- Future work should start from the current `main` state and review the
+  RFC-0003 documentation changes before any checkpoint.
 
 Recommended next steps:
 
 - Do not start new implementation without a new explicit scope.
 - If needed, synchronize `v0.5.0` and `v0.5.1` in a separate controlled task.
-- The next architecture phase must respect the approved cognitive sequence and
-  RFC-0009 efficiency, cost, energy, token, latency, and safety guidance.
+- The next architecture phase must review RFC-0003 first, then continue to the
+  approved cognitive sequence and RFC-0009 efficiency, cost, energy, token,
+  latency, and safety guidance.

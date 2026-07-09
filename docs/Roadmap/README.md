@@ -120,6 +120,20 @@
   ADR approval, contracts, policies, storage strategy, and test strategy are
   accepted.
 
+## RFC-0003: Context Domain
+
+- RFC-0003 Context Domain drafted as a documentation-only cognitive-domain
+  RFC.
+- Context defined as present-state assembly, separate from Memory experience
+  and Knowledge structured truth.
+- Context boundaries, lifecycle, freshness, traceability, policies, events,
+  contracts, manager/service responsibilities, efficient intelligence
+  considerations, risks, anti-patterns, and future implementation phases
+  documented.
+- Context implementation remains blocked until RFC approval, implementation
+  ADR approval, contracts, policies, storage/non-storage strategy, and test
+  strategy are accepted.
+
 ## AEP-0016: Cognitive Traceability
 
 - AEP-0016 Cognitive Traceability accepted.
@@ -133,7 +147,7 @@
 
 - RFC-0009 Efficient Intelligence & Energy-Aware Architecture drafted as a
   transversal architecture direction.
-- RFC-0003 through RFC-0008 remain reserved for the approved cognitive domain
+- RFC-0004 through RFC-0008 remain reserved for the approved cognitive domain
   sequence.
 - Future cognitive and intelligence work should consider cost, tokens, latency,
   energy, model routing, cache, context compression, tool-first execution, and
