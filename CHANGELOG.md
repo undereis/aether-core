@@ -2,12 +2,35 @@
 
 ## Unreleased
 
-- RFC-0003 Context Domain drafted.
-- RFC-0009 Efficient Intelligence & Energy-Aware Architecture drafted.
-- AEP-0016 Cognitive Traceability accepted.
-- RFC-0002 Knowledge Domain drafted.
+- Reconciled governance status, remote checkpoint records, and the approved
+  cognitive RFC sequence before RFC-0004 Planning Domain.
 
 No unreleased product, runtime, or architecture implementation changes.
+
+## v0.5.7-context-domain-rfc
+
+- Accepted and published RFC-0003 Context Domain as architecture documentation.
+- Defined Context as authorized present-state assembly without implementing a
+  Context Engine or runtime behavior.
+
+## v0.5.6-efficient-intelligence-rfc
+
+- Accepted and published RFC-0009 Efficient Intelligence & Energy-Aware
+  Architecture as a transversal architecture direction.
+- Preserved RFC-0003 through RFC-0008 for the approved cognitive-domain
+  sequence without implementing routing, cache, compression, AI, or agents.
+
+## v0.5.5-cognitive-traceability-aep
+
+- Accepted and published AEP-0016 Cognitive Traceability as official governance
+  for future cognitive design and implementation.
+
+## v0.5.4-knowledge-domain-rfc
+
+- Accepted and published RFC-0002 Knowledge Domain as architecture
+  documentation.
+- Defined Knowledge as structured truth without implementing Knowledge,
+  storage, graph, vector search, AI, or agents.
 
 ## v0.5.3-architecture-readiness-review
 

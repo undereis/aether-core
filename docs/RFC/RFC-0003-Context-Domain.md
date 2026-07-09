@@ -2,7 +2,11 @@
 
 ## 1. Status
 
-Draft.
+Accepted and published.
+
+Reconciliation note: RFC-0003 was accepted and published in
+`v0.5.7-context-domain-rfc`. It remains architecture documentation only;
+Context and all related runtime capabilities remain unimplemented.
 
 This RFC is documentation-only. It defines the future Context Domain for
 Aether, but it does not implement Context, crates, services, managers,

@@ -1,6 +1,6 @@
 # RFC-0001: Memory Domain
 
-Status: Drafted, Revision 1.
+Status: Accepted and published, Revision 1.
 
 Review name: RFC-0001 Revision 1 Memory Domain Architectural Review.
 
@@ -13,7 +13,12 @@ Related baseline:
 - AEP-0005: Domain First
 - AEP-0011: Policies Govern Behavior
 - AEP-0013: Everything Has Contracts
-- AEP-0016: Cognitive Traceability proposal
+- AEP-0016: Cognitive Traceability, accepted governance
+
+Reconciliation note: RFC-0001 Revision 1 was accepted and published in
+`v0.5.1-memory-domain-rfc`. AEP-0016 was still a proposal during the original
+review and was later accepted in `v0.5.5-cognitive-traceability-aep`. Memory
+remains unimplemented.
 
 ## 1. Executive Summary
 

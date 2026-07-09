@@ -2,7 +2,12 @@
 
 ## 1. Status
 
-Draft.
+Accepted, published, and transversal.
+
+Reconciliation note: RFC-0009 was accepted and published in
+`v0.5.6-efficient-intelligence-rfc`. It remains documentation-only and does not
+implement routing, cache, context compression, execution modes, models, AI, or
+agents.
 
 ## 2. Summary
 
@@ -47,14 +52,16 @@ Efficient Intelligence protects Aether from several architectural risks:
 RFC-0009 is a transversal architecture RFC. It does not replace the approved
 cognitive domain sequence.
 
-The reserved cognitive sequence remains:
+The approved cognitive sequence remains intact. RFC-0003 Context Domain is now
+accepted and published; RFC-0004 Planning Domain is the next reserved
+documentation phase:
 
-1. RFC-0003: Context Domain.
-2. RFC-0004: Planning Domain.
-3. RFC-0005: Reasoning Domain.
-4. RFC-0006: Decision Domain.
-5. RFC-0007: Learning Domain.
-6. RFC-0008: Perception Domain.
+1. RFC-0003: Context Domain, completed and published.
+2. RFC-0004: Planning Domain, reserved and next.
+3. RFC-0005: Reasoning Domain, reserved.
+4. RFC-0006: Decision Domain, reserved.
+5. RFC-0007: Learning Domain, reserved.
+6. RFC-0008: Perception Domain, reserved.
 
 RFC-0009 complements these domains by defining an efficiency lens that future
 domain RFCs, ADRs, services, managers, policies, and contracts should consider

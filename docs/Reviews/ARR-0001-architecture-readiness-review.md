@@ -2,7 +2,14 @@
 
 ## 1. Status
 
-Draft.
+Completed and published.
+
+Historical reconciliation note: ARR-0001 was completed and published in
+`v0.5.3-architecture-readiness-review`. The review was performed while AEP-0016
+was still proposed, so its analysis below intentionally preserves that original
+condition. AEP-0016 was later accepted in
+`v0.5.5-cognitive-traceability-aep`. The review result remains "Ready with minor
+cautions," and no cognitive implementation was started.
 
 ## 2. Review Context
 

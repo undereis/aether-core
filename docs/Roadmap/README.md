@@ -67,8 +67,9 @@
 
 ## CDR-0001: Cognitive Design Review
 
-- CDR-0001 drafted.
-- Official cognitive architecture defined for review.
+- CDR-0001 accepted and published in `v0.5.0-cognitive-design-review`.
+- Official cognitive architecture defined and checkpointed before
+  implementation.
 - Cognitive Pipeline defined before any Era II implementation.
 - Memory, Knowledge, Context, Planning, Reasoning, Decision, Action, Learning,
   and Inference boundaries documented.
@@ -76,11 +77,12 @@
 
 ## RFC-0001: Memory Domain
 
-- RFC-0001 Memory Domain drafted.
+- RFC-0001 Memory Domain Revision 1 accepted and published in
+  `v0.5.1-memory-domain-rfc`.
 - Memory philosophy, boundaries, types, lifecycle, provenance, confidence,
   retention, forgetting, retrieval, promotion, and storage strategy defined for
   architecture review.
-- RFC-0001 Revision 1 drafted with Cognitive Memory Metabolism, Memory Score
+- RFC-0001 Revision 1 defines Cognitive Memory Metabolism, Memory Score
   Model, Cognitive DNA, Memory Relationship Model, Cognitive Memory Events,
   Memory Evolution, Conflict Resolution, Explainability, Cognitive Retrieval,
   Cognitive Memory Principles, and Cognitive Memory Ecosystem.
@@ -91,7 +93,8 @@
 
 ## ADR-0010: Memory Domain Implementation Architecture
 
-- ADR-0010 Memory Domain Implementation Architecture drafted.
+- ADR-0010 Memory Domain Implementation Architecture accepted and published in
+  `v0.5.2-memory-implementation-adr`.
 - Future Memory implementation architecture proposed without code changes.
 - Proposed future crates, contracts, policies, cognitive memory events, storage,
   indexing, traceability, explainability, testing, and phased implementation
@@ -102,14 +105,16 @@
 
 ## ARR-0001: Architecture Readiness Review
 
-- ARR-0001 Architecture Readiness Review drafted.
+- ARR-0001 Architecture Readiness Review completed and published in
+  `v0.5.3-architecture-readiness-review`.
 - Current architecture reviewed for readiness to proceed to RFC-0002 Knowledge
   Domain as a documentation-only phase.
-- Decision drafted as ready with minor cautions.
+- Decision completed as ready with minor cautions.
 
 ## RFC-0002: Knowledge Domain
 
-- RFC-0002 Knowledge Domain drafted.
+- RFC-0002 Knowledge Domain accepted and published in
+  `v0.5.4-knowledge-domain-rfc`.
 - Knowledge defined as structured truth, separate from Memory experience and
   Context present-state assembly.
 - Evidence, provenance, confidence, versioning, contradiction, invalidation,
@@ -122,8 +127,8 @@
 
 ## RFC-0003: Context Domain
 
-- RFC-0003 Context Domain drafted as a documentation-only cognitive-domain
-  RFC.
+- RFC-0003 Context Domain accepted and published as a documentation-only
+  cognitive-domain RFC in `v0.5.7-context-domain-rfc`.
 - Context defined as present-state assembly, separate from Memory experience
   and Knowledge structured truth.
 - Context boundaries, lifecycle, freshness, traceability, policies, events,
@@ -136,7 +141,8 @@
 
 ## AEP-0016: Cognitive Traceability
 
-- AEP-0016 Cognitive Traceability accepted.
+- AEP-0016 Cognitive Traceability accepted and published in
+  `v0.5.5-cognitive-traceability-aep`.
 - Future Memory and Knowledge implementations must comply with AEP-0016.
 - Future Context, Reasoning, Planning, Decision, Learning, and Action designs
   must consider AEP-0016 from the start.
@@ -145,8 +151,9 @@
 
 ## RFC-0009: Efficient Intelligence & Energy-Aware Architecture
 
-- RFC-0009 Efficient Intelligence & Energy-Aware Architecture drafted as a
-  transversal architecture direction.
+- RFC-0009 Efficient Intelligence & Energy-Aware Architecture accepted and
+  published as a transversal architecture direction in
+  `v0.5.6-efficient-intelligence-rfc`.
 - RFC-0004 through RFC-0008 remain reserved for the approved cognitive domain
   sequence.
 - Future cognitive and intelligence work should consider cost, tokens, latency,
@@ -165,6 +172,17 @@
 | `v0.4.5` | Kernel Decomposition |
 | `v0.4.6` | Aether Engineering Protocol |
 | `v0.5.0` | Cognitive Design Review |
+| `v0.5.1` | Memory Domain RFC |
+| `v0.5.2` | Memory Implementation Architecture ADR |
+| `v0.5.3` | Architecture Readiness Review |
+| `v0.5.4` | Knowledge Domain RFC |
+| `v0.5.5` | Cognitive Traceability AEP |
+| `v0.5.6` | Efficient Intelligence transversal RFC |
+| `v0.5.7` | Context Domain RFC |
+
+Tags `v0.5.0` through `v0.5.7` are published on the remote. RFC-0004 Planning
+Domain is the next probable cognitive-domain phase, documentation only, when
+explicitly authorized. No cognitive implementation has started.
 
 ## Era Roadmap
 

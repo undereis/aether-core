@@ -2,7 +2,13 @@
 
 ## 1. Status
 
-Draft.
+Accepted and published.
+
+Reconciliation note: RFC-0002 was accepted and published in
+`v0.5.4-knowledge-domain-rfc`. Its original review treated AEP-0016 as mandatory
+design input while that protocol was still proposed. AEP-0016 was subsequently
+accepted in `v0.5.5-cognitive-traceability-aep`, satisfying that prerequisite.
+Knowledge remains unimplemented.
 
 ## 2. Summary
 
@@ -1079,8 +1085,9 @@ Indexes are retrieval aids. They do not own truth.
 
 ## 30. Traceability And Explainability
 
-AEP-0016 Cognitive Traceability is still Proposed, but this RFC treats it as
-mandatory design input.
+AEP-0016 Cognitive Traceability was proposed during the original RFC review and
+was treated as mandatory design input. It is now accepted governance and is
+mandatory for every future Knowledge implementation.
 
 Every Knowledge record and future Knowledge operation must be traceable,
 explainable, and auditable.
@@ -1309,7 +1316,8 @@ Questions for future ADRs or implementation reviews:
 - How will Knowledge be exported or imported?
 - How does Knowledge integrate with enterprise connectors?
 - How will ontology versioning work?
-- How will Knowledge integrate with AEP-0016 if it remains Proposed?
+- How will concrete Knowledge contracts implement the accepted AEP-0016
+  requirements?
 - Which confidence states require numeric scoring, if any?
 - How will Knowledge invalidation notify Context and Reasoning without direct
   service calls?
@@ -1330,7 +1338,7 @@ RFC-0002 can be considered ready for review when it:
 - includes testing strategy;
 - includes risks;
 - respects ARR-0001;
-- respects AEP-0016 as mandatory design input while Proposed;
+- respects accepted AEP-0016 governance as mandatory design input;
 - does not start implementation.
 
 Future Knowledge implementation remains blocked until RFC-0002 is approved,
@@ -1338,10 +1346,11 @@ an implementation ADR is approved, contracts are defined, policies are
 defined, storage strategy is accepted, test strategy is accepted, AEP-0016 is
 formally accepted, and the Architecture Guardian approves.
 
-RFC-0002 may be reviewed while AEP-0016 remains Proposed. RFC-0002 may also
-be checkpointed while AEP-0016 remains Proposed. No real implementation of
-Memory or Knowledge may begin until AEP-0016 Cognitive Traceability is
-formally accepted.
+During the original review, RFC-0002 could be reviewed and checkpointed while
+AEP-0016 remained proposed, but no real Memory or Knowledge implementation
+could begin before formal acceptance. That governance condition was satisfied
+by `v0.5.5-cognitive-traceability-aep`; every other implementation gate above
+remains in force.
 
 ## 39. Non-Goals
 

@@ -4,7 +4,14 @@
 
 ## Status
 
-Proposed.
+Accepted and published.
+
+Reconciliation note: ADR-0010 was accepted and published in
+`v0.5.2-memory-implementation-adr`. AEP-0016 was proposed when this decision was
+written and was later accepted in `v0.5.5-cognitive-traceability-aep`.
+Historical proposal references below preserve that review context. Current and
+future Memory work must comply with the accepted AEP-0016. Memory remains
+unimplemented.
 
 ## Context
 
@@ -744,9 +751,9 @@ the communication boundary and compatibility layer.
 
 ## Traceability And Explainability
 
-This ADR incorporates AEP-0016 as a proposed governance rule. Until AEP-0016
-is accepted, Memory implementation must still explicitly reference it as a
-proposal and satisfy its intent when approved by architecture review.
+This ADR originally incorporated AEP-0016 while it was proposed. AEP-0016 is
+now accepted governance, and every future Memory implementation must comply
+with it directly.
 
 Every memory and every memory operation must be traceable, explainable, and
 auditable.
@@ -975,7 +982,7 @@ Memory implementation can start only when:
 - policies are defined;
 - test strategy is approved;
 - storage strategy is approved;
-- AEP-0016 is accepted or explicitly referenced as a proposal;
+- AEP-0016 is accepted and mandatory;
 - the Architecture Guardian approves;
 - no AEP violation exists;
 - no ambiguity remains between Memory, Knowledge, and Context;
