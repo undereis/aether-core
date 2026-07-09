@@ -1,8 +1,12 @@
 # CDR-0001: Cognitive Design Review
 
-Status: Drafted.
+Status: Accepted and published.
 
 Phase: Cognitive Era architecture review.
+
+Reconciliation note: CDR-0001 was accepted and published in
+`v0.5.0-cognitive-design-review`. This lifecycle update does not implement any
+cognitive domain or runtime behavior.
 
 Official statement:
 

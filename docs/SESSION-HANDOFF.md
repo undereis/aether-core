@@ -8,6 +8,8 @@ Aether is published remotely through:
 
 - branch: `main`
 - remote branch: `origin/main`
+- remote branch baseline at the start of this uncommitted reconciliation:
+  `4f0323f87e7925b70c0ca3703494fa14fbb236c4`
 - RFC-0003 publication commit:
   `d22d8f85037d83ade7a8407580bc6f110b39008b`
 - current published tag: `v0.5.7-context-domain-rfc`
@@ -44,6 +46,8 @@ opened through CDR/RFC governance, but no cognitive implementation has started.
 
 Tags published to the remote through the latest controlled publication:
 
+- `v0.5.0-cognitive-design-review`
+- `v0.5.1-memory-domain-rfc`
 - `v0.5.2-memory-implementation-adr`
 - `v0.5.3-architecture-readiness-review`
 - `v0.5.4-knowledge-domain-rfc`
@@ -51,9 +55,9 @@ Tags published to the remote through the latest controlled publication:
 - `v0.5.6-efficient-intelligence-rfc`
 - `v0.5.7-context-domain-rfc`
 
-Tags `v0.5.0-cognitive-design-review` and `v0.5.1-memory-domain-rfc` were not
-published in the controlled publication sequence. Synchronize them only in a
-separate controlled task if needed.
+All local and remote tags from `v0.5.0` through `v0.5.7` are aligned. The
+historical `v0.5.0` and `v0.5.1` tags were published later through a separate,
+explicit, controlled tag publication task.
 
 ## Architecture Summary
 
@@ -175,7 +179,6 @@ Start with:
 Recommended next steps:
 
 - Do not start implementation without a new explicit scope.
-- If needed, synchronize `v0.5.0` and `v0.5.1` in a separate controlled task.
 - The next probable cognitive-domain phase is RFC-0004 Planning Domain,
   documentation only, if explicitly authorized.
 - Future work must respect the approved cognitive sequence and RFC-0009
@@ -201,7 +204,8 @@ Publication confirmations:
 - `main` was pushed without force push.
 - `v0.5.7-context-domain-rfc` was pushed explicitly.
 - `git push --tags` was not used.
-- `v0.5.0` and `v0.5.1` were not published in this session.
+- `v0.5.0` and `v0.5.1` were subsequently published through a separate
+  controlled tag-only task.
 - No release was created.
 - No functional code changed.
 - No feature was implemented.
@@ -211,7 +215,6 @@ Publication confirmations:
 Recommended next steps:
 
 - Do not start new implementation without a new explicit scope.
-- If needed, synchronize `v0.5.0` and `v0.5.1` in a separate controlled task.
 - The next probable cognitive phase is RFC-0004 Planning Domain,
   documentation only, if explicitly authorized.
 - Continue to respect the approved cognitive sequence and RFC-0009 efficiency,

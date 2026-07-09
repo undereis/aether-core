@@ -28,15 +28,22 @@ and checkpoint discipline.
 
 ## Era II: Cognitive Core
 
-Status: future.
+Status: architecture and design active; implementation not started.
 
-Planned areas:
+Approved cognitive-domain sequence:
 
 - Memory;
 - Knowledge;
 - Context;
 - Planning;
 - Reasoning.
+- Decision;
+- Learning;
+- Perception.
+
+Memory, Knowledge, and Context have accepted and published architecture
+documents. Planning is the next reserved documentation phase. No cognitive
+domain has runtime implementation.
 
 Rule:
 
