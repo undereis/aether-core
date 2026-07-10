@@ -28,15 +28,16 @@ Architecture Guardian approval explicitly authorize implementation.
 | [RFC-0001](RFC-0001-Memory-Domain.md) | Memory Domain | Accepted | `v0.5.1-memory-domain-rfc` | Not implemented |
 | [RFC-0002](RFC-0002-Knowledge-Domain.md) | Knowledge Domain | Accepted | `v0.5.4-knowledge-domain-rfc` | Not implemented |
 | [RFC-0003](RFC-0003-Context-Domain.md) | Context Domain | Accepted | `v0.5.7-context-domain-rfc` | Not implemented |
-| [RFC-0004](RFC-0004-Planning-Domain.md) | Planning Domain | Draft, current review | Not published | Not implemented |
-| RFC-0005 | Reasoning Domain | Reserved | Not published | Not implemented |
+| [RFC-0004](RFC-0004-Planning-Domain.md) | Planning Domain | Accepted | `v0.5.8-planning-domain-rfc` | Not implemented |
+| RFC-0005 | Reasoning Domain | Reserved, next | Not published | Not implemented |
 | RFC-0006 | Decision Domain | Reserved | Not published | Not implemented |
 | RFC-0007 | Learning Domain | Reserved | Not published | Not implemented |
 | RFC-0008 | Perception Domain | Reserved | Not published | Not implemented |
 | [RFC-0009](RFC-0009-Efficient-Intelligence-Energy-Aware-Architecture.md) | Efficient Intelligence, transversal | Accepted | `v0.5.6-efficient-intelligence-rfc` | Not implemented |
 
 RFC-0004 through RFC-0008 retain their assigned positions in the cognitive
-domain sequence approved in CDR-0001. RFC-0004 now contains a
-documentation-only draft pending architecture review and future
-checkpoint/publication. RFC-0005 through RFC-0008 remain reserved. RFC-0009 is a
-transversal architecture RFC and does not replace or reorder those domains.
+domain sequence approved in CDR-0001. RFC-0004 is accepted and published as
+documentation-only architecture in `v0.5.8-planning-domain-rfc`; this does not
+mean Planning is implemented. RFC-0005 is the next reserved domain, and
+RFC-0006 through RFC-0008 remain reserved. RFC-0009 is a transversal
+architecture RFC and does not replace or reorder those domains.

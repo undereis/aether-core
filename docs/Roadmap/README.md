@@ -141,17 +141,19 @@
 
 ## RFC-0004: Planning Domain
 
-- RFC-0004 Planning Domain exists as a documentation-only draft pending
-  architecture review and future checkpoint/publication.
+- RFC-0004 Planning Domain is accepted and published as documentation-only
+  architecture in `v0.5.8-planning-domain-rfc`.
 - Planning structures possible futures; Reasoning evaluates implications and
   uncertainty; Decision chooses; Action executes.
 - Planning boundaries, candidate Plan model, lifecycle, traceability,
   efficiency, risks, non-goals, and future test strategy are defined for
-  architecture review.
-- RFC-0004 remains a draft, untagged, unpublished, and unimplemented.
-- Planning implementation remains blocked until RFC approval, a future
-  implementation ADR, contracts, policies, storage/non-storage strategy, test
-  strategy, and Architecture Guardian authorization.
+  future implementation governance.
+- Planning remains unimplemented.
+- Planning implementation remains blocked until a future implementation ADR,
+  contracts, policies, storage/non-storage strategy, test strategy, and
+  Architecture Guardian authorization.
+- RFC-0005 Reasoning Domain is the next probable documentation-only phase if
+  explicitly authorized.
 
 ## AEP-0016: Cognitive Traceability
 
@@ -168,7 +170,7 @@
 - RFC-0009 Efficient Intelligence & Energy-Aware Architecture accepted and
   published as a transversal architecture direction in
   `v0.5.6-efficient-intelligence-rfc`.
-- RFC-0004 through RFC-0008 remain reserved for the approved cognitive domain
+- RFC-0005 through RFC-0008 remain reserved for the approved cognitive domain
   sequence.
 - Future cognitive and intelligence work should consider cost, tokens, latency,
   energy, model routing, cache, context compression, tool-first execution, and
@@ -193,10 +195,12 @@
 | `v0.5.5` | Cognitive Traceability AEP |
 | `v0.5.6` | Efficient Intelligence transversal RFC |
 | `v0.5.7` | Context Domain RFC |
+| `v0.5.8` | Planning Domain RFC |
 
-Tags `v0.5.0` through `v0.5.7` are published on the remote. RFC-0004 Planning
-Domain is now a documentation-only draft pending review and checkpoint. No
-cognitive implementation has started.
+Tags `v0.5.0` through `v0.5.8` are published on the remote. RFC-0004 Planning
+Domain is accepted and published as documentation-only architecture. RFC-0005
+Reasoning Domain is the next probable documentation phase if explicitly
+authorized. No cognitive implementation has started.
 
 ## Era Roadmap
 

@@ -2,12 +2,19 @@
 
 ## Unreleased
 
-- Created RFC-0004 Planning Domain as documentation-only architecture for
-  review; no Planning runtime behavior was implemented.
-- Reconciled governance status, remote checkpoint records, and the approved
-  cognitive RFC sequence before RFC-0004 Planning Domain.
+- Updated governance state documents after the controlled publication of
+  RFC-0004 Planning Domain as `v0.5.8-planning-domain-rfc`.
 
 No unreleased product, runtime, or architecture implementation changes.
+
+## v0.5.8-planning-domain-rfc
+
+- Accepted and published RFC-0004 Planning Domain as architecture
+  documentation.
+- Defined Planning as structured possible futures without implementing a
+  Planning Engine, Planner Service, runtime behavior, AI, or agents.
+- Reconciled governance status, remote checkpoint records, and the approved
+  cognitive RFC sequence before RFC-0004 Planning Domain.
 
 ## v0.5.7-context-domain-rfc
 
