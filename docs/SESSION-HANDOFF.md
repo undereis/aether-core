@@ -8,24 +8,22 @@ Aether is published remotely through:
 
 - branch: `main`
 - remote branch: `origin/main`
-- current remote branch before the RFC-0004 documentation draft checkpoint:
-  `52dfc39194a5b6a7c7da5bf4250aded971993112`
-- RFC-0003 publication commit:
-  `d22d8f85037d83ade7a8407580bc6f110b39008b`
-- current published tag: `v0.5.7-context-domain-rfc`
-- `v0.5.7-context-domain-rfc` points to:
-  `d22d8f85037d83ade7a8407580bc6f110b39008b`
+- RFC-0004 publication commit:
+  `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`
+- current published tag: `v0.5.8-planning-domain-rfc`
+- `v0.5.8-planning-domain-rfc` points to:
+  `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`
 
-`origin/main` contains documentation-only handoff and governance reconciliation
-commits after the v0.5.7 tag. The tag remains anchored to the RFC-0003
-publication commit.
+This post-publication handoff is documentation-only. `origin/main` contains the
+RFC-0004 publication commit. If this handoff is later committed and published,
+`origin/main` may be one documentation commit ahead of the v0.5.8 tag; the tag
+remains anchored to the RFC-0004 publication commit above.
 
-RFC-0004 Planning Domain now exists as a draft documentation artifact pending
-architecture review and future checkpoint/publication. It remains untagged,
-unpublished, and unimplemented. Every other cognitive domain also remains
-unimplemented.
+RFC-0004 Planning Domain is accepted, checkpointed, tagged, and published as
+documentation-only architecture. Planning and every other cognitive domain
+remain unimplemented.
 
-The working tree was clean immediately after the controlled RFC-0003
+The working tree was clean immediately after the controlled RFC-0004
 publication.
 
 The Foundation Era is complete. The Cognitive Era has been architecturally
@@ -48,6 +46,7 @@ opened through CDR/RFC governance, but no cognitive implementation has started.
 | `v0.5.5-cognitive-traceability-aep` | AEP-0016 Cognitive Traceability |
 | `v0.5.6-efficient-intelligence-rfc` | RFC-0009 Efficient Intelligence and Energy-Aware Architecture |
 | `v0.5.7-context-domain-rfc` | RFC-0003 Context Domain |
+| `v0.5.8-planning-domain-rfc` | RFC-0004 Planning Domain |
 
 Tags published to the remote through the latest controlled publication:
 
@@ -59,8 +58,9 @@ Tags published to the remote through the latest controlled publication:
 - `v0.5.5-cognitive-traceability-aep`
 - `v0.5.6-efficient-intelligence-rfc`
 - `v0.5.7-context-domain-rfc`
+- `v0.5.8-planning-domain-rfc`
 
-All local and remote tags from `v0.5.0` through `v0.5.7` are aligned. The
+All local and remote tags from `v0.5.0` through `v0.5.8` are aligned. The
 historical `v0.5.0` and `v0.5.1` tags were published later through a separate,
 explicit, controlled tag publication task.
 
@@ -85,11 +85,16 @@ Aether currently has:
 - ARR-0001 Architecture Readiness Review.
 - RFC-0002 Knowledge Domain.
 - RFC-0003 Context Domain.
+- RFC-0004 Planning Domain.
 - RFC-0009 Efficient Intelligence and Energy-Aware Architecture.
 
 RFC-0003 is architectural documentation only. It defines Context as authorized
 present-state assembly. It does not implement a Context Engine, storage, APIs,
 services, managers, cache, compression, model routing, AI, or agents.
+
+RFC-0004 is architectural documentation only. It defines Planning as structured
+possible futures. It does not implement a Planning Engine, Planner Service,
+runtime execution, storage, APIs, AI, or agents.
 
 RFC-0009 is a transversal architecture direction. It does not replace the
 cognitive-domain sequence and does not implement model routing, cache,
@@ -103,9 +108,8 @@ The approved cognitive-domain sequence is:
 1. RFC-0001 Memory Domain completed and published.
 2. RFC-0002 Knowledge Domain completed and published.
 3. RFC-0003 Context Domain completed and published.
-4. RFC-0004 Planning Domain is drafted and pending architecture review and
-   future checkpoint/publication.
-5. RFC-0005 Reasoning Domain reserved.
+4. RFC-0004 Planning Domain completed and published.
+5. RFC-0005 Reasoning Domain is the next reserved domain.
 6. RFC-0006 Decision Domain reserved.
 7. RFC-0007 Learning Domain reserved.
 8. RFC-0008 Perception Domain reserved.
@@ -142,7 +146,7 @@ and published.
 
 ## Validation State
 
-Validation executed for the v0.5.7 handoff update:
+Validation executed for the post-v0.5.8 publication state update:
 
 - `make validate`: passed.
 - `cargo test --workspace`: passed.
@@ -160,7 +164,7 @@ git log --oneline --decorate -6
 git tag --list "v0.5.*" --sort=version:refname
 git ls-remote --heads origin main
 git ls-remote --tags origin "v0.5.*"
-git show --stat v0.5.7-context-domain-rfc
+git show --stat v0.5.8-planning-domain-rfc
 make validate
 cargo test --workspace
 cargo check --workspace
@@ -175,40 +179,41 @@ Start with:
 
 1. `git status --short`.
 2. Confirm the branch is `main`.
-3. Confirm `origin/main` contains the RFC-0003 publication commit and may be
-   one documentation-only handoff commit ahead of the v0.5.7 tag.
-4. Confirm `v0.5.7-context-domain-rfc` points to
-   `d22d8f85037d83ade7a8407580bc6f110b39008b`.
+3. Confirm `origin/main` contains the RFC-0004 publication commit and may be
+   one documentation-only handoff commit ahead of the v0.5.8 tag.
+4. Confirm `v0.5.8-planning-domain-rfc` points to
+   `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`.
 5. Confirm the latest published tag is
-   `v0.5.7-context-domain-rfc`.
+   `v0.5.8-planning-domain-rfc`.
 
 Recommended next steps:
 
 - Do not start implementation without a new explicit scope.
-- Review RFC-0004 Planning Domain as documentation only; do not treat the draft
-  as tagged, published, accepted, or implemented.
+- The next probable cognitive-domain phase is RFC-0005 Reasoning Domain,
+  documentation only, if explicitly authorized.
 - Future work must respect the approved cognitive sequence and RFC-0009
   efficiency, cost, energy, token, latency, and safety guidance.
 
-## Session Closure: v0.5.7 Context Domain Publication
+## Session Closure: v0.5.8 Planning Domain Publication
 
-RFC-0003 publication state:
+RFC-0004 publication state:
 
 - branch `main` published to `origin`.
-- RFC-0003 publication commit:
-  `d22d8f85037d83ade7a8407580bc6f110b39008b`.
-- current published tag: `v0.5.7-context-domain-rfc`.
-- `v0.5.7-context-domain-rfc` points to:
-  `d22d8f85037d83ade7a8407580bc6f110b39008b`.
-- This documentation-only handoff may make `origin/main` one commit ahead of
-  the v0.5.7 tag after push.
+- RFC-0004 publication commit:
+  `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`.
+- current published tag: `v0.5.8-planning-domain-rfc`.
+- `v0.5.8-planning-domain-rfc` points to:
+  `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`.
+- This documentation-only handoff may make `origin/main` one commit ahead
+  of the v0.5.8 tag after a separately authorized commit and push.
 - working tree was clean after publication.
-- RFC-0003 was published as architectural documentation for the Context Domain.
+- RFC-0004 was published as architectural documentation for the Planning
+  Domain.
 
 Publication confirmations:
 
 - `main` was pushed without force push.
-- `v0.5.7-context-domain-rfc` was pushed explicitly.
+- `v0.5.8-planning-domain-rfc` was pushed explicitly.
 - `git push --tags` was not used.
 - `v0.5.0` and `v0.5.1` were subsequently published through a separate
   controlled tag-only task.
@@ -221,7 +226,7 @@ Publication confirmations:
 Recommended next steps:
 
 - Do not start new implementation without a new explicit scope.
-- The current documentation task after this historical closure is RFC-0004
-  Planning Domain draft review; no implementation is authorized.
+- The next probable cognitive phase is RFC-0005 Reasoning Domain,
+  documentation only, if explicitly authorized.
 - Continue to respect the approved cognitive sequence and RFC-0009 efficiency,
   cost, energy, token, latency, and safety guidance.
