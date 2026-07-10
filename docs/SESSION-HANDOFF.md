@@ -8,17 +8,22 @@ Aether is published remotely through:
 
 - branch: `main`
 - remote branch: `origin/main`
-- remote branch baseline at the start of this uncommitted reconciliation:
-  `4f0323f87e7925b70c0ca3703494fa14fbb236c4`
+- current remote branch before the RFC-0004 documentation draft checkpoint:
+  `52dfc39194a5b6a7c7da5bf4250aded971993112`
 - RFC-0003 publication commit:
   `d22d8f85037d83ade7a8407580bc6f110b39008b`
 - current published tag: `v0.5.7-context-domain-rfc`
 - `v0.5.7-context-domain-rfc` points to:
   `d22d8f85037d83ade7a8407580bc6f110b39008b`
 
-This handoff update is documentation-only. After it is pushed, `origin/main`
-may be one handoff commit ahead of the v0.5.7 tag; the tag remains anchored to
-the RFC-0003 publication commit.
+`origin/main` contains documentation-only handoff and governance reconciliation
+commits after the v0.5.7 tag. The tag remains anchored to the RFC-0003
+publication commit.
+
+RFC-0004 Planning Domain now exists as a draft documentation artifact pending
+architecture review and future checkpoint/publication. It remains untagged,
+unpublished, and unimplemented. Every other cognitive domain also remains
+unimplemented.
 
 The working tree was clean immediately after the controlled RFC-0003
 publication.
@@ -98,7 +103,8 @@ The approved cognitive-domain sequence is:
 1. RFC-0001 Memory Domain completed and published.
 2. RFC-0002 Knowledge Domain completed and published.
 3. RFC-0003 Context Domain completed and published.
-4. RFC-0004 Planning Domain is the next reserved domain.
+4. RFC-0004 Planning Domain is drafted and pending architecture review and
+   future checkpoint/publication.
 5. RFC-0005 Reasoning Domain reserved.
 6. RFC-0006 Decision Domain reserved.
 7. RFC-0007 Learning Domain reserved.
@@ -179,8 +185,8 @@ Start with:
 Recommended next steps:
 
 - Do not start implementation without a new explicit scope.
-- The next probable cognitive-domain phase is RFC-0004 Planning Domain,
-  documentation only, if explicitly authorized.
+- Review RFC-0004 Planning Domain as documentation only; do not treat the draft
+  as tagged, published, accepted, or implemented.
 - Future work must respect the approved cognitive sequence and RFC-0009
   efficiency, cost, energy, token, latency, and safety guidance.
 
@@ -215,7 +221,7 @@ Publication confirmations:
 Recommended next steps:
 
 - Do not start new implementation without a new explicit scope.
-- The next probable cognitive phase is RFC-0004 Planning Domain,
-  documentation only, if explicitly authorized.
+- The current documentation task after this historical closure is RFC-0004
+  Planning Domain draft review; no implementation is authorized.
 - Continue to respect the approved cognitive sequence and RFC-0009 efficiency,
   cost, energy, token, latency, and safety guidance.

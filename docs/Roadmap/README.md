@@ -139,6 +139,20 @@
   ADR approval, contracts, policies, storage/non-storage strategy, and test
   strategy are accepted.
 
+## RFC-0004: Planning Domain
+
+- RFC-0004 Planning Domain exists as a documentation-only draft pending
+  architecture review and future checkpoint/publication.
+- Planning structures possible futures; Reasoning evaluates implications and
+  uncertainty; Decision chooses; Action executes.
+- Planning boundaries, candidate Plan model, lifecycle, traceability,
+  efficiency, risks, non-goals, and future test strategy are defined for
+  architecture review.
+- RFC-0004 remains a draft, untagged, unpublished, and unimplemented.
+- Planning implementation remains blocked until RFC approval, a future
+  implementation ADR, contracts, policies, storage/non-storage strategy, test
+  strategy, and Architecture Guardian authorization.
+
 ## AEP-0016: Cognitive Traceability
 
 - AEP-0016 Cognitive Traceability accepted and published in
@@ -181,8 +195,8 @@
 | `v0.5.7` | Context Domain RFC |
 
 Tags `v0.5.0` through `v0.5.7` are published on the remote. RFC-0004 Planning
-Domain is the next probable cognitive-domain phase, documentation only, when
-explicitly authorized. No cognitive implementation has started.
+Domain is now a documentation-only draft pending review and checkpoint. No
+cognitive implementation has started.
 
 ## Era Roadmap
 
