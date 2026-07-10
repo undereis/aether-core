@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Created RFC-0004 Planning Domain as documentation-only architecture for
+  review; no Planning runtime behavior was implemented.
 - Reconciled governance status, remote checkpoint records, and the approved
   cognitive RFC sequence before RFC-0004 Planning Domain.
 
