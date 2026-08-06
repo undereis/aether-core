@@ -42,11 +42,12 @@ Approved cognitive-domain sequence:
 - Perception.
 
 Memory, Knowledge, Context, and Planning have accepted and published
-architecture documents. RFC-0004 Planning Domain is documentation-complete,
-but Planning remains unimplemented. RFC-0005 Reasoning Domain is the next
-probable documentation phase if explicitly authorized. RFC-0006 Decision,
-RFC-0007 Learning, and RFC-0008 Perception remain reserved. No cognitive domain
-has runtime implementation.
+architecture documents, but remain unimplemented. RFC-0005 Reasoning Domain
+exists as a Draft, documentation-only artifact under architectural review. It
+is not published or implemented. RFC-0006 Decision remains the next reserved
+domain after any future acceptance and publication of RFC-0005. RFC-0007
+Learning and RFC-0008 Perception remain reserved. No cognitive domain has
+runtime implementation.
 
 Rule:
 

@@ -152,8 +152,24 @@
 - Planning implementation remains blocked until a future implementation ADR,
   contracts, policies, storage/non-storage strategy, test strategy, and
   Architecture Guardian authorization.
-- RFC-0005 Reasoning Domain is the next probable documentation-only phase if
-  explicitly authorized.
+
+## RFC-0005: Reasoning Domain
+
+- RFC-0005 Reasoning Domain is a Draft documentation-only architecture artifact.
+- Reasoning evaluates implications, relationships, hypotheses, evidence,
+  contradictions, and uncertainty within an authorized scope.
+- Assessments are structured, explainable, and non-binding; Decision chooses
+  and Action executes.
+- Reasoning remains unimplemented. No Reasoning Engine, Service, Manager, API,
+  storage, provider runtime, or agent has been created.
+- The final architectural audit of the RFC-0005 Draft has been completed, and
+  the internal blockers it identified have been corrected.
+- RFC-0005 remains not published, not tagged, and not implemented. Any future
+  checkpoint, tag, or publication requires separate explicit authorization and
+  a controlled task.
+- Service Map reconciliation remains required before RFC-0005 may be promoted
+  to Accepted or Published. No cognitive implementation has started.
+- RFC-0006 Decision Domain remains reserved for a later documentation phase.
 
 ## AEP-0016: Cognitive Traceability
 
@@ -170,8 +186,10 @@
 - RFC-0009 Efficient Intelligence & Energy-Aware Architecture accepted and
   published as a transversal architecture direction in
   `v0.5.6-efficient-intelligence-rfc`.
-- RFC-0005 through RFC-0008 remain reserved for the approved cognitive domain
-  sequence.
+- RFC-0005 Reasoning Domain is a Draft, documentation-only, not published, not
+  implemented, and under architectural review pending a future checkpoint and
+  publication. RFC-0006 through RFC-0008 remain reserved for the approved
+  cognitive domain sequence.
 - Future cognitive and intelligence work should consider cost, tokens, latency,
   energy, model routing, cache, context compression, tool-first execution, and
   safety governance from the design phase.
@@ -199,8 +217,9 @@
 
 Tags `v0.5.0` through `v0.5.8` are published on the remote. RFC-0004 Planning
 Domain is accepted and published as documentation-only architecture. RFC-0005
-Reasoning Domain is the next probable documentation phase if explicitly
-authorized. No cognitive implementation has started.
+Reasoning Domain is in Draft documentation review and is not published or
+implemented. RFC-0006 Decision Domain remains reserved. No cognitive
+implementation has started.
 
 ## Era Roadmap
 
