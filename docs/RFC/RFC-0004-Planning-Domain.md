@@ -2,12 +2,14 @@
 
 ## 1. Status
 
-Draft.
+Accepted.
 
-This RFC is documentation-only. It defines the future Planning Domain for
-Aether but does not implement runtime behavior, a Planning Engine, a Planning
-Service, a Planning Manager, crates, contracts, APIs, persistence, inference,
-AI, agents, or tool execution.
+This RFC is documentation-only and published in the
+`v0.5.8-planning-domain-rfc` checkpoint at commit
+`1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`. It defines the future Planning
+Domain for Aether but does not implement runtime behavior, a Planning Engine, a
+Planning Service, a Planning Manager, crates, contracts, APIs, persistence,
+inference, AI, agents, or tool execution. Planning is not implemented.
 
 No functional behavior changes are introduced by this document.
 

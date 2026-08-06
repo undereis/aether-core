@@ -8,23 +8,27 @@ Aether is published remotely through:
 
 - branch: `main`
 - remote branch: `origin/main`
+- remote `main` confirmed at session close:
+  `e59989d3e62e67f4d596d0b73ed2e5b1a695aeaf`
 - RFC-0004 publication commit:
   `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`
 - current published tag: `v0.5.8-planning-domain-rfc`
 - `v0.5.8-planning-domain-rfc` points to:
   `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`
+- documentation-only commit after the tag:
+  `e59989d3e62e67f4d596d0b73ed2e5b1a695aeaf`
+  (`docs(session): record v0.5.8 planning checkpoint`)
 
-This post-publication handoff is documentation-only. `origin/main` contains the
-RFC-0004 publication commit. If this handoff is later committed and published,
-`origin/main` may be one documentation commit ahead of the v0.5.8 tag; the tag
-remains anchored to the RFC-0004 publication commit above.
+At session close, local `main` and `origin/main` are aligned at the
+documentation-only commit above. The branch is one documentation commit ahead
+of the v0.5.8 tag, while the tag remains anchored to the RFC-0004 publication
+commit.
 
 RFC-0004 Planning Domain is accepted, checkpointed, tagged, and published as
 documentation-only architecture. Planning and every other cognitive domain
 remain unimplemented.
 
-The working tree was clean immediately after the controlled RFC-0004
-publication.
+The working tree was clean at the start of this session-closure task.
 
 The Foundation Era is complete. The Cognitive Era has been architecturally
 opened through CDR/RFC governance, but no cognitive implementation has started.
@@ -64,6 +68,28 @@ All local and remote tags from `v0.5.0` through `v0.5.8` are aligned. The
 historical `v0.5.0` and `v0.5.1` tags were published later through a separate,
 explicit, controlled tag publication task.
 
+## Work Completed Through This Session
+
+- RFC-0001 Memory Domain completed and published as architecture documentation.
+- RFC-0002 Knowledge Domain completed and published as architecture
+  documentation.
+- RFC-0003 Context Domain completed and published as architecture documentation.
+- RFC-0004 Planning Domain accepted and published as documentation-only
+  architecture.
+- Post-v0.5.8 governance, roadmap, RFC index, changelog, and handoff state
+  reconciled.
+- The RFC-0004 commit and its tag published through a controlled branch and
+  explicit tag push.
+- The post-tag documentation commit published through a controlled branch-only
+  push.
+- `v0.5.8-planning-domain-rfc` preserved at the original RFC-0004 publication
+  commit.
+- Documentation scoping for the future RFC-0005 Reasoning Domain completed.
+- The scoping found RFC-0005 ready for drafting with documentation
+  reconciliation caveats; no RFC-0005 artifact or implementation was created.
+- The pre-RFC-0005 reconciliation corrects RFC-0004 status, the Architecture
+  Evolution Roadmap sequence, and the RFC-0009 cognitive sequence reference.
+
 ## Architecture Summary
 
 Aether currently has:
@@ -95,6 +121,20 @@ services, managers, cache, compression, model routing, AI, or agents.
 RFC-0004 is architectural documentation only. It defines Planning as structured
 possible futures. It does not implement a Planning Engine, Planner Service,
 runtime execution, storage, APIs, AI, or agents.
+
+The recommended Reasoning definition for future RFC-0005 drafting is:
+
+> Reasoning is the cognitive domain responsible for evaluating implications,
+> relationships, hypotheses, evidence, contradictions, and uncertainty within
+> an authorized scope, producing structured, explainable, and non-binding
+> assessments.
+
+RFC-0005 has not been created. Its documentation scoping is complete, and the
+future draft remains subject to explicit authorization and human review.
+
+No cognitive implementation has started. Memory, Knowledge, Context, and
+Planning are not implemented. No Planner Service, Planning Engine, cognitive
+storage, cognitive API, or cognitive runtime has been created.
 
 RFC-0009 is a transversal architecture direction. It does not replace the
 cognitive-domain sequence and does not implement model routing, cache,
@@ -128,6 +168,9 @@ and published.
 - Domains define responsibility boundaries before implementation.
 - No service-to-service direct calls.
 - No hidden cognitive state.
+- Preserve a modular monolith before considering microservices.
+- Preserve modularity, explicit boundaries, and small, isolated, traceable,
+  recoverable failures.
 - AEP-0016 Cognitive Traceability governs future cognitive implementations.
 - Efficiency, cost, token, latency, and energy optimization must not bypass
   safety, policies, permissions, traceability, or auditability.
@@ -139,6 +182,10 @@ and published.
   implementation before their approved RFCs and follow-up implementation ADRs.
 - No AI or agents before their approved era and governance.
 - LLMs remain inference providers, not owners of intelligence.
+- Planning does not execute. Planning structures possible futures; Reasoning
+  evaluates implications and uncertainty; Decision chooses; Action executes.
+- Future cognitive communication must use ASB or Contract Bus; direct service
+  calls remain prohibited.
 - Main-as-Maestro applies: entrypoints orchestrate; they must not become God
   Files.
 - AI-Maintainable Architecture applies: future modules must preserve clear
@@ -179,8 +226,9 @@ Start with:
 
 1. `git status --short`.
 2. Confirm the branch is `main`.
-3. Confirm `origin/main` contains the RFC-0004 publication commit and may be
-   one documentation-only handoff commit ahead of the v0.5.8 tag.
+3. Confirm `origin/main` contains
+   `e59989d3e62e67f4d596d0b73ed2e5b1a695aeaf`, unless a separately authorized
+   documentation-only closure commit was published after this record.
 4. Confirm `v0.5.8-planning-domain-rfc` points to
    `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`.
 5. Confirm the latest published tag is
@@ -188,9 +236,17 @@ Start with:
 
 Recommended next steps:
 
-- Do not start implementation without a new explicit scope.
-- The next probable cognitive-domain phase is RFC-0005 Reasoning Domain,
-  documentation only, if explicitly authorized.
+- Review the completed RFC-0005 Reasoning Domain documentation scoping and this
+  pre-RFC-0005 reconciliation.
+- If explicitly authorized after human review, draft RFC-0005 as documentation
+  only. Do not implement Reasoning.
+- Preserve the scoped Reasoning boundaries with Planning, Decision, Context,
+  Memory, Knowledge, Policies, providers, tools, and agents.
+- Preserve bounded budgets, stop conditions, uncertainty, AEP-0016
+  traceability, RFC-0009 efficiency, ASB/Contract Bus communication, and the
+  prohibition on direct service calls.
+- Do not implement anything or alter functional code.
+- Do not commit, tag, or push without later explicit authorization.
 - Future work must respect the approved cognitive sequence and RFC-0009
   efficiency, cost, energy, token, latency, and safety guidance.
 
@@ -199,14 +255,19 @@ Recommended next steps:
 RFC-0004 publication state:
 
 - branch `main` published to `origin`.
+- remote `main` confirmed at session close:
+  `e59989d3e62e67f4d596d0b73ed2e5b1a695aeaf`.
 - RFC-0004 publication commit:
   `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`.
 - current published tag: `v0.5.8-planning-domain-rfc`.
 - `v0.5.8-planning-domain-rfc` points to:
   `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`.
-- This documentation-only handoff may make `origin/main` one commit ahead
-  of the v0.5.8 tag after a separately authorized commit and push.
-- working tree was clean after publication.
+- The post-tag documentation commit is:
+  `e59989d3e62e67f4d596d0b73ed2e5b1a695aeaf`
+  (`docs(session): record v0.5.8 planning checkpoint`).
+- Local `main` and `origin/main` were aligned at that commit before this closure
+  edit, one documentation commit ahead of the v0.5.8 tag.
+- The working tree was clean before this closure edit.
 - RFC-0004 was published as architectural documentation for the Planning
   Domain.
 
@@ -222,11 +283,22 @@ Publication confirmations:
 - No feature was implemented.
 - No refactor was performed.
 - No dependency was added.
+- No cognitive implementation was started.
+- Memory, Knowledge, Context, and Planning remain unimplemented.
+- No Planner Service, Planning Engine, cognitive storage, cognitive API, or
+  cognitive runtime was created.
+- RFC-0005 documentation scoping was completed; RFC-0005 itself was not created.
+- The scoping concluded that RFC-0005 is ready for documentation drafting with
+  the pre-RFC-0005 reconciliation caveats
+  recorded in this handoff and governance reconciliation.
 
 Recommended next steps:
 
 - Do not start new implementation without a new explicit scope.
-- The next probable cognitive phase is RFC-0005 Reasoning Domain,
-  documentation only, if explicitly authorized.
+- After human review, the next probable task is drafting RFC-0005 Reasoning
+  Domain as documentation only, if explicitly authorized.
+- Do not implement Reasoning while drafting RFC-0005.
+- Do not implement anything or alter functional code.
+- Do not commit, tag, or push without later explicit authorization.
 - Continue to respect the approved cognitive sequence and RFC-0009 efficiency,
   cost, energy, token, latency, and safety guidance.

@@ -36,14 +36,17 @@ Approved cognitive-domain sequence:
 - Knowledge;
 - Context;
 - Planning;
-- Reasoning.
+- Reasoning;
 - Decision;
 - Learning;
 - Perception.
 
-Memory, Knowledge, and Context have accepted and published architecture
-documents. Planning is the next reserved documentation phase. No cognitive
-domain has runtime implementation.
+Memory, Knowledge, Context, and Planning have accepted and published
+architecture documents. RFC-0004 Planning Domain is documentation-complete,
+but Planning remains unimplemented. RFC-0005 Reasoning Domain is the next
+probable documentation phase if explicitly authorized. RFC-0006 Decision,
+RFC-0007 Learning, and RFC-0008 Perception remain reserved. No cognitive domain
+has runtime implementation.
 
 Rule:
 
