@@ -1,6 +1,6 @@
 # Aether Session Handoff
 
-Last updated: 2026-07-09
+Last updated: 2026-08-05
 
 ## Current State
 
@@ -8,27 +8,28 @@ Aether is published remotely through:
 
 - branch: `main`
 - remote branch: `origin/main`
-- remote `main` confirmed at session close:
-  `e59989d3e62e67f4d596d0b73ed2e5b1a695aeaf`
+- RFC-0005 drafting baseline on local `main` and `origin/main`:
+  `80f9e11b6802dadbec589778788096e75e6750f0`
 - RFC-0004 publication commit:
   `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`
 - current published tag: `v0.5.8-planning-domain-rfc`
 - `v0.5.8-planning-domain-rfc` points to:
   `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`
-- documentation-only commit after the tag:
-  `e59989d3e62e67f4d596d0b73ed2e5b1a695aeaf`
-  (`docs(session): record v0.5.8 planning checkpoint`)
+- pre-RFC-0005 architecture reconciliation commit:
+  `80f9e11b6802dadbec589778788096e75e6750f0`
+  (`docs(architecture): reconcile state before Reasoning RFC`)
 
-At session close, local `main` and `origin/main` are aligned at the
-documentation-only commit above. The branch is one documentation commit ahead
-of the v0.5.8 tag, while the tag remains anchored to the RFC-0004 publication
-commit.
+Local `main` and `origin/main` were clean and aligned at the drafting baseline
+before the RFC-0005 documentation task. A future documentation checkpoint may
+move the branch beyond that baseline; the v0.5.8 tag remains anchored to the
+RFC-0004 publication commit.
 
 RFC-0004 Planning Domain is accepted, checkpointed, tagged, and published as
 documentation-only architecture. Planning and every other cognitive domain
 remain unimplemented.
 
-The working tree was clean at the start of this session-closure task.
+RFC-0005 Reasoning Domain is a Draft, documentation-only artifact. It is not
+tagged, not published, and not implemented.
 
 The Foundation Era is complete. The Cognitive Era has been architecturally
 opened through CDR/RFC governance, but no cognitive implementation has started.
@@ -89,6 +90,22 @@ explicit, controlled tag publication task.
   reconciliation caveats; no RFC-0005 artifact or implementation was created.
 - The pre-RFC-0005 reconciliation corrects RFC-0004 status, the Architecture
   Evolution Roadmap sequence, and the RFC-0009 cognitive sequence reference.
+- RFC-0005 Reasoning Domain drafted as documentation-only architecture pending
+  architectural review and a future checkpoint and publication.
+- The first architectural pre-commit audit identified Policy/Decision,
+  authorization, assessment ownership, cache reuse, status reconciliation, and
+  Service Map governance issues. The internal RFC blockers were corrected.
+- The Roadmap, Architecture Evolution Roadmap, and RFC-0009 cognitive status
+  references were reconciled with the RFC-0005 Draft.
+- The seven-document review scope is `CHANGELOG.md`, `docs/RFC/README.md`,
+  `docs/RFC/RFC-0005-Reasoning-Domain.md`, `docs/Roadmap/README.md`, this
+  handoff, `docs/Architecture/Architecture-Evolution-Roadmap.md`, and
+  `docs/RFC/RFC-0009-Efficient-Intelligence-Energy-Aware-Architecture.md`.
+- The Official Service Map remains a required separate reconciliation before
+  RFC-0005 may become Accepted or Published. It does not block retaining the
+  RFC as Draft, and no Service Map change was made in this task.
+- No Reasoning Engine, Service, Manager, API, storage, runtime, provider, agent,
+  or functional feature was created.
 
 ## Architecture Summary
 
@@ -112,6 +129,7 @@ Aether currently has:
 - RFC-0002 Knowledge Domain.
 - RFC-0003 Context Domain.
 - RFC-0004 Planning Domain.
+- RFC-0005 Reasoning Domain Draft.
 - RFC-0009 Efficient Intelligence and Energy-Aware Architecture.
 
 RFC-0003 is architectural documentation only. It defines Context as authorized
@@ -122,19 +140,26 @@ RFC-0004 is architectural documentation only. It defines Planning as structured
 possible futures. It does not implement a Planning Engine, Planner Service,
 runtime execution, storage, APIs, AI, or agents.
 
-The recommended Reasoning definition for future RFC-0005 drafting is:
+RFC-0005 uses the normative Reasoning definition:
 
 > Reasoning is the cognitive domain responsible for evaluating implications,
 > relationships, hypotheses, evidence, contradictions, and uncertainty within
 > an authorized scope, producing structured, explainable, and non-binding
 > assessments.
 
-RFC-0005 has not been created. Its documentation scoping is complete, and the
-future draft remains subject to explicit authorization and human review.
+RFC-0005 is a Draft pending architectural review and a future checkpoint and
+publication. Its architecture is documentation-only and grants no
+implementation authority.
+
+The current Official Service Map predates RFC-0005. Its Reasoning ownership and
+mandatory Memory capability references require a separate documentation review
+before RFC-0005 acceptance or publication. The baseline is not runtime
+implementation.
 
 No cognitive implementation has started. Memory, Knowledge, Context, and
-Planning are not implemented. No Planner Service, Planning Engine, cognitive
-storage, cognitive API, or cognitive runtime has been created.
+Planning are not implemented. Reasoning is not implemented. No Planner Service,
+Planning Engine, Reasoning Service, Reasoning Engine, cognitive storage,
+cognitive API, or cognitive runtime has been created.
 
 RFC-0009 is a transversal architecture direction. It does not replace the
 cognitive-domain sequence and does not implement model routing, cache,
@@ -149,7 +174,8 @@ The approved cognitive-domain sequence is:
 2. RFC-0002 Knowledge Domain completed and published.
 3. RFC-0003 Context Domain completed and published.
 4. RFC-0004 Planning Domain completed and published.
-5. RFC-0005 Reasoning Domain is the next reserved domain.
+5. RFC-0005 Reasoning Domain is a Draft pending architectural review and a
+   future checkpoint and publication.
 6. RFC-0006 Decision Domain reserved.
 7. RFC-0007 Learning Domain reserved.
 8. RFC-0008 Perception Domain reserved.
@@ -193,13 +219,18 @@ and published.
 
 ## Validation State
 
-Validation executed for the post-v0.5.8 publication state update:
+Validation executed for the RFC-0005 Reasoning Domain Draft:
 
 - `make validate`: passed.
 - `cargo test --workspace`: passed.
 - `cargo check --workspace`: passed.
 - Docker validation: passed through `make validate`.
 - Backend smoke test: passed through `make validate`.
+
+The first sandboxed `make validate` attempt reached the backend build and could
+not resolve `hatchling` because sandbox DNS access was unavailable. The same
+command passed completely when repeated with authorized network access; this
+was an environment restriction, not a repository validation failure.
 
 ## Useful Commands
 
@@ -226,9 +257,9 @@ Start with:
 
 1. `git status --short`.
 2. Confirm the branch is `main`.
-3. Confirm `origin/main` contains
-   `e59989d3e62e67f4d596d0b73ed2e5b1a695aeaf`, unless a separately authorized
-   documentation-only closure commit was published after this record.
+3. Confirm `origin/main` contains the RFC-0005 drafting baseline
+   `80f9e11b6802dadbec589778788096e75e6750f0`; a separately authorized later
+   documentation checkpoint may place the branch ahead of that baseline.
 4. Confirm `v0.5.8-planning-domain-rfc` points to
    `1ae21ac42a2a2fc0898ab639191e56c8df3a43f6`.
 5. Confirm the latest published tag is
@@ -236,10 +267,16 @@ Start with:
 
 Recommended next steps:
 
-- Review the completed RFC-0005 Reasoning Domain documentation scoping and this
-  pre-RFC-0005 reconciliation.
-- If explicitly authorized after human review, draft RFC-0005 as documentation
-  only. Do not implement Reasoning.
+- The final architectural audit of the RFC-0005 Draft and the complete
+  seven-document reconciliation scope has been completed. The Draft is
+  architecturally ready to continue through the controlled documentation
+  checkpoint flow.
+- RFC-0005 remains Draft, documentation-only, not published, not tagged, and
+  not implemented. Any future documentation checkpoint, tag, or publication
+  action requires separate explicit authorization and a controlled task.
+- Service Map reconciliation remains mandatory before RFC-0005 promotion to
+  Accepted or Published, and the Service Map itself remains unchanged.
+- No Reasoning implementation was authorized, and no cognitive code was created.
 - Preserve the scoped Reasoning boundaries with Planning, Decision, Context,
   Memory, Knowledge, Policies, providers, tools, and agents.
 - Preserve bounded budgets, stop conditions, uncertainty, AEP-0016
@@ -295,9 +332,17 @@ Publication confirmations:
 Recommended next steps:
 
 - Do not start new implementation without a new explicit scope.
-- After human review, the next probable task is drafting RFC-0005 Reasoning
-  Domain as documentation only, if explicitly authorized.
-- Do not implement Reasoning while drafting RFC-0005.
+- The final architectural audit of RFC-0005 and the seven-document
+  reconciliation scope has been completed. The Draft is architecturally ready
+  to continue through the controlled documentation checkpoint flow.
+- RFC-0005 remains Draft, documentation-only, not tagged, not published, and
+  not implemented. Any future documentation checkpoint, tag, or publication
+  action requires separate explicit authorization and a controlled task.
+- The Draft defines non-binding assessments, bounded lifecycle, AEP-0016
+  traceability, RFC-0009 efficiency, policy gates, and failure isolation.
+- Service Map reconciliation remains a separate prerequisite for promoting
+  RFC-0005 to Accepted or Published; no Service Map change was made here.
+- No Reasoning implementation was authorized, and no cognitive code was created.
 - Do not implement anything or alter functional code.
 - Do not commit, tag, or push without later explicit authorization.
 - Continue to respect the approved cognitive sequence and RFC-0009 efficiency,

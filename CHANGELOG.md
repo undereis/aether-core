@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Created RFC-0005 Reasoning Domain as a Draft, documentation-only architecture
+  artifact pending architectural review and a future checkpoint and
+  publication.
+- Defined Reasoning ownership, boundaries, conceptual contracts, lifecycle,
+  traceability, efficiency, security, risks, and future testing without
+  implementing a Reasoning Engine, Service, Manager, API, storage, runtime, or
+  feature.
 - Updated governance state documents after the controlled publication of
   RFC-0004 Planning Domain as `v0.5.8-planning-domain-rfc`.
 
