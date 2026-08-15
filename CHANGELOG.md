@@ -11,8 +11,12 @@
   feature.
 - Updated governance state documents after the controlled publication of
   RFC-0004 Planning Domain as `v0.5.8-planning-domain-rfc`.
-
-No unreleased product, runtime, or architecture implementation changes.
+- Separated the Aether Service Bus control plane from identity-bound service
+  clients, preventing self-granted permissions, caller-identity spoofing, and
+  silent route replacement.
+- Released handler-registry locks before invoking callbacks to prevent
+  re-entrant deadlocks.
+- Hardened loopback defaults, CI action pinning, and dependency maintenance.
 
 ## v0.5.8-planning-domain-rfc
 
