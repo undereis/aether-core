@@ -380,74 +380,36 @@ impl ServiceNotification {
 
 /// Service Bus abstraction.
 pub trait AetherServiceBus: Send + Sync {
-    /// Register service permissions with the bus.
-    ///
-    /// # Errors
-    ///
-    /// Returns [`ServiceBusError`] when the permission index is unavailable.
-    fn register_permissions(
-        &self,
-        service_id: &ServiceId,
-        permissions: PermissionSet,
-    ) -> Result<(), ServiceBusError>;
+    /// Return the immutable identity bound to this client.
+    fn service_id(&self) -> &ServiceId;
 
     /// Publish an event through the bus.
     ///
     /// # Errors
     ///
     /// Returns [`ServiceBusError`] when publication fails or permission is missing.
-    fn publish_event(&self, source: &ServiceId, event: &Event) -> Result<usize, ServiceBusError>;
+    fn publish_event(&self, event: &Event) -> Result<usize, ServiceBusError>;
 
     /// Subscribe to events through the bus.
     ///
     /// # Errors
     ///
     /// Returns [`ServiceBusError`] when subscription fails or permission is missing.
-    fn subscribe_events(&self, source: &ServiceId) -> Result<EventReceiver, ServiceBusError>;
-
-    /// Register a local request handler.
-    ///
-    /// # Errors
-    ///
-    /// Returns [`ServiceBusError`] when the handler cannot be registered.
-    fn register_request_handler(
-        &self,
-        subject: impl Into<String>,
-        handler: Arc<dyn RequestHandler>,
-    ) -> Result<(), ServiceBusError>;
+    fn subscribe_events(&self) -> Result<EventReceiver, ServiceBusError>;
 
     /// Execute local request/reply through the bus.
     ///
     /// # Errors
     ///
     /// Returns [`ServiceBusError`] when request routing fails or permission is missing.
-    fn request(
-        &self,
-        source: &ServiceId,
-        request: &ServiceRequest,
-    ) -> Result<ServiceReply, ServiceBusError>;
-
-    /// Register a service command handler.
-    ///
-    /// # Errors
-    ///
-    /// Returns [`ServiceBusError`] when the command handler cannot be registered.
-    fn register_command_handler(
-        &self,
-        route: impl Into<String>,
-        handler: Arc<dyn CommandHandler>,
-    ) -> Result<(), ServiceBusError>;
+    fn request(&self, request: &ServiceRequest) -> Result<ServiceReply, ServiceBusError>;
 
     /// Route a service command through the bus.
     ///
     /// # Errors
     ///
     /// Returns [`ServiceBusError`] when command routing fails or permission is missing.
-    fn command(
-        &self,
-        source: &ServiceId,
-        command: &ServiceCommand,
-    ) -> Result<ServiceReply, ServiceBusError>;
+    fn command(&self, command: &ServiceCommand) -> Result<ServiceReply, ServiceBusError>;
 
     /// Subscribe to service notifications.
     ///
@@ -462,43 +424,37 @@ pub trait AetherServiceBus: Send + Sync {
     ///
     /// Returns [`ServiceBusError`] when notification delivery fails or permission is missing.
     fn notify(&self, notification: &ServiceNotification) -> Result<usize, ServiceBusError>;
-
-    /// Return bus status.
-    ///
-    /// # Errors
-    ///
-    /// Returns [`ServiceBusError`] when internal indexes are unavailable.
-    fn status(&self) -> Result<ServiceBusStatus, ServiceBusError>;
 }
 
 /// Contract Bus abstraction for typed internal service contracts.
 pub trait AetherContractBus: Send + Sync {
-    /// Register a typed contract handler.
-    ///
-    /// # Errors
-    ///
-    /// Returns [`ServiceBusError`] when the handler cannot be registered.
-    fn register_contract_handler(
-        &self,
-        contract: BusContract,
-        handler: Arc<dyn ContractHandler>,
-    ) -> Result<(), ServiceBusError>;
-
     /// Execute a typed contract request.
     ///
     /// # Errors
     ///
     /// Returns [`ServiceBusError`] when routing fails or permission is missing.
-    fn request_contract(
-        &self,
-        source: &ServiceId,
-        request: &ContractRequest,
-    ) -> Result<ContractReply, ServiceBusError>;
+    fn request_contract(&self, request: &ContractRequest)
+    -> Result<ContractReply, ServiceBusError>;
 }
 
-/// In-memory Aether Service Bus implementation.
+/// Kernel-owned administrative capability for the in-memory Service Bus.
+///
+/// Service code receives [`ServiceBusClient`] values instead of this controller. This keeps
+/// permission grants and route ownership inside the trusted Kernel control plane.
 #[derive(Clone, Default)]
-pub struct InMemoryAetherServiceBus {
+pub struct ServiceBusController {
+    bus: InMemoryAetherServiceBus,
+}
+
+/// Service-facing client bound to one registered identity.
+#[derive(Clone)]
+pub struct ServiceBusClient {
+    service_id: ServiceId,
+    bus: InMemoryAetherServiceBus,
+}
+
+#[derive(Clone, Default)]
+struct InMemoryAetherServiceBus {
     event_bus: EventBus,
     notification_subscribers: Arc<Mutex<Vec<Sender<ServiceNotification>>>>,
     request_handlers: Arc<Mutex<BTreeMap<String, Arc<dyn RequestHandler>>>>,
@@ -507,13 +463,134 @@ pub struct InMemoryAetherServiceBus {
     permissions: Arc<Mutex<BTreeMap<ServiceId, PermissionSet>>>,
 }
 
-impl InMemoryAetherServiceBus {
-    /// Create an empty in-memory bus.
+impl ServiceBusController {
+    /// Create an empty Kernel-owned Service Bus controller.
     #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// Register a service identity and its approved permissions, returning a bound client.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ServiceBusError::DuplicateServiceIdentity`] when the identity already exists.
+    pub fn register_service(
+        &self,
+        service_id: ServiceId,
+        permissions: PermissionSet,
+    ) -> Result<ServiceBusClient, ServiceBusError> {
+        let mut grants = self
+            .bus
+            .permissions
+            .lock()
+            .map_err(|_| ServiceBusError::BusUnavailable)?;
+        if grants.contains_key(&service_id) {
+            return Err(ServiceBusError::DuplicateServiceIdentity(
+                service_id.to_string(),
+            ));
+        }
+        grants.insert(service_id.clone(), permissions);
+        Ok(ServiceBusClient {
+            service_id,
+            bus: self.bus.clone(),
+        })
+    }
+
+    /// Register a request handler owned by a registered service.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error when the owner is unknown, the subject is invalid, or the route exists.
+    pub fn register_request_handler(
+        &self,
+        owner: &ServiceId,
+        subject: impl Into<String>,
+        handler: Arc<dyn RequestHandler>,
+    ) -> Result<(), ServiceBusError> {
+        self.ensure_registered(owner)?;
+        let subject = subject.into();
+        if subject.trim().is_empty() {
+            return Err(ServiceBusError::InvalidSubject);
+        }
+        insert_unique_handler(&self.bus.request_handlers, subject, handler)
+    }
+
+    /// Register a command handler owned by a registered service.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error when the owner is unknown, the route is invalid, or the route exists.
+    pub fn register_command_handler(
+        &self,
+        owner: &ServiceId,
+        route: impl Into<String>,
+        handler: Arc<dyn CommandHandler>,
+    ) -> Result<(), ServiceBusError> {
+        self.ensure_registered(owner)?;
+        let route = route.into();
+        if route.trim().is_empty() {
+            return Err(ServiceBusError::InvalidCommand);
+        }
+        insert_unique_handler(&self.bus.command_handlers, route, handler)
+    }
+
+    /// Register a typed contract handler owned by a registered service.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error when the owner is unknown or the route already exists.
+    pub fn register_contract_handler(
+        &self,
+        owner: &ServiceId,
+        contract: &BusContract,
+        handler: Arc<dyn ContractHandler>,
+    ) -> Result<(), ServiceBusError> {
+        self.ensure_registered(owner)?;
+        insert_unique_handler(&self.bus.contract_handlers, contract.route_key(), handler)
+    }
+
+    /// Return a read-only Service Bus status snapshot.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ServiceBusError`] when an internal index is unavailable.
+    pub fn status(&self) -> Result<ServiceBusStatus, ServiceBusError> {
+        self.bus.status()
+    }
+
+    fn ensure_registered(&self, service_id: &ServiceId) -> Result<(), ServiceBusError> {
+        let grants = self
+            .bus
+            .permissions
+            .lock()
+            .map_err(|_| ServiceBusError::BusUnavailable)?;
+        if grants.contains_key(service_id) {
+            Ok(())
+        } else {
+            Err(ServiceBusError::UnknownService(service_id.to_string()))
+        }
+    }
+}
+
+impl fmt::Debug for ServiceBusController {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("ServiceBusController")
+            .finish_non_exhaustive()
+    }
+}
+
+impl fmt::Debug for ServiceBusClient {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("ServiceBusClient")
+            .field("service_id", &self.service_id)
+            .finish_non_exhaustive()
+    }
+}
+
+impl InMemoryAetherServiceBus {
     fn ensure_permission(
         &self,
         service_id: &ServiceId,
@@ -537,134 +614,6 @@ impl InMemoryAetherServiceBus {
                 permission: permission.to_string(),
             })
         }
-    }
-}
-
-impl fmt::Debug for InMemoryAetherServiceBus {
-    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        formatter
-            .debug_struct("InMemoryAetherServiceBus")
-            .finish_non_exhaustive()
-    }
-}
-
-impl AetherServiceBus for InMemoryAetherServiceBus {
-    fn register_permissions(
-        &self,
-        service_id: &ServiceId,
-        permissions: PermissionSet,
-    ) -> Result<(), ServiceBusError> {
-        self.permissions
-            .lock()
-            .map_err(|_| ServiceBusError::BusUnavailable)?
-            .insert(service_id.clone(), permissions);
-        Ok(())
-    }
-
-    fn publish_event(&self, source: &ServiceId, event: &Event) -> Result<usize, ServiceBusError> {
-        self.ensure_permission(source, &Permission::event_publish())?;
-        Ok(self.event_bus.publish(event)?)
-    }
-
-    fn subscribe_events(&self, source: &ServiceId) -> Result<EventReceiver, ServiceBusError> {
-        self.ensure_permission(source, &Permission::event_subscribe())?;
-        Ok(self.event_bus.subscribe()?)
-    }
-
-    fn register_request_handler(
-        &self,
-        subject: impl Into<String>,
-        handler: Arc<dyn RequestHandler>,
-    ) -> Result<(), ServiceBusError> {
-        let subject = subject.into();
-        if subject.trim().is_empty() {
-            return Err(ServiceBusError::InvalidSubject);
-        }
-        self.request_handlers
-            .lock()
-            .map_err(|_| ServiceBusError::BusUnavailable)?
-            .insert(subject, handler);
-        Ok(())
-    }
-
-    fn request(
-        &self,
-        source: &ServiceId,
-        request: &ServiceRequest,
-    ) -> Result<ServiceReply, ServiceBusError> {
-        self.ensure_permission(source, &Permission::service_command())?;
-        let handlers = self
-            .request_handlers
-            .lock()
-            .map_err(|_| ServiceBusError::BusUnavailable)?;
-        let handler = handlers
-            .get(request.subject())
-            .ok_or_else(|| ServiceBusError::NoRoute {
-                route: request.subject().to_owned(),
-            })?;
-        handler.handle(request)
-    }
-
-    fn register_command_handler(
-        &self,
-        route: impl Into<String>,
-        handler: Arc<dyn CommandHandler>,
-    ) -> Result<(), ServiceBusError> {
-        let route = route.into();
-        if route.trim().is_empty() {
-            return Err(ServiceBusError::InvalidCommand);
-        }
-        self.command_handlers
-            .lock()
-            .map_err(|_| ServiceBusError::BusUnavailable)?
-            .insert(route, handler);
-        Ok(())
-    }
-
-    fn command(
-        &self,
-        source: &ServiceId,
-        command: &ServiceCommand,
-    ) -> Result<ServiceReply, ServiceBusError> {
-        self.ensure_permission(source, &Permission::service_command())?;
-        let handlers = self
-            .command_handlers
-            .lock()
-            .map_err(|_| ServiceBusError::BusUnavailable)?;
-        let handler = handlers
-            .get(command.route())
-            .ok_or_else(|| ServiceBusError::NoRoute {
-                route: command.route().to_owned(),
-            })?;
-        handler.handle(command)
-    }
-
-    fn subscribe_notifications(&self) -> Result<ServiceNotificationReceiver, ServiceBusError> {
-        let (sender, receiver) = mpsc::channel();
-        self.notification_subscribers
-            .lock()
-            .map_err(|_| ServiceBusError::BusUnavailable)?
-            .push(sender);
-        Ok(ServiceNotificationReceiver { receiver })
-    }
-
-    fn notify(&self, notification: &ServiceNotification) -> Result<usize, ServiceBusError> {
-        self.ensure_permission(notification.source_service(), &Permission::event_publish())?;
-        let mut subscribers = self
-            .notification_subscribers
-            .lock()
-            .map_err(|_| ServiceBusError::BusUnavailable)?;
-
-        let mut delivered = 0usize;
-        subscribers.retain(|sender| {
-            if sender.send(notification.clone()).is_ok() {
-                delivered += 1;
-                true
-            } else {
-                false
-            }
-        });
-        Ok(delivered)
     }
 
     fn status(&self) -> Result<ServiceBusStatus, ServiceBusError> {
@@ -699,35 +648,128 @@ impl AetherServiceBus for InMemoryAetherServiceBus {
     }
 }
 
-impl AetherContractBus for InMemoryAetherServiceBus {
-    fn register_contract_handler(
-        &self,
-        contract: BusContract,
-        handler: Arc<dyn ContractHandler>,
-    ) -> Result<(), ServiceBusError> {
-        self.contract_handlers
-            .lock()
-            .map_err(|_| ServiceBusError::BusUnavailable)?
-            .insert(contract.route_key(), handler);
-        Ok(())
+impl AetherServiceBus for ServiceBusClient {
+    fn service_id(&self) -> &ServiceId {
+        &self.service_id
     }
 
-    fn request_contract(
-        &self,
-        source: &ServiceId,
-        request: &ContractRequest,
-    ) -> Result<ContractReply, ServiceBusError> {
-        self.ensure_permission(source, &Permission::service_command())?;
-        let handlers = self
-            .contract_handlers
+    fn publish_event(&self, event: &Event) -> Result<usize, ServiceBusError> {
+        self.bus
+            .ensure_permission(&self.service_id, &Permission::event_publish())?;
+        Ok(self.bus.event_bus.publish(event)?)
+    }
+
+    fn subscribe_events(&self) -> Result<EventReceiver, ServiceBusError> {
+        self.bus
+            .ensure_permission(&self.service_id, &Permission::event_subscribe())?;
+        Ok(self.bus.event_bus.subscribe()?)
+    }
+
+    fn request(&self, request: &ServiceRequest) -> Result<ServiceReply, ServiceBusError> {
+        self.bus
+            .ensure_permission(&self.service_id, &Permission::service_command())?;
+        let handler = self
+            .bus
+            .request_handlers
             .lock()
-            .map_err(|_| ServiceBusError::BusUnavailable)?;
-        let route = request.contract().route_key();
-        let handler = handlers
-            .get(&route)
-            .ok_or(ServiceBusError::NoRoute { route })?;
+            .map_err(|_| ServiceBusError::BusUnavailable)?
+            .get(request.subject())
+            .ok_or_else(|| ServiceBusError::NoRoute {
+                route: request.subject().to_owned(),
+            })?
+            .clone();
         handler.handle(request)
     }
+
+    fn command(&self, command: &ServiceCommand) -> Result<ServiceReply, ServiceBusError> {
+        self.bus
+            .ensure_permission(&self.service_id, &Permission::service_command())?;
+        let handler = self
+            .bus
+            .command_handlers
+            .lock()
+            .map_err(|_| ServiceBusError::BusUnavailable)?
+            .get(command.route())
+            .ok_or_else(|| ServiceBusError::NoRoute {
+                route: command.route().to_owned(),
+            })?
+            .clone();
+        handler.handle(command)
+    }
+
+    fn subscribe_notifications(&self) -> Result<ServiceNotificationReceiver, ServiceBusError> {
+        self.bus
+            .ensure_permission(&self.service_id, &Permission::event_subscribe())?;
+        let (sender, receiver) = mpsc::channel();
+        self.bus
+            .notification_subscribers
+            .lock()
+            .map_err(|_| ServiceBusError::BusUnavailable)?
+            .push(sender);
+        Ok(ServiceNotificationReceiver { receiver })
+    }
+
+    fn notify(&self, notification: &ServiceNotification) -> Result<usize, ServiceBusError> {
+        if notification.source_service() != &self.service_id {
+            return Err(ServiceBusError::IdentityMismatch {
+                client_id: self.service_id.to_string(),
+                claimed_id: notification.source_service().to_string(),
+            });
+        }
+        self.bus
+            .ensure_permission(&self.service_id, &Permission::event_publish())?;
+        let mut subscribers = self
+            .bus
+            .notification_subscribers
+            .lock()
+            .map_err(|_| ServiceBusError::BusUnavailable)?;
+
+        let mut delivered = 0usize;
+        subscribers.retain(|sender| {
+            if sender.send(notification.clone()).is_ok() {
+                delivered += 1;
+                true
+            } else {
+                false
+            }
+        });
+        Ok(delivered)
+    }
+}
+
+impl AetherContractBus for ServiceBusClient {
+    fn request_contract(
+        &self,
+        request: &ContractRequest,
+    ) -> Result<ContractReply, ServiceBusError> {
+        self.bus
+            .ensure_permission(&self.service_id, &Permission::service_command())?;
+        let route = request.contract().route_key();
+        let handler = self
+            .bus
+            .contract_handlers
+            .lock()
+            .map_err(|_| ServiceBusError::BusUnavailable)?
+            .get(&route)
+            .ok_or(ServiceBusError::NoRoute { route })?
+            .clone();
+        handler.handle(request)
+    }
+}
+
+fn insert_unique_handler<T: ?Sized>(
+    handlers: &Mutex<BTreeMap<String, Arc<T>>>,
+    route: String,
+    handler: Arc<T>,
+) -> Result<(), ServiceBusError> {
+    let mut handlers = handlers
+        .lock()
+        .map_err(|_| ServiceBusError::BusUnavailable)?;
+    if handlers.contains_key(&route) {
+        return Err(ServiceBusError::DuplicateRoute(route));
+    }
+    handlers.insert(route, handler);
+    Ok(())
 }
 
 /// Service notification receiver.
@@ -786,6 +828,23 @@ pub enum ServiceBusError {
     /// Contract is invalid.
     #[error("invalid service contract")]
     InvalidContract,
+    /// Service identity is already registered with the controller.
+    #[error("service identity already registered: {0}")]
+    DuplicateServiceIdentity(String),
+    /// Service is not registered with the controller.
+    #[error("unknown service identity: {0}")]
+    UnknownService(String),
+    /// A route already has an owner and cannot be replaced implicitly.
+    #[error("service bus route already registered: {0}")]
+    DuplicateRoute(String),
+    /// A bound client attempted to claim a different service identity.
+    #[error("service client {client_id} cannot claim identity {claimed_id}")]
+    IdentityMismatch {
+        /// Identity bound to the client.
+        client_id: String,
+        /// Identity claimed by the operation.
+        claimed_id: String,
+    },
     /// Route has no handler.
     #[error("no route registered for {route}")]
     NoRoute {
@@ -816,14 +875,13 @@ pub enum ServiceBusError {
 /// [`ServiceError`] when the service cannot be registered.
 pub fn register_service_with_bus(
     registry: &mut ServiceRegistry,
-    bus: &InMemoryAetherServiceBus,
+    controller: &ServiceBusController,
     descriptor: ServiceDescriptor,
-) -> Result<(), RegisterServiceError> {
+) -> Result<ServiceBusClient, RegisterServiceError> {
     let service_id = descriptor.id.clone();
     let permissions = descriptor.permissions.clone();
     registry.register(descriptor)?;
-    bus.register_permissions(&service_id, permissions)?;
-    Ok(())
+    Ok(controller.register_service(service_id, permissions)?)
 }
 
 /// Error raised while registering a service with the bus.
@@ -839,7 +897,8 @@ pub enum RegisterServiceError {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::Arc;
+    use std::sync::{Arc, mpsc};
+    use std::thread;
     use std::time::Duration;
 
     use aether_events::{Event, EventSource, EventType};
@@ -849,8 +908,8 @@ mod tests {
 
     use super::{
         AetherContractBus, AetherServiceBus, BusContract, ContractReply, ContractRequest,
-        InMemoryAetherServiceBus, ServiceBusError, ServiceCommand, ServiceNotification,
-        ServiceReply, ServiceRequest,
+        ServiceBusController, ServiceBusError, ServiceCommand, ServiceNotification, ServiceReply,
+        ServiceRequest,
     };
 
     fn service_id() -> aether_ids::ServiceId {
@@ -874,13 +933,14 @@ mod tests {
 
     #[test]
     fn asb_publishes_event() {
-        let bus = InMemoryAetherServiceBus::new();
+        let controller = ServiceBusController::new();
         let service_id = service_id();
-        bus.register_permissions(&service_id, permissions())
-            .expect("permissions");
-        let subscription = bus.subscribe_events(&service_id).expect("subscribe");
+        let client = controller
+            .register_service(service_id, permissions())
+            .expect("service client");
+        let subscription = client.subscribe_events().expect("subscribe");
 
-        let delivered = bus.publish_event(&service_id, &event()).expect("publish");
+        let delivered = client.publish_event(&event()).expect("publish");
 
         assert_eq!(delivered, 1);
         assert!(
@@ -892,10 +952,12 @@ mod tests {
 
     #[test]
     fn asb_rejects_publish_without_permission() {
-        let bus = InMemoryAetherServiceBus::new();
-        let service_id = service_id();
+        let controller = ServiceBusController::new();
+        let client = controller
+            .register_service(service_id(), PermissionSet::default())
+            .expect("service client");
 
-        let result = bus.publish_event(&service_id, &event());
+        let result = client.publish_event(&event());
 
         assert!(matches!(
             result,
@@ -905,26 +967,24 @@ mod tests {
 
     #[test]
     fn asb_handles_request_reply() {
-        let bus = InMemoryAetherServiceBus::new();
+        let controller = ServiceBusController::new();
         let service_id = service_id();
-        bus.register_permissions(&service_id, permissions())
-            .expect("permissions");
-        bus.register_request_handler(
-            "telemetry.echo",
-            Arc::new(|request: &ServiceRequest| {
-                Ok(
-                    ServiceReply::accepted()
-                        .with_payload_value("subject", json!(request.subject())),
-                )
-            }),
-        )
-        .expect("handler");
-
-        let reply = bus
-            .request(
+        let client = controller
+            .register_service(service_id.clone(), permissions())
+            .expect("service client");
+        controller
+            .register_request_handler(
                 &service_id,
-                &ServiceRequest::new("telemetry.echo").expect("request"),
+                "telemetry.echo",
+                Arc::new(|request: &ServiceRequest| {
+                    Ok(ServiceReply::accepted()
+                        .with_payload_value("subject", json!(request.subject())))
+                }),
             )
+            .expect("handler");
+
+        let reply = client
+            .request(&ServiceRequest::new("telemetry.echo").expect("request"))
             .expect("reply");
 
         assert!(reply.is_accepted());
@@ -936,23 +996,24 @@ mod tests {
 
     #[test]
     fn asb_routes_service_command() {
-        let bus = InMemoryAetherServiceBus::new();
+        let controller = ServiceBusController::new();
         let source = service_id();
-        bus.register_permissions(&source, permissions())
-            .expect("permissions");
-        bus.register_command_handler(
-            "telemetry.commands",
-            Arc::new(|command: &ServiceCommand| {
-                Ok(ServiceReply::accepted().with_payload_value("command", json!(command.name())))
-            }),
-        )
-        .expect("handler");
-
-        let reply = bus
-            .command(
+        let client = controller
+            .register_service(source.clone(), permissions())
+            .expect("service client");
+        controller
+            .register_command_handler(
                 &source,
-                &ServiceCommand::new("telemetry.commands", "refresh").expect("command"),
+                "telemetry.commands",
+                Arc::new(|command: &ServiceCommand| {
+                    Ok(ServiceReply::accepted()
+                        .with_payload_value("command", json!(command.name())))
+                }),
             )
+            .expect("handler");
+
+        let reply = client
+            .command(&ServiceCommand::new("telemetry.commands", "refresh").expect("command"))
             .expect("reply");
 
         assert_eq!(reply.payload().get("command"), Some(&json!("refresh")));
@@ -960,13 +1021,14 @@ mod tests {
 
     #[test]
     fn asb_delivers_service_notification() {
-        let bus = InMemoryAetherServiceBus::new();
+        let controller = ServiceBusController::new();
         let service_id = service_id();
-        bus.register_permissions(&service_id, permissions())
-            .expect("permissions");
-        let receiver = bus.subscribe_notifications().expect("subscriber");
+        let client = controller
+            .register_service(service_id.clone(), permissions())
+            .expect("service client");
+        let receiver = client.subscribe_notifications().expect("subscriber");
 
-        let delivered = bus
+        let delivered = client
             .notify(
                 &ServiceNotification::new(service_id, "telemetry.updated")
                     .expect("notification")
@@ -983,17 +1045,20 @@ mod tests {
 
     #[test]
     fn asb_status_reports_routes() {
-        let bus = InMemoryAetherServiceBus::new();
+        let controller = ServiceBusController::new();
         let service_id = service_id();
-        bus.register_permissions(&service_id, permissions())
-            .expect("permissions");
-        bus.register_request_handler(
-            "telemetry.echo",
-            Arc::new(|_request: &ServiceRequest| Ok(ServiceReply::accepted())),
-        )
-        .expect("handler");
+        controller
+            .register_service(service_id.clone(), permissions())
+            .expect("service client");
+        controller
+            .register_request_handler(
+                &service_id,
+                "telemetry.echo",
+                Arc::new(|_request: &ServiceRequest| Ok(ServiceReply::accepted())),
+            )
+            .expect("handler");
 
-        let status = bus.status().expect("status");
+        let status = controller.status().expect("status");
 
         assert_eq!(status.event_bus, "in-memory");
         assert_eq!(status.request_handlers, 1);
@@ -1003,25 +1068,28 @@ mod tests {
 
     #[test]
     fn contract_bus_routes_typed_contract_request() {
-        let bus = InMemoryAetherServiceBus::new();
+        let controller = ServiceBusController::new();
         let service_id = service_id();
         let contract = BusContract::new("system.inspect", "v1").expect("contract");
-        bus.register_permissions(&service_id, permissions())
-            .expect("permissions");
-        bus.register_contract_handler(
-            contract.clone(),
-            Arc::new(|request: &ContractRequest| {
-                Ok(ContractReply::accepted()
-                    .with_payload_value("subject", json!(request.contract().subject()))
-                    .with_payload_value("version", json!(request.contract().version())))
-            }),
-        )
-        .expect("handler");
+        let client = controller
+            .register_service(service_id.clone(), permissions())
+            .expect("service client");
+        controller
+            .register_contract_handler(
+                &service_id,
+                &contract,
+                Arc::new(|request: &ContractRequest| {
+                    Ok(ContractReply::accepted()
+                        .with_payload_value("subject", json!(request.contract().subject()))
+                        .with_payload_value("version", json!(request.contract().version())))
+                }),
+            )
+            .expect("handler");
 
-        let reply = bus
-            .request_contract(&service_id, &ContractRequest::new(contract))
+        let reply = client
+            .request_contract(&ContractRequest::new(contract))
             .expect("reply");
-        let status = bus.status().expect("status");
+        let status = controller.status().expect("status");
 
         assert!(reply.is_accepted());
         assert_eq!(
@@ -1058,11 +1126,92 @@ mod tests {
         )
         .expect("manifest");
         let descriptor = ServiceDescriptor::from_manifest(manifest).expect("descriptor");
-        let bus = InMemoryAetherServiceBus::new();
+        let controller = ServiceBusController::new();
 
-        bus.register_permissions(&descriptor.id, descriptor.permissions)
-            .expect("permissions");
+        controller
+            .register_service(descriptor.id, descriptor.permissions)
+            .expect("service client");
 
-        assert_eq!(bus.status().expect("status").permission_entries, 1);
+        assert_eq!(controller.status().expect("status").permission_entries, 1);
+    }
+
+    #[test]
+    fn controller_rejects_duplicate_route_registration() {
+        let controller = ServiceBusController::new();
+        let service_id = service_id();
+        controller
+            .register_service(service_id.clone(), permissions())
+            .expect("service client");
+        controller
+            .register_command_handler(
+                &service_id,
+                "telemetry.commands",
+                Arc::new(|_command: &ServiceCommand| Ok(ServiceReply::accepted())),
+            )
+            .expect("first handler");
+
+        let result = controller.register_command_handler(
+            &service_id,
+            "telemetry.commands",
+            Arc::new(|_command: &ServiceCommand| Ok(ServiceReply::accepted())),
+        );
+
+        assert!(matches!(result, Err(ServiceBusError::DuplicateRoute(_))));
+    }
+
+    #[test]
+    fn bound_client_rejects_notification_identity_spoofing() {
+        let controller = ServiceBusController::new();
+        let client = controller
+            .register_service(service_id(), permissions())
+            .expect("service client");
+        let other = aether_ids::ServiceId::new("other-service").expect("other id");
+
+        let result = client
+            .notify(&ServiceNotification::new(other, "telemetry.updated").expect("notification"));
+
+        assert!(matches!(
+            result,
+            Err(ServiceBusError::IdentityMismatch { .. })
+        ));
+    }
+
+    #[test]
+    fn request_handler_can_reenter_controller_without_deadlock() {
+        let controller = ServiceBusController::new();
+        let service_id = service_id();
+        let client = controller
+            .register_service(service_id.clone(), permissions())
+            .expect("service client");
+        let nested_controller = controller.clone();
+        let nested_owner = service_id.clone();
+        controller
+            .register_request_handler(
+                &service_id,
+                "telemetry.outer",
+                Arc::new(move |_request: &ServiceRequest| {
+                    nested_controller.register_request_handler(
+                        &nested_owner,
+                        "telemetry.inner",
+                        Arc::new(|_request: &ServiceRequest| Ok(ServiceReply::accepted())),
+                    )?;
+                    Ok(ServiceReply::accepted())
+                }),
+            )
+            .expect("outer handler");
+        let (sender, receiver) = mpsc::channel();
+
+        thread::spawn(move || {
+            let result =
+                client.request(&ServiceRequest::new("telemetry.outer").expect("outer request"));
+            sender.send(result).expect("send result");
+        });
+
+        assert!(
+            receiver
+                .recv_timeout(Duration::from_secs(1))
+                .expect("request must not deadlock")
+                .is_ok()
+        );
     }
 }

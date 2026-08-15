@@ -9,8 +9,7 @@ use aether_core::{Capability, LifecycleStatus};
 use aether_kernel::{AetherKernel, KernelError};
 use aether_service::{ServiceDescriptor, ServiceError, ServiceHealthStatus, ServiceManifest};
 use aether_service_bus::{
-    AetherServiceBus, CommandHandler, InMemoryAetherServiceBus, ServiceBusError, ServiceCommand,
-    ServiceReply,
+    CommandHandler, ServiceBusClient, ServiceBusError, ServiceCommand, ServiceReply,
 };
 use serde_json::json;
 use thiserror::Error;
@@ -924,8 +923,8 @@ pub trait SystemService {
     ///
     /// # Errors
     ///
-    /// Returns [`SystemServicesError`] when the bus cannot register handlers.
-    fn register_handlers(&self, bus: &InMemoryAetherServiceBus) -> Result<(), SystemServicesError>;
+    /// Returns [`SystemServicesError`] when the Kernel cannot register handlers.
+    fn register_handlers(&self, kernel: &mut AetherKernel) -> Result<(), SystemServicesError>;
 }
 
 /// Core system service loaded from a manifest.
@@ -956,8 +955,8 @@ impl SystemService for CoreSystemService {
         self.descriptor.health_status
     }
 
-    fn register_handlers(&self, bus: &InMemoryAetherServiceBus) -> Result<(), SystemServicesError> {
-        register_system_service_handler(bus, self)?;
+    fn register_handlers(&self, kernel: &mut AetherKernel) -> Result<(), SystemServicesError> {
+        register_system_service_handler(kernel, self)?;
         Ok(())
     }
 }
@@ -979,12 +978,16 @@ pub fn load_core_system_services() -> Result<Vec<CoreSystemService>, SystemServi
 /// # Errors
 ///
 /// Returns [`SystemServicesError`] when service registration or handler registration fails.
-pub fn register_core_system_services(kernel: &mut AetherKernel) -> Result<(), SystemServicesError> {
+pub fn register_core_system_services(
+    kernel: &mut AetherKernel,
+) -> Result<Vec<ServiceBusClient>, SystemServicesError> {
+    let mut clients = Vec::with_capacity(CORE_SYSTEM_SERVICE_COUNT);
     for service in load_core_system_services()? {
-        kernel.register_service(service.descriptor().clone())?;
-        service.register_handlers(kernel.service_bus())?;
+        let client = kernel.register_service(service.descriptor().clone())?;
+        service.register_handlers(kernel)?;
+        clients.push(client);
     }
-    Ok(())
+    Ok(clients)
 }
 
 /// Return whether the provided services avoid direct service coupling.
@@ -1055,9 +1058,9 @@ fn load_core_system_service(
 }
 
 fn register_system_service_handler(
-    bus: &InMemoryAetherServiceBus,
+    kernel: &mut AetherKernel,
     service: &CoreSystemService,
-) -> Result<(), ServiceBusError> {
+) -> Result<(), KernelError> {
     let route = service.route();
     let handler = SystemServiceCommandHandler {
         service_name: service.descriptor().name.clone(),
@@ -1065,7 +1068,7 @@ fn register_system_service_handler(
         route,
         health: service.health(),
     };
-    bus.register_command_handler(route, Arc::new(handler))
+    kernel.register_service_command_handler(&service.descriptor().id, route, Arc::new(handler))
 }
 
 fn capabilities_do_not_reference_service_ids(capabilities: &[Capability]) -> bool {
@@ -1277,17 +1280,20 @@ mod tests {
     #[test]
     fn core_services_expose_commands_through_asb() {
         let mut kernel = test_kernel();
-        register_core_system_services(&mut kernel).expect("register services");
+        let clients = register_core_system_services(&mut kernel).expect("register services");
         let source = kernel
             .services()
             .into_iter()
             .find(|service| service.name == "service-inspector")
             .expect("source service");
+        let client = clients
+            .iter()
+            .find(|client| client.service_id() == &source.id)
+            .expect("bound service client");
 
         let reply = kernel
-            .service_bus()
-            .command(
-                &source.id,
+            .route_service_command(
+                client,
                 &ServiceCommand::new("system.health", "status").expect("command"),
             )
             .expect("reply");
