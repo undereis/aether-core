@@ -34,19 +34,24 @@ of ad hoc command names.
 
 ## Permission Enforcement
 
-ASB checks declared permissions before service actions:
+The Kernel-owned `ServiceBusController` approves identities, permissions, and
+route ownership. Services receive only an identity-bound `ServiceBusClient`;
+they cannot alter grants, choose another caller identity, or replace a route.
+
+The client checks approved permissions before service actions:
 
 - `event.publish` is required to publish events and notifications.
 - `event.subscribe` is required to subscribe to events.
 - `service.command` is required for request/reply and service commands.
 
-No service action should be executed without the required declared permission.
+No service action is executed without the required approved permission.
+Duplicate route registration and notification identity spoofing are rejected.
 
 ## Boundary Rule
 
-Services do not receive direct references to other services and do not route
-commands by direct service identity. The bus is the mediator and routing
-boundary.
+Services do not receive the administrative controller or direct references to
+other services. The bus client is the mediated data-plane boundary; the
+controller remains inside the Kernel control plane.
 
 ## Current Limits
 

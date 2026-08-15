@@ -12,7 +12,7 @@ use aether_ids::KernelId;
 use aether_kernel::{AetherKernel, KernelError};
 use aether_logging::{MemoryLogSink, StructuredLogger};
 use aether_runtime::{AetherRuntime, RuntimeError};
-use aether_service_bus::{AetherServiceBus, ServiceBusError};
+use aether_service_bus::ServiceBusError;
 use aether_system_services::{
     OFFICIAL_SERVICE_MAP, SystemService, SystemServicesError, load_core_system_services,
     register_core_system_services,
@@ -446,7 +446,7 @@ where
     W: Write,
 {
     let kernel = local_kernel()?;
-    let status = kernel.service_bus().status()?;
+    let status = kernel.service_bus_status()?;
     writeln!(
         writer,
         "bus status: event_bus={}, notification_subscribers={}, request_handlers={}, command_handlers={}, contract_handlers={}, permission_entries={}",

@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     app_version: str = Field(default_factory=resolve_package_version)
     environment: Environment = Field(default="local")
     log_level: LogLevel = Field(default="INFO")
-    api_host: str = Field(default="0.0.0.0")
+    api_host: str = Field(default="127.0.0.1")
     api_port: int = Field(default=18000, ge=1, le=65535)
     api_prefix: str = Field(default="")
     docs_enabled: bool = Field(default=True)

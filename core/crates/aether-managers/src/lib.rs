@@ -4,6 +4,7 @@
 //! Manager layer infrastructure for Aether Kernel decomposition.
 
 use std::collections::BTreeMap;
+use std::sync::Arc;
 
 use aether_core::{
     AetherModule, Capability, LifecycleStatus, ModuleDescriptor, ModuleHealth, ModuleId,
@@ -12,7 +13,8 @@ use aether_ids::{ManagerId, ServiceId};
 use aether_permissions::PermissionSet;
 use aether_service::{ServiceDescriptor, ServiceError, ServiceHealthAggregation, ServiceRegistry};
 use aether_service_bus::{
-    InMemoryAetherServiceBus, RegisterServiceError, ServiceBusError, register_service_with_bus,
+    AetherServiceBus, CommandHandler, RegisterServiceError, ServiceBusClient, ServiceBusController,
+    ServiceBusError, ServiceBusStatus, ServiceCommand, ServiceReply, register_service_with_bus,
 };
 use thiserror::Error;
 
@@ -220,7 +222,7 @@ impl ManagerRegistry {
 pub struct ServiceManager {
     descriptor: ManagerDescriptor,
     registry: ServiceRegistry,
-    service_bus: InMemoryAetherServiceBus,
+    service_bus: ServiceBusController,
 }
 
 impl ServiceManager {
@@ -247,7 +249,7 @@ impl ServiceManager {
                 ],
             ),
             registry: ServiceRegistry::new(),
-            service_bus: InMemoryAetherServiceBus::new(),
+            service_bus: ServiceBusController::new(),
         }
     }
 
@@ -256,9 +258,15 @@ impl ServiceManager {
     /// # Errors
     ///
     /// Returns [`ManagerError`] when registration or permission indexing fails.
-    pub fn register_service(&mut self, descriptor: ServiceDescriptor) -> Result<(), ManagerError> {
-        register_service_with_bus(&mut self.registry, &self.service_bus, descriptor)?;
-        Ok(())
+    pub fn register_service(
+        &mut self,
+        descriptor: ServiceDescriptor,
+    ) -> Result<ServiceBusClient, ManagerError> {
+        Ok(register_service_with_bus(
+            &mut self.registry,
+            &self.service_bus,
+            descriptor,
+        )?)
     }
 
     /// Return registered services.
@@ -341,10 +349,45 @@ impl ServiceManager {
         &self.registry
     }
 
-    /// Return the Aether Service Bus.
-    #[must_use]
-    pub const fn service_bus(&self) -> &InMemoryAetherServiceBus {
-        &self.service_bus
+    /// Register a command handler at the Kernel-owned control-plane boundary.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ManagerError`] when the owner is unknown or the route cannot be registered.
+    pub fn register_command_handler(
+        &mut self,
+        owner: &ServiceId,
+        route: impl Into<String>,
+        handler: Arc<dyn CommandHandler>,
+    ) -> Result<(), ManagerError> {
+        if self.registry.get(owner).is_none() {
+            return Err(ManagerError::UnknownService(owner.to_string()));
+        }
+        self.service_bus
+            .register_command_handler(owner, route, handler)?;
+        Ok(())
+    }
+
+    /// Route a command through an identity-bound client.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ManagerError`] when the command cannot be routed.
+    pub fn route_command(
+        &self,
+        client: &ServiceBusClient,
+        command: &ServiceCommand,
+    ) -> Result<ServiceReply, ManagerError> {
+        Ok(client.command(command)?)
+    }
+
+    /// Return a read-only Service Bus status snapshot.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ManagerError`] when the bus status cannot be read.
+    pub fn service_bus_status(&self) -> Result<ServiceBusStatus, ManagerError> {
+        Ok(self.service_bus.status()?)
     }
 }
 

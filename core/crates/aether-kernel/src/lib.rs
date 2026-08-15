@@ -4,11 +4,12 @@
 //! Kernel orchestration layer for Aether.
 
 use std::fmt;
+use std::sync::Arc;
 
 use aether_config::{AetherConfig, ConfigError, ConfigProvider};
 use aether_core::{AetherModule, LifecycleStatus, ModuleDescriptor, ModuleHealth};
 use aether_events::EventBus;
-use aether_ids::KernelId;
+use aether_ids::{KernelId, ServiceId};
 use aether_logging::{LogLevel, StructuredLogger};
 pub use aether_managers::{
     CapabilityRegistration, LifecycleManager, ManagerDescriptor, ManagerError, ManagerRegistry,
@@ -16,7 +17,10 @@ pub use aether_managers::{
 };
 use aether_runtime::{AetherRuntime, RuntimeError, RuntimeHealth};
 use aether_service::{ServiceDescriptor, ServiceError, ServiceHealthAggregation, ServiceRegistry};
-use aether_service_bus::{InMemoryAetherServiceBus, ServiceBusError};
+use aether_service_bus::{
+    CommandHandler, ServiceBusClient, ServiceBusError, ServiceBusStatus, ServiceCommand,
+    ServiceReply,
+};
 use aether_telemetry::{TelemetryEmitter, TelemetryError, TelemetryRecord};
 use thiserror::Error;
 
@@ -215,15 +219,18 @@ impl AetherKernel {
     ///
     /// Returns [`KernelError`] when service registration, bus permission registration,
     /// or telemetry emission fails.
-    pub fn register_service(&mut self, descriptor: ServiceDescriptor) -> Result<(), KernelError> {
+    pub fn register_service(
+        &mut self,
+        descriptor: ServiceDescriptor,
+    ) -> Result<ServiceBusClient, KernelError> {
         let service_id = descriptor.id.clone();
-        self.service_manager.register_service(descriptor)?;
+        let client = self.service_manager.register_service(descriptor)?;
         self.telemetry.emit(
             &TelemetryRecord::log(LogLevel::Info, KERNEL_TARGET, "service registered")
                 .with_attribute("kernel_id", self.id.as_str())
                 .with_attribute("service_id", service_id.to_string()),
         )?;
-        Ok(())
+        Ok(client)
     }
 
     /// Return registered services.
@@ -244,10 +251,42 @@ impl AetherKernel {
         self.service_manager.registry()
     }
 
-    /// Return the Aether Service Bus.
-    #[must_use]
-    pub const fn service_bus(&self) -> &InMemoryAetherServiceBus {
-        self.service_manager.service_bus()
+    /// Register a service-owned command handler through the Kernel control plane.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`KernelError`] when the owner is unknown or the route cannot be registered.
+    pub fn register_service_command_handler(
+        &mut self,
+        owner: &ServiceId,
+        route: impl Into<String>,
+        handler: Arc<dyn CommandHandler>,
+    ) -> Result<(), KernelError> {
+        self.service_manager
+            .register_command_handler(owner, route, handler)?;
+        Ok(())
+    }
+
+    /// Route a command through an identity-bound service client.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`KernelError`] when routing fails or the client lacks permission.
+    pub fn route_service_command(
+        &self,
+        client: &ServiceBusClient,
+        command: &ServiceCommand,
+    ) -> Result<ServiceReply, KernelError> {
+        Ok(self.service_manager.route_command(client, command)?)
+    }
+
+    /// Return a read-only Service Bus status snapshot.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`KernelError`] when the bus status cannot be read.
+    pub fn service_bus_status(&self) -> Result<ServiceBusStatus, KernelError> {
+        Ok(self.service_manager.service_bus_status()?)
     }
 
     /// Return registered managers.
@@ -363,7 +402,6 @@ mod tests {
     use aether_ids::KernelId;
     use aether_logging::{MemoryLogSink, StructuredLogger};
     use aether_service::{ServiceDescriptor, ServiceHealthStatus, ServiceManifest};
-    use aether_service_bus::AetherServiceBus;
     use aether_telemetry::{MemoryTelemetrySink, TelemetryEmitter};
 
     use super::{AetherKernel, ModuleRegistry, RegistryError};
@@ -610,8 +648,7 @@ mod tests {
         );
         assert_eq!(
             kernel
-                .service_bus()
-                .status()
+                .service_bus_status()
                 .expect("bus status")
                 .permission_entries,
             1
