@@ -1,111 +1,82 @@
 # Aether
 
-The Cognitive Operating System.
+**A modular, security-conscious foundation for long-lived cognitive systems.**
 
-Aether is a long-term platform foundation owned by NeuroForge Labs. Phase 0
-contains no product features, no agents, no embeddings, no memory engine, no
-chat, no business APIs, and no authentication. Its purpose is to establish the
-engineering baseline for future decades of work.
+Aether is an architecture and platform R&D project maintained by NeuroForge Labs. It establishes the engineering foundation for future cognitive capabilities while keeping runtime, policy, service, and domain boundaries explicit.
 
-The Foundation Era is complete through Phase 4.6. Future approved phases will
-build cognitive capabilities on top of the Kernel, Manager Layer, Service
-Platform, Driver contracts, Domain model, Policy model, ASB, Contract Bus base,
-and Aether Engineering Protocols established here.
+> **Current maturity:** foundation and architecture research. Aether is not yet a production AI product, autonomous agent platform, or end-user application.
 
-## Phase 0 Scope
+## What is implemented
 
-- Professional monorepo structure.
-- Rust workspace for the future core runtime.
-- Python 3.12 workspace managed by `uv`.
-- Minimal FastAPI backend with health, version, config loading, logging, and
-  dependency injection.
-- Docker Compose infrastructure for PostgreSQL, Redis, and Qdrant.
-- Engineering documentation, coding standards, ADRs, and decision log.
-- Local validation commands through `make`.
+- A native Rust runtime and orchestration kernel.
+- Module registration, dependency validation, lifecycle states, health checks, and capability discovery.
+- A manager layer, driver contracts, domain boundaries, policy contracts, and typed identifiers.
+- An in-memory event bus, Aether Service Bus, and Contract Bus foundation.
+- Service manifests, permissions, resources, telemetry, and health aggregation.
+- Five base system services: Telemetry, Configuration, Health, Event, and Service Inspector.
+- A Python 3.12 FastAPI foundation with health, version, configuration, logging, and dependency injection.
+- Local PostgreSQL, Redis, and Qdrant infrastructure through Docker Compose.
+- Validation tooling for linting, type checking, tests, builds, and smoke checks.
 
-## Phase 1 Scope
+## What is planned
 
-- Native Rust core runtime foundation.
-- Base internal event types and in-memory event bus.
-- Local runtime configuration.
-- Structured logging primitives.
-- Module lifecycle contract.
-- Runtime bootstrap.
-- Minimal CLI validation command.
+The following areas are documented or reserved for future phases and are **not implemented as cognitive runtime capabilities**:
 
-Phase 1 still excludes AI, agents, chat, business APIs, UI, OS capture, and
-desktop functionality.
+- Memory, Knowledge, Context, Planning, Reasoning, Decision, Learning, and Perception domains.
+- AI providers, agents, model routing, and inference orchestration.
+- Authentication, multi-tenancy, enterprise services, and production persistence.
+- Next.js frontend, Tauri desktop application, device integration, and automation.
 
-## Phase 2 Scope
+Architecture documents and RFCs define boundaries before implementation. Their presence must not be interpreted as working product functionality.
 
-- Aether Kernel as the orchestration layer above the Runtime.
-- Module registry with dependency validation.
-- Explicit module lifecycle states.
-- Capability declaration and discovery.
-- Kernel health checks.
-- EventBus, ConfigProvider, telemetry, and typed ID abstractions.
-- Kernel CLI validation commands.
+## Architecture
 
-Phase 2 still excludes AI, agents, chat, OS capture, business APIs, UI,
-authentication, plugins, and desktop functionality.
+```text
+FastAPI foundation
+        |
+Aether Kernel
+        |
+Managers + Runtime + Policies
+        |
+Service Platform + ASB / Contract Bus
+        |
+Core system services and driver/domain contracts
+```
 
-## Phase 3 Scope
+The Rust workspace currently contains 18 focused crates, including:
 
-- Aether Service Platform as the Kernel-controlled service layer.
-- Service Model and TOML Service Manifest.
-- Service Registry and health aggregation.
-- Aether Service Bus for internal service communication.
-- Capability, permission, and resource models for services.
-- CLI inspection commands for services and bus status.
+- `aether-runtime`, `aether-kernel`, and `aether-managers`
+- `aether-service`, `aether-service-bus`, and `aether-system-services`
+- `aether-events`, `aether-telemetry`, and `aether-config`
+- `aether-permissions`, `aether-resources`, and `aether-policies`
+- `aether-domains`, `aether-drivers`, and `aether-ids`
 
-Phase 3 still excludes AI, agents, authentication, Memory Engine, business
-database schemas, frontend, desktop functionality, and production sandboxing.
+See [`docs/Project-Structure/README.md`](docs/Project-Structure/README.md) for ownership rules and the authoritative repository structure.
 
-## Phase 4 Scope
+## Security and engineering principles
 
-- Official Service Map across Foundation, Cognitive, AI, Interaction, Device,
-  Automation, and Enterprise layers.
-- Base core system services:
-  - Telemetry Service
-  - Configuration Service
-  - Health Service
-  - Event Service
-  - Service Inspector Service
-- Declarative service manifests under `core/services`.
-- `aether-system-services` crate for loading and registering base services.
-- CLI inspection commands for the service map and core system services.
+- Rust `unsafe_code` is forbidden across the workspace.
+- Services communicate through explicit bus contracts instead of direct coupling.
+- Permissions, resource declarations, provenance, and policy boundaries are first-class architectural concerns.
+- Cognitive outputs are designed to remain bounded, traceable, explainable, and non-binding until an authorized decision and action boundary exists.
+- Runtime dependencies follow an LTS/stable strategy recorded in ADRs.
+- Development infrastructure credentials are local defaults only and must never be used in production.
 
-Phase 4 still excludes AI, agents, Memory Engine, Knowledge Graph,
-authentication, frontend, desktop functionality, and business persistence.
+See [`SECURITY.md`](SECURITY.md) for reporting and deployment guidance.
 
-## Phase 4.5 Scope
+## Technology
 
-- Kernel decomposition to prevent growth into a God Object.
-- Official Manager Layer infrastructure.
-- Driver Layer contracts.
-- Domain Layer contracts.
-- Policy Layer contracts.
-- Contract Bus base on top of the ASB.
-- Public compatibility facade preserved on the Kernel.
+| Area | Technology |
+| --- | --- |
+| Core runtime | Rust 2024 edition |
+| Backend | Python 3.12, FastAPI, Pydantic |
+| Infrastructure | Docker Compose, PostgreSQL, Redis, Qdrant |
+| Tooling | Cargo, uv, Ruff, Black, mypy, pytest, pre-commit |
+| Future UI | Next.js and Tauri (reserved, not implemented) |
 
-Phase 4.5 structurally closes the Foundation Era. It still excludes AI, agents,
-Memory Engine, Knowledge Graph, authentication, frontend, desktop functionality,
-and business persistence.
+## Quick start
 
-## Phase 4.6 Scope
-
-- Aether Engineering Protocols.
-- Architecture Constitution v2.
-- Architecture Bible.
-- Architecture Evolution Roadmap.
-- Architectural Gravity classification.
-- Architecture Guardian authority.
-
-Phase 4.6 adds governance only. It does not alter runtime behavior, public APIs,
-AI, agents, Memory Engine, Knowledge Graph, authentication, frontend, desktop
-functionality, or business persistence.
-
-## Quick Start
+Prerequisites: Rust 1.90+, Python 3.12, `uv`, `pnpm`, and Docker.
 
 ```bash
 make setup
@@ -113,46 +84,50 @@ make lint
 make type-check
 make test
 make build
+```
+
+Start and validate local infrastructure:
+
+```bash
 make docker-up
 make docker-validate
+```
+
+Run the backend:
+
+```bash
 make backend-dev
 ```
 
-In another shell:
+The local backend defaults to `127.0.0.1:18000`.
+
+## Validation
+
+Continuous integration validates both language workspaces:
+
+- Rust formatting, Clippy, tests, and workspace build.
+- Python dependency locking, Ruff, Black, mypy, pytest, and package build.
+
+Local full validation remains available through:
 
 ```bash
-make backend-validate
+make validate
 ```
 
-The local backend defaults to `127.0.0.1:18000` to avoid colliding with common
-development services on port `8000`. Override with `BACKEND_PORT=...` only when
-the target port is known to be free.
+## Roadmap and governance
 
-## Repository Layout
+- [`docs/Roadmap/README.md`](docs/Roadmap/README.md)
+- [`docs/Architecture/README.md`](docs/Architecture/README.md)
+- [`docs/ADRs/README.md`](docs/ADRs/README.md)
+- [`CHANGELOG.md`](CHANGELOG.md)
 
-See `docs/Project-Structure/README.md` for the authoritative structure and
-ownership rules.
+Foundation phases through 4.6 are complete. Later cognitive-domain material is architecture-first and proceeds through explicit RFC, ADR, review, and checkpoint gates.
 
-## Runtime Policy
+## Maintainer
 
-Production runtime versions follow the LTS strategy documented in
-`docs/ADRs/ADR-0002-runtime-version-strategy.md`.
+**Ramon Mascarenha Reis**  
+Cybersecurity, network infrastructure, and secure systems architecture.
 
-## Core Runtime CLI
+## License
 
-```bash
-cargo run -p aether-cli -- validate
-cargo run -p aether-cli -- kernel status
-cargo run -p aether-cli -- kernel health
-cargo run -p aether-cli -- kernel modules
-cargo run -p aether-cli -- kernel capabilities
-cargo run -p aether-cli -- service list
-cargo run -p aether-cli -- service inspect
-cargo run -p aether-cli -- service capabilities
-cargo run -p aether-cli -- service health
-cargo run -p aether-cli -- service map
-cargo run -p aether-cli -- system services
-cargo run -p aether-cli -- system health
-cargo run -p aether-cli -- system inspect
-cargo run -p aether-cli -- bus status
-```
+Apache License 2.0. See [`LICENSE`](LICENSE).
