@@ -86,9 +86,11 @@ make test
 make build
 ```
 
-Start and validate local infrastructure:
+Create a local environment file, replace the placeholder database password, then start and validate the infrastructure:
 
 ```bash
+cp .env.example .env
+# Edit .env and replace CHANGE_ME_USE_A_UNIQUE_LOCAL_PASSWORD
 make docker-up
 make docker-validate
 ```
